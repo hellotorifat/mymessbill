@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><script>try{var t=localStorage.getItem("bpTheme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#17348f"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Bachelors Paradise — মেস ম্যানেজমেন্ট</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Baloo+Da+2:wght@600;700&display=swap"><style id="css">
+:root{--bg:#eef2fb;--card:#ffffff;--field:#f4f7fd;--ink:#0e1a33;--mute:#5a678a;--line:#dae2f3;--pri:#2255d4;--pri-d:#17348f;--onpri:#ffffff;--soft:#e1e9fc;--acc:#f4a300;--acc-soft:#fff2d2;--acc-ink:#6b4600;--bad:#d23f2c;--good:#2255d4;--info:#0a8ea6;--info-soft:#dff4f8;--rose:#e0685a;--rose-soft:#fde9e5;--sh:0 1px 2px rgba(14,26,51,.06),0 12px 28px -18px rgba(14,26,51,.35)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1020;--card:#111a30;--field:#0c1527;--ink:#e6ecfa;--mute:#9aabcc;--line:#233256;--pri:#78a6ff;--pri-d:#14214a;--onpri:#06122e;--soft:#1a2a57;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#78a6ff;--info:#4fd8e8;--info-soft:#12323d;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}}
+:root[data-theme="dark"]{--bg:#0a1020;--card:#111a30;--field:#0c1527;--ink:#e6ecfa;--mute:#9aabcc;--line:#233256;--pri:#78a6ff;--pri-d:#14214a;--onpri:#06122e;--soft:#1a2a57;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#78a6ff;--info:#4fd8e8;--info-soft:#12323d;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0 auto;background:var(--bg);color:var(--ink);font:15px/1.55 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;max-width:900px;padding:0 14px 112px}
+h1,h2,h3,.kpi b,.qk b,.dvn{font-family:"Baloo Da 2","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+h1{font-size:clamp(20px,6vw,26px);line-height:1.1;margin:0;font-weight:700}
+h2{font-size:17px;line-height:1.3;margin:0 0 10px;font-weight:700}
+h3{font-size:15px;margin:16px 0 6px;font-weight:700}
+a{color:var(--pri)}
+.hero{margin:0 -14px 14px;padding:calc(14px + env(safe-area-inset-top,0px)) 18px 16px;background:var(--pri-d);color:#fff;border-radius:0 0 28px 28px}
+.hh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.hl{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:46px;height:46px;border-radius:15px;background:var(--acc);display:grid;place-items:center;font-size:25px;flex:none;box-shadow:0 6px 14px -6px rgba(0,0,0,.45)}
+.dev{display:flex;align-items:center;gap:7px;margin-top:5px;font-size:13px;flex-wrap:wrap}
+.dl{color:rgba(255,255,255,.88);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.55)}
+.dn{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 11px 2px 3px;border-radius:20px;border:0;background:rgba(255,255,255,.16);color:#fff;font-weight:700;font-size:13px}
+.av{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid var(--acc)}
+.hact{display:flex;gap:6px;flex:none}
+.hb{min-height:34px;padding:4px 12px;border:0;border-radius:18px;background:rgba(255,255,255,.16);color:#fff;font-weight:600;font-size:13px}
+.sub{color:rgba(255,255,255,.8);font-size:13px;margin:10px 0 0}
+input,select,textarea,button{font:inherit;color:inherit}
+input,select,textarea{background:var(--field);border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;width:100%;min-width:0;min-height:42px}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--pri);box-shadow:0 0 0 3px var(--soft)}
+input[type=checkbox]{width:auto;min-height:0;padding:0;accent-color:var(--pri)}
+input[readonly],textarea[readonly]{border-color:transparent;background:transparent}
+td input{width:76px;padding:6px;text-align:right;min-height:36px}
+button{cursor:pointer;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 14px;min-height:42px;font-weight:600;transition:transform .08s,background .15s}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.5;cursor:default}
+button.p,.btn.p{background:var(--pri);color:var(--onpri);border-color:var(--pri);box-shadow:0 6px 14px -8px var(--pri)}
+.btn{display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:9px 16px;border-radius:12px;font-weight:700;text-decoration:none;border:1.5px solid transparent}
+button.x{border:0;background:none;color:var(--bad);padding:4px 8px;min-height:0;font-weight:600}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+h2 button.x{color:var(--pri)}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;gap:2px;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));max-width:900px;margin:0 auto;overflow-x:auto;scrollbar-width:none;box-shadow:0 -10px 26px -16px rgba(14,26,51,.4);border-radius:20px 20px 0 0;z-index:20}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-width:58px;border:0;border-radius:14px;background:none;padding:6px 8px;min-height:0;color:var(--mute);font-size:11.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:1px;white-space:nowrap}
+.tabs button i{font-style:normal;font-size:20px;line-height:1.15}
+.tabs button.on{background:var(--soft);color:var(--pri);font-weight:700}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:9px 12px;margin-bottom:12px;font-size:13px;box-shadow:var(--sh)}
+.bar.warn{background:var(--acc-soft);border-color:var(--acc);color:var(--acc-ink)}
+.bar.me{background:var(--soft);border-color:var(--pri)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin-bottom:12px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:14px;padding:9px 12px;box-shadow:var(--sh)}
+.kpi div:nth-child(4n+2){border-left-color:var(--acc)}.kpi div:nth-child(4n+3){border-left-color:var(--info)}.kpi div:nth-child(4n+4){border-left-color:var(--rose)}
+.kpi small{display:block;color:var(--mute);font-size:12px}.kpi b{font-size:20px;line-height:1.3}
+.qk{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.qk button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;padding:14px;border:0;border-radius:18px;min-height:98px;box-shadow:var(--sh)}
+.qk button i{font-style:normal;font-size:27px;line-height:1;margin-bottom:6px}
+.qk button b{font-size:16px;line-height:1.2}.qk button small{color:var(--mute);font-size:12px;font-weight:500}
+.qk button:nth-child(1){background:var(--soft)}.qk button:nth-child(2){background:var(--acc-soft)}.qk button:nth-child(3){background:var(--info-soft)}.qk button:nth-child(4){background:var(--rose-soft)}
+@media (min-width:640px){.qk{grid-template-columns:repeat(4,1fr)}}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+th{color:var(--mute);font-weight:600}
+.rp th,.rp td{position:static!important}
+/* ---- premium polish ---- */
+body{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.hero{background:radial-gradient(120% 140% at 100% 0%,rgba(244,163,0,.28),transparent 55%),linear-gradient(135deg,var(--pri-d),#2255d4);box-shadow:0 18px 34px -22px rgba(23,52,143,.9)}
+:root[data-theme="dark"] .hero{background:radial-gradient(120% 140% at 100% 0%,rgba(255,191,60,.16),transparent 55%),linear-gradient(135deg,#14214a,#0c1527)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:radial-gradient(120% 140% at 100% 0%,rgba(255,191,60,.16),transparent 55%),linear-gradient(135deg,#14214a,#0c1527)}}
+.hb{backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18)}
+#thm{min-width:38px;font-size:16px;padding:4px 10px}
+.box{border-radius:22px;border-color:transparent;box-shadow:0 1px 2px rgba(14,26,51,.05),0 16px 32px -22px rgba(14,26,51,.38)}
+:root[data-theme="dark"] .box{border-color:var(--line)}
+button.p,.btn.p{background:linear-gradient(180deg,color-mix(in srgb,var(--pri) 88%,#fff),var(--pri));border-color:transparent}
+.kpi div{border:0;border-radius:18px;border-top:3px solid var(--pri);border-left:0}
+.kpi div:nth-child(4n+2){border-top-color:var(--acc)}.kpi div:nth-child(4n+3){border-top-color:var(--info)}.kpi div:nth-child(4n+4){border-top-color:var(--rose)}
+.tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:876px;padding:7px 6px;gap:0;justify-content:space-around;overflow:visible;border:1px solid var(--line);border-radius:26px;background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 18px 40px -14px rgba(8,16,40,.55)}
+.tabs button{flex:1 1 0;min-width:0;padding:2px 2px;gap:3px;font-size:11px;background:none!important;border-radius:16px}
+.tabs button i{display:grid;place-items:center;width:52px;height:30px;border-radius:15px;transition:background .2s,color .2s,transform .2s}
+.tabs button i svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs button.on{color:var(--pri)}
+.tabs button.on i{background:var(--pri);color:var(--onpri);box-shadow:0 8px 16px -8px var(--pri);transform:translateY(-1px)}
+.mg6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 4px}
+.mg6 button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border-radius:18px;background:var(--field)}
+.mg6 button svg{width:26px;height:26px;stroke:var(--pri);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mg6 button.on{background:var(--soft);border-color:var(--pri)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}.mch{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:0;font-size:14px}.mch.on{background:var(--pri);color:#fff;border-color:var(--pri)}.mch:disabled{opacity:.5}
+.xrow{display:grid;grid-template-columns:1fr 110px 36px;gap:6px;margin-bottom:6px}
+table.fndt{width:100%}table.fndt td:first-child{position:static;white-space:normal}
+tr.tot td{font-weight:700;border-top:2px solid var(--pri)}tr.off td{color:var(--mute)}
+.pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.g2 label,label.mute{font-size:13px;color:var(--mute);display:block;margin-bottom:2px}
+.mute{color:var(--mute);font-size:13px}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.row>*{flex:1}.row>.fix{flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.btns>*{flex:1 1 auto}
+.role{display:block;width:100%;text-align:left;padding:16px;margin-bottom:10px;border-radius:12px}
+.warnb{background:var(--acc-soft);color:var(--acc-ink);border:1px solid var(--acc);border-radius:12px;padding:9px 12px;margin:10px 0;font-size:13px}
+input.code{font-family:ui-monospace,Menlo,monospace;font-size:16px;letter-spacing:1px;text-align:center;border:1.5px dashed var(--pri);background:var(--soft)}
+svg.ch{width:100%;height:auto;display:block}
+.seg{display:flex;gap:4px;margin-bottom:12px;padding:4px;background:var(--soft);border-radius:14px}
+.seg button{flex:1;border:0;background:transparent;color:var(--mute);padding:8px 4px;min-height:40px}
+.seg button.on{background:var(--pri);color:var(--onpri);box-shadow:0 4px 10px -6px var(--pri)}
+.bzt{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px;margin-bottom:12px;box-shadow:var(--sh)}
+.bzt .l{display:flex;justify-content:space-between;gap:8px}
+.prog{height:10px;border-radius:6px;background:var(--line);overflow:hidden;display:flex;margin:6px 0}.prog i{display:block;height:100%;background:var(--pri)}.prog i+i{background:var(--acc)}.prog.over i{background:var(--bad)}
+.bzr{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}.bzr:last-child{border-bottom:0}.bzr.done .bzn{text-decoration:line-through;color:var(--mute)}
+.bzk{padding:2px 0}.bzk input[type=checkbox]{width:26px;height:26px}.bzm{flex:1;min-width:0}.bzn{font-weight:700}.bzc{font-weight:700;white-space:nowrap}
+.bzi{display:flex;gap:6px;margin-top:6px}.bzi input{padding:6px 10px;font-size:13px;min-height:38px}
+.mrow{margin-bottom:10px}.cb{display:grid;grid-template-columns:120px 1fr 72px;gap:8px;align-items:center;margin:6px 0;font-size:13px}.cb b{text-align:right}.cb .prog{margin:0}
+.srow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.srow:last-child{border-bottom:0}
+.srow input[type=date]{width:auto;flex:1 1 140px}.srow select{width:auto;flex:1 1 110px}.srow input[type=checkbox]{width:18px;height:18px;vertical-align:-3px}
+.srow.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0}.srow.mg input,.srow.mg select{width:100%}.srow.mg>*{min-width:0}
+.srow.mg .wh,.srow.mg .ac,.srow.mg .scn{grid-column:1/-1}.srow.mg.w1 .wh{grid-column:auto}.srow.mg .ac{display:flex;justify-content:space-between;align-items:center}.srow.mg .scn{margin-top:0}.srow.mg.next,.srow.mg.late{padding:12px 10px}
+.srow.done{opacity:.6}.srow.late{border-left:4px solid var(--bad);padding-left:8px}.srow.next{border-left:4px solid var(--pri);padding-left:8px;background:var(--soft);border-radius:0 12px 12px 0}.scn{flex-basis:100%;margin-top:-2px}
+.clist{height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:8px;background:var(--field);border-radius:14px;border:1px solid var(--line)}
+.cm{max-width:82%;align-self:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:6px 11px;white-space:pre-wrap;word-break:break-word}.cm small{display:block;color:var(--mute);font-size:11px}
+.cm.me{align-self:flex-end;background:var(--pri);color:var(--onpri);border-color:var(--pri);border-radius:16px 16px 4px 16px}.cm.me small{color:var(--onpri);opacity:.8}.cday{align-self:center;color:var(--mute);font-size:12px;margin:4px 0}
+.chip{padding:6px 9px;border-radius:16px;border:1px solid var(--line);background:var(--field);color:var(--mute);min-height:0}.chip.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}.chip:disabled{opacity:.55}
+.days{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}
+.dy{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 2px 8px;min-height:0;border-radius:14px;background:var(--field);border:1.5px solid transparent}
+.dy small{font-size:11px;color:var(--mute);font-weight:600}.dy b{font-family:"Baloo Da 2","Hind Siliguri",sans-serif;font-size:19px;line-height:1.1}
+.dy.td{border-color:var(--acc)}.dy.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}.dy.on small{color:var(--onpri);opacity:.85}
+.dts{display:flex;gap:3px;margin-top:2px}.dts i{width:6px;height:6px;border-radius:50%;background:var(--line)}.dts i.f{background:var(--pri)}.dy.on .dts i{background:rgba(255,255,255,.35)}.dy.on .dts i.f{background:var(--acc)}
+.mtg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.mtb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 4px;min-height:92px;border-radius:16px;background:var(--rose-soft);border:2px solid transparent;color:var(--mute)}
+.mtb i{font-style:normal;font-size:26px;line-height:1;opacity:.55}.mtb b{font-size:15px}.mtb small{font-size:11.5px;font-weight:600}
+.mtb.on{background:var(--soft);border-color:var(--pri);color:var(--pri)}.mtb.on i{opacity:1}
+.stp{display:flex;align-items:center;gap:10px}.stp button{width:42px;padding:0;border-radius:50%;font-size:20px}.stp b{min-width:28px;text-align:center;font-size:18px}
+details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;padding:10px 12px}details.mr summary{cursor:pointer;font-weight:700}
+.mini{display:flex;gap:3px}.mini em{font-style:normal;font-size:11px;font-weight:700;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--rose-soft);color:var(--mute);text-decoration:line-through}.mini em.f{background:var(--soft);color:var(--pri);text-decoration:none}
+.srow.cur{background:var(--soft);border-radius:12px;padding-left:8px;padding-right:8px}
+.ov{position:fixed;inset:0;background:rgba(6,10,26,.58);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sh{background:var(--card);width:100%;max-width:520px;border-radius:26px 26px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto}
+@media (min-width:700px){.ov{align-items:center}.sh{border-radius:26px}}
+.shh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.shh h2{margin:0}
+.shp{white-space:pre-wrap;word-break:break-word;font:13px/1.5 inherit;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:10px 12px;max-height:30vh;overflow:auto;margin:0 0 12px}
+.shg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}.shg .wide{grid-column:1/-1}
+.dv{text-align:center;position:relative}.dvx{position:absolute;right:10px;top:10px;color:var(--mute)}
+.dvp{width:128px;height:128px;border-radius:50%;object-fit:cover;border:4px solid var(--acc);box-shadow:0 10px 24px -10px rgba(0,0,0,.5);margin:6px auto 8px;display:block;background:var(--soft)}
+.dv h2{font-size:24px;margin:0}.dvr{display:inline-block;background:var(--soft);color:var(--pri);font-weight:700;font-size:12.5px;border-radius:14px;padding:3px 12px;margin:4px 0 8px}
+.dvb{text-align:left;margin:6px 0 14px;line-height:1.7}.dv .btn{width:100%}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:60;max-width:90vw;box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.rp{--bg:#eef2fb;--card:#ffffff;--field:#f4f7fd;--ink:#0e1a33;--mute:#5a678a;--line:#dae2f3;--pri:#2255d4;--pri-d:#17348f;--onpri:#ffffff;--soft:#e1e9fc;--acc:#f4a300;--acc-soft:#fff2d2;--acc-ink:#6b4600;--bad:#d23f2c;--good:#2255d4;--info:#0a8ea6;--rose:#e0685a;width:1123px;padding:24px 28px;background:var(--bg);color:var(--ink);font:15px/1.55 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+.rh{display:flex;justify-content:space-between;align-items:center;background:var(--pri-d);color:#fff;border-radius:16px;padding:16px 22px;margin-bottom:12px;border-bottom:5px solid var(--acc)}
+.rt{font:700 30px "Baloo Da 2","Hind Siliguri",serif}.rs{font-size:13px;opacity:.85}
+.rp table{white-space:normal}.rp table.c{font-size:12px}.rp table.c th,.rp table.c td{padding:3px 6px}
+</style>
+</head>
+<body><div id="shell"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script id="app">
+const E="</scr"+"ipt>",DKEY="bpDraftV2",RKEY="bpRoleV2";
+const $=id=>document.getElementById(id);
+const BN=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+const SM=["জানু","ফেব্রু","মার্চ","এপ্রি","মে","জুন","জুলাই","আগ","সেপ্টে","অক্টো","নভে","ডিসে"];
+const bd=s=>String(s).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const MONTHS=[];for(let y=2026;y<=2027;y++)for(let m=1;m<=12;m++)if(y*100+m>=202609)MONTHS.push(y+"-"+String(m).padStart(2,"0"));
+const lab=k=>BN[+k.slice(5)-1]+" "+bd(k.slice(0,4));
+const SH=[["wifi","ওয়াইফাই"],["garbage","ময়লা"],["fridge","ফ্রিজ"],["bibidh","বিবিধ"],["bidyut","বিদ্যুৎ"],["unnoyon","মেস উন্নয়ন"],["extra","অতিরিক্ত"]];
+const mk=(n,r)=>({id:"m"+Math.random().toString(36).slice(2,8),name:n,rent:r});
+const def=()=>({members:[["নাজমুল",2175],["মিনহাজ",2175],["ইউনুস",2175],["আশিক",2525],["মারুফ",2525],["রুহুল",2175],["রিফাত",2175],["মুরাদ",2175]].map(a=>mk(a[0],a[1])),def:{khala:500,extra:200,wifi:525},months:{}});
+const blank=()=>Object.assign(def(),{name:"",members:[],mcode:""});
+let S=blank(),MCODE="",VER=0,CID="",VAULT=null,Kraw=null,VM=null,VA=null,BASE="",PUB="",stage="login",NEW={},NEWMEM=[];
+const nowK=(d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))(new Date());
+let ROLE=null,MGR=false,CO=false,busy=false,DL=null,tab="home",mon=MONTHS.includes(nowK)?nowK:MONTHS[0];
+const SKEY="bpSessV3",PKEY="bpPendV3";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const p=s=>String(s==null?"":s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[,৳\s]/g,"").split("+").reduce((a,x)=>a+(parseFloat(x)||0),0);
+const f=n=>(Math.round(n*100)/100).toLocaleString("en-IN");
+const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
+const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
+const RO=()=>MGR?"":" readonly";
+const ens=k=>S.months[k]||(S.months[k]={r:{},s:{},n:""});
+const enc=new TextEncoder(),dec=new TextDecoder(),AL="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const b64=u=>{let t="";new Uint8Array(u).forEach(x=>t+=String.fromCharCode(x));return btoa(t)};
+const ub=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+const norm=c=>String(c).toUpperCase().replace(/[^A-Z0-9]/g,"");
+const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
+const genCode=pre=>pre+"-"+[...rnd(12)].map(x=>AL[x%32]).join("").match(/.{4}/g).join("-");
+async function kdf(code,salt){const m=await crypto.subtle.importKey("raw",enc.encode(norm(code)),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:120000,hash:"SHA-256"},m,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function wrap(code,raw){const sl=rnd(16),iv=rnd(12),k=await kdf(code,sl);return{s:b64(sl),i:b64(iv),w:b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},k,raw))}}
+async function unwrap(code,o){try{return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(o.i)},await kdf(code,ub(o.s)),ub(o.w)))}catch(e){return null}}
+const dkey=u=>crypto.subtle.importKey("raw",u,"AES-GCM",false,["encrypt","decrypt"]);
+const pends=()=>{const r=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf(PKEY)===0)try{r.push(JSON.parse(localStorage.getItem(k)))}catch(e){}}}catch(e){}return r};
+const getPend=id=>{try{return JSON.parse(localStorage.getItem(PKEY+id))}catch(e){return null}};
+const clrPend=id=>{try{localStorage.removeItem(PKEY+id)}catch(e){}};
+function save(){if(!MGR)return;try{if(VAULT&&JSON.stringify(S)===BASE)clrPend(CID);else localStorage.setItem(PKEY+CID,JSON.stringify({id:CID,k:b64(Kraw),M:VM,A:VA,S,base:VAULT?VAULT.ct:"",pub:PUB}))}catch(e){}updBar()}
+const b64u=u=>b64(u).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"");
+const hsh=async(pre,c)=>b64u(new Uint8Array(await crypto.subtle.digest("SHA-256",enc.encode(pre+norm(c)))));
+const lkOf=c=>hsh("bp-lk:",c),tokOf=c=>hsh("bp-tok:",c);
+async function login(code,wantMgr){
+  try{
+  let v=null;const lk0=await lkOf(code);OFFLINE=false;SRVERR="";
+  try{const r=await fetch("/api/vault?lk="+lk0,{cache:"no-store"});if(r.ok){v=await r.json();try{localStorage.setItem("bpVc:"+lk0,JSON.stringify(v))}catch(x){}}else if(r.status===404){try{localStorage.removeItem("bpVc:"+lk0)}catch(x){}}else{const j=await r.json().catch(()=>({}));SRVERR=j.error||("http_"+r.status)}}
+  catch(e){try{v=JSON.parse(localStorage.getItem("bpVc:"+lk0));OFFLINE=!!v}catch(x){}}
+  if(v)for(const w of v.co?["M"]:wantMgr?["A"]:["M","A"]){const raw=await unwrap(code,v[w]);if(!raw)continue;
+    const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(v.di)},await dkey(raw),ub(v.ct));
+    VAULT=v;CID=v.id;VER=v.ver||0;S=Object.assign(blank(),JSON.parse(dec.decode(pt)));Kraw=raw;VM=v.M;VA=v.A;BASE=JSON.stringify(S);
+    CO=!!v.co;MGR=CO||(wantMgr&&w==="A");ROLE=MGR?"manager":"member";if(MGR)MCODE=code;
+    VW=MGR&&!CO&&v.W?v.W:{};MCW=MGR&&!CO&&v.MC?v.MC:null;MCODES={};DROP=[];IDM="";kicked=false;
+    if(MGR&&!CO&&MCW){const r2=await unwrap(code,MCW);if(r2)try{MCODES=JSON.parse(dec.decode(r2))}catch(e){}}
+    if(!MGR){const mm=S.members.find(z=>z.lk&&z.lk===lk0);if(mm)IDM=mm.id}
+    const P=MGR&&getPend(CID);if(P){if(P.pub===v.ct||P.base!==v.ct)clrPend(CID);else S=Object.assign(blank(),P.S)}
+    return true}
+  CO=false;
+  if(wantMgr)for(const P of pends()){if(P&&P.base===""&&await unwrap(code,P.A)){VAULT=null;VER=0;MCODE=code;CID=P.id;Kraw=ub(P.k);VM=P.M;VA=P.A;S=Object.assign(blank(),P.S);BASE="";ROLE="manager";MGR=true;return true}}
+  }catch(e){}
+  return false}
+function rv(k,id,fl){const m=S.months[k],x=m&&m.r[id]&&m.r[id][fl];if(x!==undefined&&x!=="")return x;
+  const b=S.members.find(z=>z.id===id)||{};return fl==="r"?b.rent:fl==="k"?S.def.khala:fl==="e"?S.def.extra:""}
+function sv(k,fl){const m=S.months[k],x=m&&m.s[fl];if(x!==undefined&&x!=="")return x;return fl==="wifi"?S.def.wifi:""}
+function calc(k){
+  const rows=S.members.filter(b=>isAct(b,k)).map(b=>{const g=x=>p(rv(k,b.id,x));return{id:b.id,name:b.name,bazar:g("b"),meal:g("m"),rent:g("r"),khala:g("k"),deduct:g("d"),extra:g("e")}});
+  const tb=sum(rows,"bazar"),tm=sum(rows,"meal"),rate=tm?tb/tm:0;
+  const mo=S.months[k]||{},ex=mo.x||{},inc=rows.filter(r=>!ex[r.id]),cn=p(mo.c),div=cn>0?cn:inc.length,shared=SH.reduce((a,x)=>a+p(sv(k,x[0])),0),share=div?shared/div:0;
+  rows.forEach(r=>{r.mc=r.meal*rate;r.G=r.bazar-r.mc;r.J=ex[r.id]?0:share;r.N=r.rent+r.khala+r.J-r.G-r.deduct;r.P=r.N+r.extra});
+  const ov=sv(k,"rentOv"),rentT=ov!==""?p(ov):sum(rows,"rent"),income=sum(rows,"P");
+  const cost=shared+rentT+sum(rows,"khala");
+  const xl=mo.xp||[],exp=sum(xl.map(e=>({v:p(e.a)})),"v"),khalaT=sum(rows,"khala");
+  return{xl,exp,khalaT,rows,div,exn:rows.filter(r=>ex[r.id]).map(r=>r.name),exi:rows.filter(r=>ex[r.id]).map(r=>r.id),tb,tm,rate,shared,share,rentT,cost,income,fund:income-cost,net:income-cost-exp,active:tb>0||tm>0}}
+const act=()=>MONTHS.map(k=>({k,c:calc(k)})).filter(x=>x.c.active);
+
+const IC=(()=>{const g=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`,P=x=>`<path d="${x}"/>`;return{
+home:g(P("M3 11l9-8 9 8M5 9.5V20h5v-6h4v6h5V9.5")),
+bz:g(P("M3 4h2.2l2.3 11h10.3l2-8H6.2")+'<circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>'),
+ml:g(P("M7 3v7M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2.2 2-3 4.6-3 8h6V3zM17 11v10")),
+chat:g(P("M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.5A8 8 0 1 1 21 12z")),
+month:g(P("M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11M9 8h6")),
+more:g(P("M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z")),
+sc:g(P("M4 6h16v14H4zM4 10h16M8 3v4M16 3v4")),
+mem:g(P("M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14a6.5 6.5 0 0 1 3.5 6")),
+year:g(P("M3 17l6-6 4 4 8-8M15 7h6v6")),
+rep:g(P("M7 3h8l5 5v13H7zM14 3v6h6M10 14h7M10 18h7")),
+set:g('<circle cx="12" cy="12" r="3"/>'+P("M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"))}})();
+const curTheme=()=>document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+function paintTheme(){const d=curTheme()==="dark",b=$("thm");if(b){b.textContent=d?"☀️":"🌙";b.title=d?"লাইট মোড":"ডার্ক মোড"}const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?"#0a1020":"#17348f"}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(!a)return;
+  if(a.dataset.act==="theme"){e.stopPropagation();const n=curTheme()==="dark"?"light":"dark";document.documentElement.dataset.theme=n;try{localStorage.setItem("bpTheme",n)}catch(x){}paintTheme()}
+  else if(a.dataset.act==="more"){e.stopPropagation();closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
+    o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="আরও"><div class="shh"><h2>আরও মেনু</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><div class="mg6">${(window.__MORE||[]).map(x=>`<button data-t="${x[0]}" class="${tab===x[0]?"on":""}">${IC[x[0]]}<span>${x[1]}</span></button>`).join("")}</div></div>`;document.body.appendChild(o)}},true);
+/* ---------- shell / render ---------- */
+$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div class="logo" aria-hidden="true">🏠</div><div><h1>Bachelors Paradise</h1><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb" data-act="logout" hidden>বের হন</button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><nav class="tabs" id="tabs"></nav>';
+paintTheme();
+function updBar(){const b=$("bar");if(OFFLINE&&ROLE&&!MGR){b.innerHTML='<div class="bar warn">📴 অফলাইন — সর্বশেষ সেভ করা ডেটা দেখাচ্ছে</div>';return}if(!MGR||!ROLE){b.innerHTML="";return}const pend=JSON.stringify(S)!==BASE;
+  b.innerHTML=`<div class="bar${pend?" warn":""}"><span>${pend?(VAULT?"⚠ অপ্রকাশিত পরিবর্তন আছে — মেম্বাররা এখনো দেখছে না":"🆕 মেস তৈরি হয়েছে — প্রকাশ করুন চাপলে কোড দিয়ে মেম্বাররা ঢুকতে পারবে"):"✓ সব পরিবর্তন প্রকাশিত"}</span><button class="p" data-act="pub"${pend&&!busy?"":" disabled"}>${busy?"প্রকাশ হচ্ছে…":"প্রকাশ করুন"}</button></div>`}
+function render(){
+  if(ROLE&&S.bz&&!S.bz.v&&S.bz.ml&&p(S.bz.ml[0])===.5&&p(S.bz.ml[1])===.75&&p(S.bz.ml[2])===.75){S.bz.ml=[.5,1,1];S.bz.v=2;if(MGR)save()}
+  if(MGR&&scTop())save();
+  const L=!ROLE;$("out").hidden=L;$("tabs").style.display=L?"none":"flex";
+  $("sub").textContent=L?"মেসের হিসাব ও মাসিক রিপোর্ট":(S.name?"🏠 "+S.name+" • ":"")+(CO?"🤝 সহ-ম্যানেজার":MGR?"🔑 ম্যানেজার":"👤 মেম্বার")+" • "+AM().length+" জন সদস্য";
+  updBar();
+  if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();return}
+  if(tab==="set"&&(!MGR||CO))tab="home";
+  const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["chat","চ্যাট"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
+  const inMore=MORE.some(x=>x[0]===tab);
+  $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
+  window.__MORE=MORE;
+  $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
+  paint();paintBz();fit();
+  if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
+  if(ROLE)evStart();
+  const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
+}
+function vLogin(){
+  return `<div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
+  <h2 style="margin-top:14px">🔑 ম্যানেজার লগইন</h2><div class="row"><input id="ac" class="code" placeholder="MGR-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="alogin">লগইন</button></div>
+  <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল, বাজারের টিক ও চ্যাট করা যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
+  <div class="box"><h2>🏠 নতুন মেস তৈরি করুন</h2><p class="mute">নিজের মেসের হিসাব রাখতে চান? নতুন মেস তৈরি করলে আপনি একটি ম্যানেজার কোড ও একটি মেম্বার কোড পাবেন।</p><button class="p" data-act="newmess" style="width:100%">➕ মেস তৈরি করুন</button>
+  </div>
+  <div class="box"><h2>♻️ ব্যাকআপ থেকে ফেরান</h2><p class="mute">ডেটা হারিয়ে গেলে বা নতুন সার্ভারে গেলে: ব্যাকআপ ফাইল (.json) বেছে আগের ম্যানেজার কোড দিন। ম্যানেজার ও মেম্বার কোড আগের মতোই থাকবে এবং ডেটা নিজে থেকেই প্রকাশ হবে।</p>
+  <input type="file" accept=".json,application/json" data-recf="1" style="border:1.5px dashed var(--line);padding:8px;margin-bottom:8px"><div class="row"><input id="rc" class="code" placeholder="MGR-XXXX-XXXX-XXXX" aria-label="আগের ম্যানেজার কোড" autocomplete="off"><button class="p fix" data-act="recover">ফেরান</button></div></div>`}
+function vCodes(){return `<div class="box"><h2>🔐 আপনার ইউনিক কোড</h2>
+  <label class="mute">ম্যানেজার কোড — গোপন রাখুন, এটি দিয়েই ডেটা ফেরত পাবেন</label><input class="code" readonly value="${NEW.a}">
+  <label class="mute" style="display:block;margin-top:8px">সবার জন্য মেম্বার কোড — মেম্বারদের দিন (পরে সেটিং থেকে আলাদা কোডও দিতে পারবেন)</label><input class="code" readonly value="${NEW.m}">
+  <div class="warnb">⚠ সতর্কতা: কোড দুটি এখনই লিখে বা স্ক্রিনশট নিয়ে সংরক্ষণ করুন। কোড হারিয়ে গেলে ডেটা আর ফেরত পাওয়া যাবে না এবং কেউ কোড রিসেট করতে পারবে না। ম্যানেজার কোড কাউকে দেবেন না।</div>
+  <label><input type="checkbox" id="saved" style="width:auto"> আমি কোড দুটি সংরক্ষণ করেছি</label>
+  <div class="row" style="margin-top:10px"><button class="fix" data-act="back">← ফিরে যান</button><button class="p" data-act="tosetup">পরবর্তী ধাপ: মেস তৈরি</button></div></div>`}
+function vSetup(){return `<div class="box"><h2>🏠 মেস তৈরি করুন</h2><label class="mute">মেসের নাম</label><input id="mn" value="${esc(NEW.name||"")}" placeholder="যেমন: Bachelors Paradise" maxlength="50">
+  <h2 style="margin-top:12px">সদস্য যোগ করুন</h2>${NEWMEM.map((b,i)=>`<div class="row"><span>${esc(b.name)} — ভাড়া ${b.rent}</span><button class="x fix" data-rm="${i}">মুছুন</button></div>`).join("")||'<p class="mute">এখনো কোনো সদস্য নেই।</p>'}
+  <div class="row"><input id="nn" placeholder="সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="fix" data-act="addnew">যোগ</button></div>
+  <button class="p" style="width:100%;margin-top:6px" data-act="create">মেস তৈরি করুন</button><p class="mute" id="lmsg"></p></div>`}
+
+/* ---------- charts ---------- */
+function chart(title,key,fm){
+  const vals=MONTHS.map(k=>{const c=calc(k);return c.active?c[key]:null}),ok=vals.filter(v=>v!=null);
+  if(!ok.length)return `<div class="box"><h2>${title}</h2><p class="mute">হিসাব যোগ হলে গ্রাফ দেখা যাবে।</p></div>`;
+  const W=640,H=210,l=40,r=14,t=26,b=30,n=vals.length,mx=Math.max(...ok)*1.15||1,x=i=>l+i*(W-l-r)/(n-1),y=v=>t+(H-t-b)*(1-v/mx);
+  const P=vals.map((v,i)=>v==null?null:[x(i),y(v),v]).filter(Boolean);
+  const grid=[0,.5,1].map(q=>`<line x1="${l}" x2="${W-r}" y1="${y(mx*q)}" y2="${y(mx*q)}" stroke="var(--line)"/><text x="${l-5}" y="${y(mx*q)+3}" font-size="10" text-anchor="end" fill="var(--mute)">${fm(mx*q)}</text>`).join("");
+  const xl=MONTHS.map((k,i)=>`<text x="${x(i)}" y="${H-10}" font-size="9" text-anchor="middle" fill="var(--mute)">${SM[+k.slice(5)-1]}</text>`).join("");
+  const pts=P.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="var(--pri)"/><text x="${q[0]}" y="${q[1]-9}" font-size="10" text-anchor="middle" fill="var(--ink)">${fm(q[2])}</text>`).join("");
+  const lo=Math.min(...ok),hi=Math.max(...ok),at=v=>lab(MONTHS[vals.indexOf(v)]);
+  return `<div class="box"><h2>${title}</h2><svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${title}">${grid}${xl}<polyline fill="none" stroke="var(--pri)" stroke-width="2.5" points="${P.map(q=>q[0]+","+q[1]).join(" ")}"/>${pts}</svg>
+  <p class="mute">সর্বনিম্ন: <b>${fm(lo)}</b> (${at(lo)}) • সর্বোচ্চ: <b>${fm(hi)}</b> (${at(hi)})</p></div>`}
+
+/* ---------- views ---------- */
+function vHome(){
+  const LF=lastFund(),A=act(),tb=sum(A.map(x=>x.c),"tb"),tm=sum(A.map(x=>x.c),"tm"),inc=sum(A.map(x=>x.c),"income"),cst=sum(A.map(x=>x.c),"cost")+sum(MONTHS.map(k=>({v:calc(k).exp})),"v");
+  return vQuick()+vNotice()+vNext()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
+  ${chart("📈 মাসভিত্তিক মিল রেট (৳)","rate",v=>f(v))}${chart("🍽 মাসভিত্তিক মোট মিল","tm",v=>f(v))}
+  <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
+  ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
+const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
+function vMonth(){
+  const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
+  return `<div class="row">${msel()}</div>${vAct()}
+  <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
+  <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
+  ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
+  <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
+  ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
+  <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
+  <div style="margin-top:10px"><label class="mute" style="display:block">কত জনের মধ্যে ভাগ হবে? (ফাঁকা রাখলে নিচে টিক দেওয়া সদস্য সংখ্যাই ধরা হবে)</label><input${RO()} data-cnt="1" inputmode="numeric" value="${esc(m.c||"")}" placeholder="${bd(c.rows.length-c.exn.length)}" style="max-width:140px"></div>
+  <div class="mute" style="margin:10px 0 4px">কার কার ওপর এই খরচ যাবে (টিক = ভাগ নেবে):</div>
+  <div class="g2">${c.rows.map(r=>`<label style="display:flex;gap:7px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" data-ck="${r.id}"${c.exi.indexOf(r.id)<0?" checked":""}${MGR?"":" disabled"}> ${esc(r.name)}</label>`).join("")}</div>
+  <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p></div>
+  <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
+  ${vXp(c)}
+  ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`}
+function paint(){
+  if(tab!=="month")return;
+  const c=calc(mon),o={},put=(k,t,n)=>o[k]=[t,n];
+  c.rows.forEach(r=>{put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
+  put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
+  put("tN",f(sum(c.rows,"N")));put("income",f(c.income));put("cost","৳"+f(c.cost-c.shared+c.exp));put("incx",f(c.income-c.shared));{const fi=fundInfo(mon);put("fund","৳"+f(fi.close),fi.close);put("fclose","৳"+f(fi.close),fi.close);put("finc",f(c.income-c.shared));put("xall","৳"+f(c.cost-c.shared+c.exp));put("xall2","−"+f(c.cost-c.shared+c.exp));put("fuT","৳"+f(sum(fuOf(mon).map(e=>({v:p(e.a)})),"v")));put("ax:rent",f(c.rentT));put("ax:khala",f(c.khalaT))}
+  document.querySelectorAll("[data-o]").forEach(el=>{const v=o[el.dataset.o];if(!v)return;el.textContent=v[0];
+    if(v[1]!==undefined&&/^(fund|fgen|fclose|G)/.test(el.dataset.o))el.className=v[1]>=0?"pos":"neg"})}
+function vMem(){
+  const A=act();
+  const rows=S.members.map(b=>{let tb=0,tm=0,mc=0,N=0,P=0,n=0;A.forEach(x=>{const r=x.c.rows.find(z=>z.id===b.id);if(!r)return;tb+=r.bazar;tm+=r.meal;mc+=r.mc;N+=r.N;P+=r.P;if(r.meal>0)n++});return{name:b.name,tb,tm,mc,N,P,n,net:P-N,rate:tm?tb/tm:0}});
+  return `<div class="box scroll"><h2>সদস্যভিত্তিক পূর্ণ হিসাব</h2><table><tr><th>সদস্য</th><th>মোট বাজার</th><th>মোট মিল</th><th>গড় রেট</th><th>মিল খরচ</th><th>মোট বিল</th><th>মোট প্রদান</th><th>নিট</th><th>মাস</th></tr>
+  ${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.tb)}</td><td>${f(r.tm)}</td><td>${f(r.rate)}</td><td>${f(r.mc)}</td><td>${f(r.N)}</td><td>${f(r.P)}</td><td class="${r.net>=0?"pos":"neg"}">${sg(r.net)}</td><td>${bd(r.n)}</td></tr>`).join("")}
+  <tr class="tot"><td>TOTAL</td><td>${f(sum(rows,"tb"))}</td><td>${f(sum(rows,"tm"))}</td><td></td><td>${f(sum(rows,"mc"))}</td><td>${f(sum(rows,"N"))}</td><td>${f(sum(rows,"P"))}</td><td>${sg(sum(rows,"net"))}</td><td></td></tr></table></div>`}
+function vYear(){
+  const yr=y=>{const A=MONTHS.filter(k=>k.startsWith(y)).map(k=>calc(k)).filter(c=>c.active),t=g=>sum(A,g);return`<tr class="tot"><td>${bd(y)} সর্বমোট</td><td>${f(t("tb"))}</td><td>${f(t("tm"))}</td><td>${f(t("tm")?t("tb")/t("tm"):0)}</td><td>${f(t("cost")+t("exp"))}</td><td>${f(t("income"))}</td><td>${sg(t("net"))}</td><td>${f(t("exp"))}</td><td></td></tr>`};
+  return `<div class="box scroll"><h2>বার্ষিক সারাংশ — ২০২৬ বনাম ২০২৭</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
+  ${MONTHS.map(k=>{const c=calc(k),a=c.active,d=v=>a?v:"—";return`<tr class="${a?"":"off"}"><td><a href="#" data-open="${k}">${lab(k)}</a></td><td>${d(f(c.tb))}</td><td>${d(f(c.tm))}</td><td>${d(f(c.rate))}</td><td>${d(f(c.cost+c.exp))}</td><td>${d(f(c.income))}</td><td class="${c.net>=0?"pos":"neg"}">${d(sg(c.net))}</td><td>${a||c.exp?f(c.exp):"—"}</td><td>${a||c.exp?f(fundInfo(k).close):"—"}</td></tr>`}).join("")}${yr("2026")}${yr("2027")}</table></div>`}
+function vSet(){
+  return `<div class="box"><h2>মেসের নাম</h2><input data-nm="1" value="${esc(S.name)}" maxlength="50"></div>
+  <div class="box"><h2>সদস্য তালিকা ও ডিফল্ট ভাড়া</h2>${S.members.map(b=>`<div class="row"><input data-mn="${b.id}" value="${esc(b.name)}" aria-label="নাম"><input data-mr="${b.id}" inputmode="decimal" value="${b.rent}" aria-label="ভাড়া" style="max-width:100px"><button class="x fix" data-del="${b.id}">মুছুন</button></div>`).join("")}
+  <div class="row"><input id="nn" placeholder="নতুন সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="p fix" data-act="add">যোগ</button></div></div>
+  <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div></div>
+  ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vLogins()}${vBackup()}`}
+
+/* ---------- PDF report ---------- */
+function reportHTML(k){
+  const c=calc(k),m=S.months[k]||{n:""},fi=fundInfo(k),offn=S.members.filter(b=>isMem(b,k)&&!isAct(b,k)).map(b=>b.name);
+  const rows=c.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.bazar)}</td><td>${f(r.meal)}</td><td>${f(r.mc)}</td><td class="${r.G>=0?"pos":"neg"}">${sg(r.G)}</td><td>${f(r.rent)}</td><td>${f(r.khala)}</td><td>${f(r.J)}</td><td>${f(r.deduct)}</td><td>${f(r.N)}</td><td>${f(r.extra)}</td><td><b>${f(r.P)}</b></td></tr>`).join("");
+  const ln=(t,v,b)=>`<tr${b?' class="tot"':""}><td>${t}</td><td>${v}</td></tr>`,K=(t,v,cl)=>`<div><small>${t}</small><b class="${cl||""}">${v}</b></div>`;
+  return `<div class="rp"><div class="rh"><div><div class="rt">🏠 ${esc(S.name||"Bachelors Paradise")}</div><div class="rs">Bachelors Paradise • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">মাসিক হিসাব রিপোর্ট</div><div class="rt" style="font-size:22px">${lab(k)}</div></div></div>
+  <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট বাজার","৳"+f(c.tb))}${K("মোট মিল",f(c.tm))}${K("মিল রেট","৳"+f(c.rate),"pos")}${K("মোট খরচ","৳"+f(fi.spX))}${K("মেস আয় (বিবিধ বাদে)","৳"+f(fi.incX))}${K("এ মাসে জমা",sg(c.net),c.net>=0?"pos":"neg")}${K("🏦 ফান্ড বাকি","৳"+f(fi.close),fi.close>=0?"pos":"neg")}</div>
+  <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>${rows}
+  <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td><td>${f(sum(c.rows,"deduct"))}</td><td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${f(c.income)}</td></tr></table></div>
+  <div class="box"><h2>💸 মোট খরচ — আলাদা আলাদা হিসাব</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start"><table>${ln("🏠 বাড়িভাড়া",f(c.rentT))}${ln("🧹 খালার বিল",f(c.khalaT))}${c.xl.filter(e=>p(e.a)>0||e.n).map(e=>ln("✍ "+esc(e.n||"অন্যান্য"),f(p(e.a)))).join("")}${ln("মোট খরচ",f(fi.spX),1)}</table>
+  <div><table>${ln("আগের মাসের জের",f(fi.open))}${ln("এই মাসে মোট আয় (+) (বিবিধ বাদে)",f(fi.incX))}${ln("এই মাসে মোট খরচ (−)",f(fi.spX))}${ln("🏦 মেস ফান্ড বাকি (জমা)",f(fi.close),1)}</table>
+  <p class="mute" style="margin:8px 0 0">বিবিধ খরচ ${f(c.shared)} ÷ ${bd(c.div)} জন = জনপ্রতি ${f(c.share)} — সদস্যদের বিলের ভেতরেই ধরা, তাই খরচের তালিকায় আলাদা নেই${c.exn.length?" • যাদের ওপর যায়নি: "+esc(c.exn.join(", ")):""}</p>${offn.length?`<p class="mute" style="margin:4px 0 0">এই মাসের হিসাবে বাদ (নিষ্ক্রিয়): ${esc(offn.join(", "))}</p>`:""}</div></div></div>
+  ${fuOf(k).length?`<div class="box"><h2>📝 আগের মাসের জমা ফান্ড (জের ৳${f(fi.open)}) যে কাজে খরচ হয়েছে</h2><table class="c" style="max-width:560px">${fuOf(k).filter(e=>e.n||p(e.a)>0).map(e=>`<tr><td style="text-align:left">${esc(e.n||"অন্যান্য")}</td><td>${p(e.a)>0?f(p(e.a)):""}</td></tr>`).join("")}${sum(fuOf(k).map(e=>({v:p(e.a)})),"v")>0?`<tr class="tot"><td style="text-align:left">মোট</td><td>${f(sum(fuOf(k).map(e=>({v:p(e.a)})),"v"))}</td></tr>`:""}</table></div>`:""}
+  ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
+  <p class="mute" style="text-align:center;margin:6px 0 0">Bachelors Paradise • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
+function vRep(){return `<div class="row">${msel()}${DL?'<button class="p fix" data-act="pdf">📄 PDF ডাউনলোড</button>':""}</div>
+  ${DL?"":''}
+  <div class="box" id="rwrap" style="overflow:hidden;padding:0"><div id="rprev" style="width:1123px;transform-origin:top left">${reportHTML(mon)}</div></div>`}
+function fit(){const w=$("rwrap"),r=$("rprev");if(!w||!r)return;const s=Math.min(1,w.clientWidth/1123);r.style.transform="scale("+s+")";w.style.height=r.offsetHeight*s+"px"}
+addEventListener("resize",fit);
+/* ---------- bazar planner (স্মার্ট বাজার) ---------- */
+const BZC=[["মুদি","🏪 মুদি দোকান"],["সবজি ও মসলা","🥬 সবজি ও মসলা"],["মাছ-মাংস-ডিম","🐟 মাছ-মাংস-ডিম"],["মাছের সাথের সবজি","🍆 মাছের সাথের সবজি"]];
+const BZREF=32,DAYN=["১ম দিন","২য় দিন","৩য় দিন","৪র্থ দিন"];
+let bzv="shop",bzn=0;
+const bzi=(n,c,u,b,st,ep)=>({id:"d"+(++bzn),n,c,u,b,st,ep,q:"",aq:"",ap:"",d:0});
+const defBz=()=>{bzn=0;return{v:2,days:4,ppl:"",mo:"",mt:["","",""],ml:[.5,1,1],price:55,tg:55,
+ menu:[["শাক ভাজি + ডাল","মাছ/ডিম","মুরগি","ডিম/মাছের সাথে টমেটো"],["ভাজি + ডাল","মুরগি","মাছ + আলু + সবজি","মাছের সাথে বেগুন / ফুলকপি"],["আলু ভাজি + ডাল","মাছ + সবজি","গরুর মাংস + আলু","রাতে গরুর মাংস (ভুনা)"],["সবজি + ডাল","মুরগি","মাছ + সবজি","মাছের সাথে পটল / লাউ"]],
+ items:[bzi("পোলাও চাল","মুদি","কেজি",2,.5,130),bzi("চাল","মুদি","কেজি",10,.5,57),bzi("ডাল","মুদি","কেজি",1,.25,94),
+ bzi("সয়াবিন তেল","মুদি","লিটার",1.5,.5,204),bzi("লবণ","মুদি","কেজি",.5,.5,38),bzi("মসলা","মুদি","লট",1,1,100),
+ bzi("আলু","সবজি ও মসলা","কেজি",4,.5,23),bzi("পেঁয়াজ","সবজি ও মসলা","কেজি",2,.5,46),bzi("রসুন","সবজি ও মসলা","কেজি",.25,.05,180),
+ bzi("আদা","সবজি ও মসলা","কেজি",.15,.05,160),bzi("কাঁচা মরিচ","সবজি ও মসলা","কেজি",.25,.05,100),bzi("মিক্সড সবজি (সকাল)","সবজি ও মসলা","কেজি",3,.5,60),bzi("অন্যান্য (ভিম ইত্যাদি)","সবজি ও মসলা","লট",1,1,100),
+ bzi("মাছ","মাছ-মাংস-ডিম","কেজি",2,.5,320),bzi("ব্রয়লার মুরগি","মাছ-মাংস-ডিম","কেজি",2,.5,200),bzi("গরুর মাংস","মাছ-মাংস-ডিম","কেজি",1,.5,800),bzi("ডিম","মাছ-মাংস-ডিম","টি",7,1,12),
+ bzi("টমেটো","মাছের সাথের সবজি","কেজি",.5,.25,120),bzi("বেগুন","মাছের সাথের সবজি","কেজি",.7,.1,120),bzi("পটল","মাছের সাথের সবজি","কেজি",.7,.1,60),
+ bzi("ফুলকপি / পছন্দমত","মাছের সাথের সবজি","কেজি",0,.5,80),bzi("মুলা / পছন্দমত","মাছের সাথের সবজি","কেজি",0,.5,80),bzi("লাউ / পছন্দমত","মাছের সাথের সবজি","কেজি",0,.5,80)]}};
+const BZD=defBz();
+const BZ=()=>S.bz||BZD;
+function BZw(){if(!S.bz)S.bz=JSON.parse(JSON.stringify(BZD));return S.bz}
+const bzN=()=>{const z=BZ(),n=p(z.ppl);return n>0?n:AM().length};
+const bzMealsAuto=()=>{const z=BZ(),N=bzN(),mt=z.mt||[];return[0,1,2].reduce((a,i)=>a+(p(mt[i])>0?p(mt[i]):N*p(z.ml[i])),0)*z.days};
+const bzMeals=()=>{const o=p(BZ().mo);return o>0?o:bzMealsAuto()};
+const bzPD=()=>{const z=BZ(),ws=z.ml.reduce((a,x)=>a+p(x),0);return ws>0?bzMeals()/ws:bzN()*z.days};
+function bzPq(it){if(it.q!==""&&it.q!=null)return p(it.q);const raw=p(it.b)*bzPD()/BZREF-p(it.hv);if(raw<=0)return 0;const st=+it.st||1;return Math.round(Math.ceil(Math.round(raw/st*1e6)/1e6)*st*1000)/1000}
+const bzVis=r=>r.pq>0||r.it.d||r.it.aq!=="";
+function bzCalc(){const z=BZ(),meals=bzMeals(),budget=meals*p(z.price);
+ const rows=z.items.map(it=>{const pq=bzPq(it),eq=pq*p(it.ep),q=it.aq!==""?p(it.aq):pq,pr=it.ap!==""?p(it.ap):p(it.ep),cost=q*pr;return{it,pq,eq,q,pr,cost,diff:cost-eq}});
+ const done=rows.filter(r=>r.it.d),vis=rows.filter(bzVis),cur=sum(rows,"cost");
+ return{rows,meals,budget,est:sum(rows,"eq"),cur,spent:sum(done,"cost"),rate:meals?cur/meals:0,tg:p(z.tg),left:budget-cur,nDone:done.length,nVis:vis.length}}
+
+const bzTop=()=>`<div class="bzt"><div class="l"><span>খরচ <b data-bo="cur"></b> / বাজেট <b data-bo="budget"></b></span><b data-bo="left"></b></div><div class="prog" data-bbar><i></i><i></i></div><div class="mute">মিল রেট <b data-bo="rate"></b> (লক্ষ্য ৳<span data-bo="tg"></span>) • কেনা <b data-bo="cnt"></b></div></div>`;
+function vBzDuty(){const x=scNext("b");if(!x)return"";const mine=x.who.some(i=>mname(i)===getMe());return `<div class="bar${mine?" me":""}"><span>🛒 ${mine?"আপনার বাজারের পালা":"পরের বাজার"}: <b>${fdr(x)}</b> — ${x.who.map(i=>esc(mname(i))).join(", ")}</span><button class="x" data-t="sc" style="color:var(--pri)">রুটিন</button></div>`}
+function vBz(){
+  const T=[["shop","🛒 কেনাকাটা"],["plan","📝 প্ল্যান"],["sum","📊 সারাংশ"]];
+  const z=BZ(),days=`<div class="box" style="display:flex;align-items:center;gap:10px"><b>কত দিনের বাজার?</b><div class="seg" style="margin:0;flex:1">${[3,4].map(x=>`<button data-bzd="${x}" class="${z.days===x?"on":""}"${MGR?"":" disabled"}>${bd(x)} দিন</button>`).join("")}</div></div>`;
+  return vBzDuty()+days+`<div class="seg">${T.map(x=>`<button data-bzv="${x[0]}" class="${bzv===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>`+({shop:bzShop,plan:bzPlan,sum:bzSum}[bzv])(bzCalc())}
+
+function bzShop(c){
+  const row=r=>{const it=r.it,id=it.id;
+    const inp=`<div class="bzi"><input inputmode="decimal" data-bz="i" data-k="aq" data-id="${id}" data-bph="${id}" value="${esc(it.aq)}" aria-label="কেনা পরিমাণ"><input inputmode="decimal" data-bz="i" data-k="ap" data-id="${id}" value="${esc(it.ap)}" placeholder="দাম/${esc(it.u)}: ${f(p(it.ep))}" aria-label="আসল দাম"></div>`;
+    return `<div class="bzr${it.d?" done":""}" data-brow="${id}"><label class="bzk"><input type="checkbox" data-bzdone="${id}"${it.d?" checked":""} aria-label="কেনা হয়েছে"></label>
+    <div class="bzm"><div class="bzn">${esc(it.n)}</div><div class="mute">প্ল্যান <span data-bo="pq:${id}"></span> ${esc(it.u)} • ৳${f(p(it.ep))}/${esc(it.u)}${p(it.hv)>0?" • ঘরে আছে "+f(p(it.hv)):""}</div>${inp}</div><div class="bzc" data-bo="c:${id}"></div></div>`};
+  const boxes=BZC.map(([k,l])=>{const rs=c.rows.filter(r=>r.it.c===k&&bzVis(r));if(!rs.length)return"";
+    return `<div class="box"><h2>${l} <span class="mute" data-bo="cat:${k}"></span></h2>${rs.map(row).join("")}</div>`}).join("");
+  const opt=c.rows.filter(r=>!bzVis(r)).map(r=>esc(r.it.n));
+  return bzTop()+boxes+(opt.length?`<p class="mute">ঐচ্ছিক (পরিমাণ ০): ${opt.join(", ")} — "প্ল্যান" ট্যাবে পরিমাণ দিলে তালিকায় আসবে।</p>`:"")+
+  (MGR?'<p class="mute">টিপ: বাজারে যা কিনলেন তাতে টিক দিন — মেম্বাররাও লাইভ দেখবে। আসল পরিমাণ/দাম ফাঁকা রাখলে প্ল্যানের মানই ধরা হবে। শেষে "প্রকাশ করুন" চাপুন।</p>':'<p class="mute">টিপ: যিনি বাজার করছেন তিনি টিক ও আসল দাম লিখলে সবাই লাইভ দেখবে।</p>')}
+
+function bzPlan(c){
+  const z=BZ(),R=RO(),dis=MGR?"":" disabled";
+  const g=(lbl,k,ph)=>`<div><label>${lbl}</label><input${R} inputmode="decimal" data-bz="g" data-k="${k}" value="${esc(z[k])}" placeholder="${ph||""}"></div>`;
+  const mt=["সকাল","দুপুর","রাত"].map((l,i)=>`<div><label>${l} মোট মিল/দিন</label><input${R} inputmode="decimal" data-bz="mt" data-k="${i}" value="${esc((z.mt||[])[i]||"")}" placeholder="${f(bzN()*p(z.ml[i]))} (অটো)"></div>`).join("");
+  const ml=["সকাল","দুপুর","রাত"].map((l,i)=>`<div><label>${l} (প্রতি জনের মিল)</label><input${R} inputmode="decimal" data-bz="ml" data-k="${i}" value="${esc(z.ml[i])}"></div>`).join("");
+  const menu=z.menu.slice(0,z.days).map((m,i)=>`<div class="mrow"><b>${DAYN[i]}</b><div class="g2">${["সকাল","দুপুর","রাত","নোট"].map((l,j)=>`<div><label>${l}</label><input${R} data-bz="m" data-dy="${i}" data-k="${j}" value="${esc(m[j]||"")}"></div>`).join("")}</div></div>`).join("");
+  const tr=r=>{const it=r.it,id=it.id,I=(k,w,ex)=>`<input${R} data-bz="i" data-k="${k}" data-id="${id}" value="${esc(it[k])}" style="width:${w}px;${ex||""}">`;
+    return `<tr><td><input${R} data-bz="i" data-k="n" data-id="${id}" value="${esc(it.n)}" style="width:130px;text-align:left"></td>
+    <td><select data-bz="i" data-k="c" data-id="${id}"${dis} style="width:120px">${BZC.map(x=>`<option value="${x[0]}"${x[0]===it.c?" selected":""}>${x[0]}</option>`).join("")}</select></td>
+    <td>${I("b",64)}</td><td>${I("hv",64)}</td><td><input${R} inputmode="decimal" data-bz="i" data-k="q" data-id="${id}" data-bqph="${id}" value="${esc(it.q)}" style="width:64px"></td><td>${I("u",52,"text-align:left")}</td><td>${I("ep",64)}</td><td data-bo="ec:${id}"></td>${MGR?`<td><button class="x" data-bzdel="${id}" aria-label="মুছুন">✕</button></td>`:""}</tr>`};
+  return bzTop()+`<div class="box"><h2>⚙ মূল সেটিং</h2><div class="g2">${g("সদস্য সংখ্যা","ppl",bd(AM().length)+" (অটো)")}${ml}${mt}${g("প্রতি Full Meal মূল্য (৳)","price")}${g("লক্ষ্য মিল রেট (৳)","tg")}${g("পুরো সময়ের মোট মিল (ম্যানুয়াল)","mo",f(bzMealsAuto())+" (অটো)")}</div>
+  <p class="mute">অটো: মোট মিল = সদস্য × (সকাল+দুপুর+রাত ওজন) × দিন। কোনো বেলার "মোট মিল/দিন" ঘরে সংখ্যা (যেমন সকাল ৪.৫, দুপুর ৭, রাত ৭) লিখলে ওই বেলায় সেটাই ধরা হবে। "পুরো সময়ের মোট মিল" লিখলে পুরো হিসাব ওটাই হবে। বাজেট = মোট মিল × মিল মূল্য। এখন: <b data-bo="meals"></b> মিল • বাজেট <b data-bo="budget"></b></p>${MGR?'<button style="width:100%" data-act="bzfrommeal">📥 "মিল" ট্যাবের নির্বাচিত দিনের বেলাভিত্তিক মিল এখানে নিন</button>':""}</div>
+  <div class="box"><h2>🍽 ${bd(z.days)} দিনের মেনু</h2>${menu}</div>
+  <div class="box scroll"><h2>🧺 পণ্য ও দাম</h2><table><tr><th>পণ্য</th><th>ধরন</th><th>বেস পরিমাণ*</th><th>ঘরে আছে</th><th>এবারের পরিমাণ</th><th>একক</th><th>দাম/একক</th><th>খরচ</th>${MGR?"<th></th>":""}</tr>${c.rows.map(tr).join("")}</table>
+  <p class="mute">* বেস পরিমাণ = ৮ জন × ৪ দিনে (৩২ জন-দিন) যত লাগে। সদস্য বা দিন বদলালে "এবারের পরিমাণ" নিজে হিসাব হয় (ছোট ভাগে রাউন্ড করে)। নিজে ঠিক করতে চাইলে "এবারের পরিমাণ" ঘরে লিখুন। দামগুলো শেষ বাজারের আসল দাম।</p>
+  ${MGR?`<div class="row"><input id="bzn" placeholder="নতুন পণ্য"><select id="bzc" style="max-width:130px">${BZC.map(x=>`<option>${x[0]}</option>`).join("")}</select></div><div class="row"><input id="bzq" inputmode="decimal" placeholder="পরিমাণ"><input id="bzu" placeholder="একক (কেজি)"><input id="bzp" inputmode="decimal" placeholder="দাম/একক"><button class="p fix" data-act="bzadd">যোগ</button></div>`:""}</div>`}
+
+function bzText(c){const z=BZ();let t=`🛒 বাজার তালিকা — ${bd(z.days)} দিন, ${bd(bzN())} জন (${S.name||"মেস"})\n`;
+  BZC.forEach(([k,l])=>{const rs=c.rows.filter(r=>r.it.c===k&&bzVis(r));if(!rs.length)return;t+="\n"+l+"\n"+rs.map(r=>(r.it.d?"✅ ":"⬜ ")+r.it.n+" — "+f(r.pq)+" "+r.it.u+" (≈৳"+f(r.eq)+")").join("\n")+"\n"});
+  const nb=scNext("b");if(nb)t+=`\n🛒 বাজারে যাবেন: ${nb.who.map(i=>mname(i)).join(", ")} (${fdr(nb)})\n`;return t+`\nমোট আনুমানিক: ৳${f(c.est)} • বাজেট: ৳${f(c.budget)}`}
+function bzSum(c){
+  const N=bzN(),kp=(t,v,cl)=>`<div><small>${t}</small><b class="${cl||""}">${v}</b></div>`;
+  const cats=BZC.map(([k,l])=>{const rs=c.rows.filter(r=>r.it.c===k);return{l,est:sum(rs,"eq"),cur:sum(rs,"cost")}}),mx=Math.max(1,...cats.map(x=>Math.max(x.est,x.cur)));
+  const top=[...c.rows].filter(r=>r.cost>0).sort((a,b)=>b.cost-a.cost).slice(0,3),up=c.rows.filter(r=>r.diff>0.5).sort((a,b)=>b.diff-a.diff).slice(0,5);
+  const over=c.left<0,dv=c.rate-c.tg;
+  const tip=over?`<div class="warnb">⚠ বাজেটের চেয়ে <b>৳${f(-c.left)}</b> বেশি যাচ্ছে (মিল রেট ৳${f(c.rate)}, লক্ষ্য ৳${f(c.tg)})। সবচেয়ে বেশি খরচ: ${top.map(r=>esc(r.it.n)+" ৳"+f(r.cost)).join(", ")}। এগুলোর পরিমাণ কমান বা সস্তা বিকল্প (যেমন গরুর বদলে মুরগি/ডিম) ভাবুন।</div>`
+    :`<div class="bar" style="border-color:var(--pri)">✓ বাজেটের মধ্যে আছে — ৳${f(c.left)} বাকি</div>`;
+  const mem=MGR?`<div class="box"><h2>📒 মাসিক হিসাবে যোগ করুন</h2><p class="mute">কেনা (✔) আইটেমের মোট <b>৳${f(c.spent)}</b> যে সদস্য বাজার করেছেন তার "বাজার" ঘরে যোগ হবে।</p>
+    <div class="row">${msel()}<select id="bzmem">${AM().map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join("")}</select></div>
+    <button class="p" style="width:100%" data-act="bzmonth"${c.spent>0?"":" disabled"}>মাসিক হিসাবে যোগ করুন</button></div>
+    <div class="box"><h2>🔄 নতুন বাজার শুরু</h2><p class="mute">এই বাজারে যে আসল দামে কিনেছেন সেগুলো পরের বাজারের আনুমানিক দাম হয়ে যাবে; টিক ও আসল পরিমাণ/দাম মুছে যাবে।</p><button style="width:100%" data-act="bzreset">নতুন বাজার শুরু করুন</button></div>`:"";
+  return `<div class="kpi">${kp("বাজেট","৳"+f(c.budget))}${kp("বর্তমান খরচ","৳"+f(c.cur))}${kp(over?"ঘাটতি":"বাকি","৳"+f(Math.abs(c.left)),over?"neg":"pos")}${kp("মিল রেট","৳"+f(c.rate),dv>0?"neg":"pos")}${kp("জনপ্রতি","৳"+f(N?c.cur/N:0))}${kp("কেনা শেষ","৳"+f(c.spent))}</div>${tip}
+  <div class="box"><h2>ধরন অনুযায়ী খরচ</h2>${cats.map(x=>`<div class="cb"><span>${x.l}</span><div class="prog"><i style="width:${x.cur/mx*100}%"></i></div><b>৳${f(x.cur)}</b></div>`).join("")}</div>
+  ${up.length?`<div class="box"><h2>প্ল্যানের চেয়ে বেশি লেগেছে</h2>${up.map(r=>`<div class="cb"><span>${esc(r.it.n)}</span><span></span><b class="neg">+৳${f(r.diff)}</b></div>`).join("")}</div>`:""}
+  <div class="box"><h2>📤 তালিকা শেয়ার</h2><div class="row"><button data-act="bzcopy">📋 কপি</button><button class="p" data-act="bzwa">📤 শেয়ার (Messenger…)</button></div><button style="width:100%;margin-top:8px" data-act="pdfbz">📄 প্ল্যান ও কেনাকাটা PDF ডাউনলোড</button><p class="mute">বাজারে যাওয়ার আগে তালিকা মেসের গ্রুপে পাঠিয়ে দিন।</p></div>${bzHist()}${mem}`}
+
+function paintBz(){
+  if(tab!=="bz")return;const c=bzCalc(),o={},z=BZ();
+  o.cur="৳"+f(c.cur);o.budget="৳"+f(c.budget);o.rate="৳"+f(c.rate);o.tg=f(c.tg);o.meals=f(c.meals);o.cnt=bd(c.nDone)+"/"+bd(c.nVis);
+  o.left=c.left>=0?"বাকি ৳"+f(c.left):"ঘাটতি ৳"+f(-c.left);
+  c.rows.forEach(r=>{const id=r.it.id;o["pq:"+id]=f(r.pq);o["c:"+id]="৳"+f(r.cost);o["ec:"+id]=f(r.eq)});
+  BZC.forEach(([k])=>{o["cat:"+k]="৳"+f(sum(c.rows.filter(r=>r.it.c===k&&bzVis(r)),"cost"))});
+  document.querySelectorAll("[data-bo]").forEach(el=>{const v=o[el.dataset.bo];if(v!==undefined)el.textContent=v});
+  document.querySelectorAll('[data-bo="left"]').forEach(el=>el.className=c.left>=0?"pos":"neg");
+  document.querySelectorAll('[data-bo="rate"]').forEach(el=>el.className=c.rate>c.tg?"neg":"pos");
+  document.querySelectorAll("[data-bbar]").forEach(el=>{const a=c.budget>0?Math.min(100,c.spent/c.budget*100):0,b=c.budget>0?Math.min(100-a,(c.cur-c.spent)/c.budget*100):0;
+    el.children[0].style.width=a+"%";el.children[1].style.width=Math.max(0,b)+"%";el.classList.toggle("over",c.left<0)});
+  const by={};c.rows.forEach(r=>by[r.it.id]=r);
+  document.querySelectorAll("[data-brow]").forEach(el=>el.classList.toggle("done",!!(by[el.dataset.brow]&&by[el.dataset.brow].it.d)));
+  document.querySelectorAll("[data-bph]").forEach(el=>{const r=by[el.dataset.bph];if(r)el.placeholder="কেনা পরিমাণ: "+f(r.pq)+" "+r.it.u});
+  document.querySelectorAll("[data-bqph]").forEach(el=>{const r=by[el.dataset.bqph];if(r)el.placeholder=f(bzPqAuto(r.it))});
+}
+const bzPqAuto=it=>{const q=it.q;it.q="";const v=bzPq(it);it.q=q;return v};
+function bzIn(t){const d=t.dataset,z=BZw();
+  if(d.bz==="g")z[d.k]=t.value;
+  else if(d.bz==="ml")z.ml[+d.k]=t.value;
+  else if(d.bz==="mt"){z.mt=z.mt||["","",""];z.mt[+d.k]=t.value}
+  else if(d.bz==="m")z.menu[+d.dy][+d.k]=t.value;
+  else if(d.bz==="i"){const it=z.items.find(x=>x.id===d.id);if(it)it[d.k]=t.value}}
+async function bzCopy(txt){toast(await copyText(txt)?"তালিকা কপি হয়েছে ✔":"কপি করা যায়নি")}
+function bzAct(k){
+  if(k==="bzcopy")bzCopy(bzText(bzCalc()));
+  else if(k==="bzwa")shareSheet(bzText(bzCalc()),"বাজার তালিকা");
+  else if(!MGR)return;
+  else if(k==="bzfrommeal"){const w=wts(),z=BZw();z.mt=[0,1,2].map(i=>{const v=Math.round(sum(S.members.filter(b=>isAct(b,mld.slice(0,7))).map(b=>{const e=mlGet(mld,b.id);return{v:[e.b,e.l,e.n][i]*w[i]}}),"v")*100)/100;return v?String(v):""});save();render();alert("নেওয়া হয়েছে ("+fd(mld)+"): সকাল "+f(p(z.mt[0]))+", দুপুর "+f(p(z.mt[1]))+", রাত "+f(p(z.mt[2]))+"। অতিথি মিল এতে ধরা হয়নি।")}
+  else if(k==="bzadd"){const n=$("bzn").value.trim();if(!n)return;const z=BZw(),u=$("bzu").value.trim()||"কেজি",q=p($("bzq").value),kg=u==="কেজি"||u==="লিটার",den=bzPD();
+    z.items.push({id:"n"+Math.random().toString(36).slice(2,7),n,c:$("bzc").value,u,b:den?Math.round(q*BZREF/den*1000)/1000:q,st:kg?.05:1,ep:p($("bzp").value),q:"",aq:"",ap:"",d:0});save();render()}
+  else if(k==="bzmonth"){const id=$("bzmem").value,c=bzCalc(),m=S.members.find(x=>x.id===id);if(!m||c.spent<=0)return;
+    if(!confirm(lab(mon)+" মাসে "+m.name+"-এর বাজারে ৳"+f(Math.round(c.spent))+" যোগ হবে। চালিয়ে যাবেন?"))return;
+    const mo=ens(mon),r=(mo.r[id]=mo.r[id]||{});r.b=(r.b?String(r.b)+"+":"")+Math.round(c.spent);save();alert("যোগ হয়েছে — \"মাসিক\" ট্যাবে দেখুন। প্রকাশ করতে ভুলবেন না।")}
+  else if(k==="bzreset"){if(!confirm("নতুন বাজার শুরু করবেন?\n• আসল দাম পরের বাজারের আনুমানিক দাম হবে\n• কেনা আর আগের মজুদ থেকে প্ল্যানের ব্যবহার বাদ দিয়ে ঘরে বাকি পরিমাণ অটো হিসাব হবে\n• এই বাজার ইতিহাসে জমা হবে, টিক মুছে যাবে"))return;
+    const z=BZw(),c=bzCalc(),T=todayK();
+    if(c.nDone>0){S.rounds=(S.rounds||[]).concat([{d:T,days:z.days,n:bzN(),meals:Math.round(c.meals*100)/100,tot:Math.round(c.cur),rate:Math.round(c.rate*100)/100}]).slice(-24);
+      S.ph=S.ph||{};c.rows.forEach(r=>{const it=r.it;if(it.ap!==""&&p(it.ap)>0){S.ph[it.id]=(S.ph[it.id]||[]).concat([[T,p(it.ap)]]).slice(-12)}})}
+    c.rows.forEach(r=>{const it=r.it,base=p(it.b)*bzPD()/BZREF,bought=it.d?(it.aq!==""?p(it.aq):r.pq):0,left=Math.max(0,Math.round((p(it.hv)+bought-base)*100)/100);
+      if(it.ap!=="")it.ep=p(it.ap);it.hv=left?String(left):"";it.aq="";it.ap="";it.d=0;it.q=""});
+    save();bzv="plan";render()}}
+
+/* ---------- রুটিন (ওয়াশরুম ক্লিন + বাজারের তারিখ) ---------- */
+const WD=["রবি","সোম","মঙ্গল","বুধ","বৃহস্পতি","শুক্র","শনি"];
+const pad=n=>String(n).padStart(2,"0");
+const dk=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const todayK=()=>dk(new Date());
+const dayDiff=(a,b)=>{const x=a.split("-").map(Number),y=b.split("-").map(Number);return Math.round((new Date(y[0],y[1]-1,y[2])-new Date(x[0],x[1]-1,x[2]))/864e5)};
+const scEnd=x=>x.e&&x.e>x.d?x.e:x.d;
+const fs=k=>{if(!k)return"—";const a=k.split("-").map(Number);return bd(a[2])+" "+SM[a[1]-1]};
+const fdr=x=>x.e&&x.e>x.d?fs(x.d)+" – "+fs(x.e):fd(x.d);
+const fd=k=>{if(!k)return"তারিখ নেই";const a=k.split("-").map(Number);return bd(a[2])+" "+BN[a[1]-1]+", "+WD[new Date(a[0],a[1]-1,a[2]).getDay()]};
+const SCN={w:"🚽 ওয়াশরুম পরিষ্কার",b:"🛒 বাজারের তারিখ"};
+let scv="w";
+const SC=()=>S.sc||{w:[],b:[]};
+function SCw(){if(!S.sc)S.sc={w:[],b:[]};return S.sc}
+const mname=id=>{const m=S.members.find(x=>x.id===id);return m?m.name:"—"};
+const mopts=sel=>S.members.filter(m=>isMem(m,nowK)||m.id===sel).map(m=>`<option value="${m.id}"${m.id===sel?" selected":""}>${esc(m.name)}</option>`).join("");
+const scNext=k=>SC()[k].find(x=>!x.done&&scEnd(x)>=todayK());
+function vNext(){
+  const a=scNext("b"),w=scNext("w"),late=["w","b"].reduce((n,k)=>n+SC()[k].filter(x=>!x.done&&x.d&&scEnd(x)<todayK()).length,0),mine=scMine();
+  const banner=mine.length?`<div class="bar me"><span>⏰ ${mine.map(m=>(m.today?"আজ":"কাল")+" আপনার পালা: "+SCN[m.k]+(m.k==="b"&&scEnd(m.x)>m.x.d?" ("+fdr(m.x)+")":"")).join(" • ")}</span></div>`:"";
+  if(!a&&!w&&!late)return banner;
+  const line=(l,x,k)=>x?`<div class="cb" style="grid-template-columns:100px 1fr auto"><b>${l}</b><span>${fdr(x)} — <b>${x.who.map(i=>esc(mname(i))).join(", ")}</b></span><button class="x" data-act="screm" data-k="${k}" aria-label="রিমাইন্ডার শেয়ার করুন">📤</button></div>`:"";
+  return banner+`<div class="box"><h2>📅 সামনের কাজ <button class="x" data-t="sc" style="font-size:13px;font-weight:400">সব দেখুন</button></h2>${line("🛒 বাজার",a,"b")}${line("🚽 ওয়াশরুম",w,"w")}${late?`<p class="mute neg">⚠ ${bd(late)}টি কাজ তারিখ পেরিয়ে গেছে, ✔ দেওয়া হয়নি</p>`:""}</div>`}
+function vSc(){
+  const k=scv,sc=SC()[k],T=todayK(),first=sc.findIndex(x=>!x.done&&scEnd(x)>=T),dis=MGR?"":" disabled";
+  const seg=`<div class="seg">${["w","b"].map(x=>`<button data-scv="${x}" class="${k===x?"on":""}">${SCN[x]}</button>`).join("")}</div>`;
+  const row=(x,i)=>{const late=!x.done&&x.d&&scEnd(x)<T,cls=(x.done?" done":"")+(late?" late":"")+(i===first?" next":"");
+    const badge=(i===first?" • 🔜 সামনে":"")+(late?" • ⚠ বাকি":"");
+    if(!MGR){const mj=x.who.findIndex(i=>mname(i)===getMe());return `<div class="srow${cls}"><b>${fdr(x)}</b><span style="flex:1">${x.who.map(w=>esc(mname(w))).join(", ")}${x.sb?" 🔄":""}</span>${mj>=0?`<label style="white-space:nowrap"><input type="checkbox" data-scdone="${x.id}" data-k="${k}"${x.done?" checked":""}> হয়েছে</label><select data-sub="${k}:${x.id}:${mj}" aria-label="বদলি"><option value="">🔄 বদলি দিন…</option>${mopts("")}</select>`:`<span>${x.done?"✔ হয়েছে":"⏳"}</span>`}<span class="mute scn">${badge}</span></div>`}
+    return `<div class="srow mg${k==="w"?" w1":""}${cls}"><div><label class="mute">${k==="b"?"কোন তারিখ থেকে":"তারিখ"}</label><input type="date" data-sc="${k}" data-id="${x.id}" data-k="d" value="${x.d}"></div>${k==="b"?`<div><label class="mute">কোন তারিখ পর্যন্ত</label><input type="date" data-sc="${k}" data-id="${x.id}" data-k="e" value="${x.e||x.d}"></div>`:""}<div class="wh"><label class="mute">কে</label>${x.who.map((w,j)=>`<select data-sc="${k}" data-id="${x.id}" data-k="w" data-j="${j}" aria-label="কে">${mopts(w)}</select>`).join("")}</div>
+    <div class="ac"><label style="white-space:nowrap"><input type="checkbox" data-scdone="${x.id}" data-k="${k}"${x.done?" checked":""}> হয়েছে</label><button class="x" data-scdel="${k}:${x.id}" aria-label="মুছুন">✕ মুছুন</button></div><div class="mute scn">${fdr(x)}${x.sb?" • 🔄 বদলি":""}${badge}</div></div>`};
+  const gen=MGR?`<div class="box"><h2>⚙ ঘূর্ণি রুটিন তৈরি করুন</h2><p class="mute">সদস্যদের পালা করে নিজে নিজে তারিখ ও দায়িত্ব সাজিয়ে দেবে। পরে ইচ্ছেমত বদলাতে পারবেন।</p>
+    <div class="g2"><div><label>শুরুর তারিখ</label><input type="date" id="scs" value="${T}"></div><div><label>${k==="w"?"কত দিন পর পর":"প্রতি জনের পালা কত দিনের"}</label><input id="sce" inputmode="numeric" value="${k==="w"?7:BZ().days}"></div>
+    <div><label>কয়টি তারিখ</label><input id="scc" inputmode="numeric" value="${k==="w"?AM().length||8:8}"></div>${k==="w"?'<div><label>এক দিনে কত জন</label><input id="scp" inputmode="numeric" value="1"></div>':""}
+    <div><label>প্রথমে কে</label><select id="scf">${mopts("")}</select></div></div>${k==="w"?`<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--ink);font-size:14px"><input type="checkbox" id="scmo"> 🔁 প্রতি মাসে একই তারিখে, চিরকাল (শুরুর তারিখের দিনটি প্রতি মাসে; সদস্যরা পালা করে)</label>`:""}
+    <div class="row" style="margin-top:10px"><button class="p" data-act="scgen">রুটিন তৈরি করুন</button><button data-act="scadd">+ একটি পালা</button></div></div>
+    <div class="box"><h2>🙋 একজনের পালা আলাদা করে দিন</h2><p class="mute">${k==="b"?"যার যার বাজারের তারিখ আলাদা — কে, কোন তারিখ থেকে কোন তারিখ পর্যন্ত বাজার করবে বেছে যোগ করুন।":"কে, কোন তারিখে পরিষ্কার করবে বেছে যোগ করুন।"}</p>
+    <div class="g2"><div><label>কে</label><select id="sao">${mopts("")}</select></div><div><label>${k==="b"?"কোন তারিখ থেকে":"তারিখ"}</label><input type="date" id="sas" value="${T}"></div>${k==="b"?`<div><label>কোন তারিখ পর্যন্ত</label><input type="date" id="sae" value="${shiftD(T,Math.max(1,BZ().days)-1)}"></div>`:""}</div>
+    ${k==="w"?`<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--ink);font-size:14px"><input type="checkbox" id="sar"> 🔁 প্রতি মাসে একই তারিখে, চিরকাল</label>`:""}<button class="p" style="width:100%;margin-top:10px" data-act="scone">যোগ করুন</button></div>`:"";
+  return seg+`${k==="w"?vRules():""}<div class="box"><h2>${SCN[k]}</h2>${sc.map(row).join("")||'<p class="mute">এখনো কোনো তারিখ ঠিক করা হয়নি।'+(MGR?" নিচে থেকে রুটিন তৈরি করুন।":"")+'</p>'}</div>${gen}
+  <div class="btns" style="margin:0 0 12px"><button data-act="scshare">📤 শেয়ার</button><button data-act="pdfsc">📄 PDF ডাউনলোড</button></div>`}
+const mDate=(y,m0,d)=>{const L=new Date(y,m0+1,0).getDate();return dk(new Date(y,m0,Math.min(d,L)))};
+/* প্রতি মাসের স্থায়ী নিয়ম (ওয়াশরুম): একবার সেট করলে প্রতি মাসে নিজে নিজে তারিখ তৈরি হয় */
+function scTop(){const sc=SCw();if(!sc.rep||!sc.rep.length)return false;sc.rs=sc.rs||{};let ch=false;
+  const q=nowK.split("-").map(Number),lim=q[0]*12+q[1]-1+24;
+  for(const r of sc.rep){const f0=r.from.split("-").map(Number);
+    for(let i=0;i<600;i++){const mi=f0[0]*12+f0[1]-1+i;if(mi>lim)break;const y=Math.floor(mi/12),m0=mi%12,id="r"+r.id+y+"-"+pad(m0+1);
+      if(sc.rs[id]||sc.w.some(x=>x.id===id))continue;
+      sc.w.push({id,d:mDate(y,m0,r.day),who:r.rot&&r.rot.length?[r.rot[i%r.rot.length]]:r.who.slice(),done:0,note:"",rp:r.id});ch=true}}
+  if(ch)sc.w.sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0);return ch}
+function vRules(){const sc=SC();if(!sc.rep||!sc.rep.length)return"";
+  return `<div class="box"><h2>🔁 প্রতি মাসের স্থায়ী নিয়ম</h2>${sc.rep.map(r=>`<div class="srow"><span style="flex:1">প্রতি মাসের <b>${bd(r.day)}</b> তারিখ — ${r.rot&&r.rot.length?"পালা করে: "+r.rot.map(i=>esc(mname(i))).join(" → "):esc(r.who.map(mname).join(", "))}<div class="mute">${lab(r.from)} থেকে নিজে নিজে চলছে</div></span>${MGR?`<button class="x" data-rrm="${r.id}">✕ বন্ধ</button>`:""}</div>`).join("")}<p class="mute">একবার সেট করলে প্রতি মাসে একই তারিখে নিজে তৈরি হয়ে যায় — আর নতুন করে দিতে হবে না।</p></div>`}
+function scAct(k){
+  if(!MGR)return;const kind=scv,sc=SCw();
+  if(k==="scadd"){const l=sc[kind][sc[kind].length-1];let d0=todayK();if(l&&l.d)d0=kind==="b"?shiftD(scEnd(l),1):shiftD(l.d,7);
+    const it={id:"s"+Math.random().toString(36).slice(2,7),d:d0,who:[AM()[0]?AM()[0].id:""],done:0,note:""};if(kind==="b")it.e=shiftD(d0,Math.max(1,BZ().days)-1);
+    sc[kind].push(it);save();render();return}
+  if(k==="scone"){const who=$("sao").value,a=$("sas").value,z=kind==="b"?$("sae").value:"";if(!who||!a){alert("কে ও তারিখ দিন");return}
+    if(kind==="b"&&(!z||z<a)){alert("শেষ তারিখ শুরুর তারিখের আগে হতে পারে না");return}
+    const it={id:"s"+Math.random().toString(36).slice(2,7),d:a,who:[who],done:0,note:""};if(kind==="b")it.e=z;
+    sc[kind].push(it);
+    if(kind==="w"&&$("sar")&&$("sar").checked){const q=a.split("-").map(Number),rid=Math.random().toString(36).slice(2,6);it.id="r"+rid+a.slice(0,7);it.rp=rid;sc.rep=(sc.rep||[]).concat([{id:rid,day:q[2],from:a.slice(0,7),who:[who]}]);scTop()}
+    sc[kind].sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0);save();render();toast("যোগ হয়েছে ✔");return}
+  const st=$("scs").value,ev=Math.max(1,parseInt($("sce").value)||7),cnt=Math.min(60,Math.max(1,parseInt($("scc").value)||8)),per=kind==="w"?Math.max(1,Math.min(AM().length,parseInt($("scp").value)||1)):1;
+  if(!st){alert("শুরুর তারিখ দিন");return}if(!AM().length)return;
+  if(sc[kind].length&&!confirm("আগের তালিকা বদলে যাবে। চালিয়ে যাবেন?"))return;
+  const a=st.split("-").map(Number),n=AM().length;let idx=Math.max(0,AM().findIndex(m=>m.id===$("scf").value)),arr=[];
+  const mo=kind==="w"&&$("scmo")&&$("scmo").checked;
+  if(mo){const rid=Math.random().toString(36).slice(2,6),rot=[];for(let i=0;i<n;i++)rot.push(AM()[(idx+i)%n].id);sc.w=sc.w.filter(x=>!x.rp);sc.rep=[{id:rid,day:a[2],from:st.slice(0,7),rot}];sc.rs={};scTop();save();render();toast("প্রতি মাসের নিয়ম চালু হয়েছে ✔");return}
+  for(let i=0;i<cnt;i++){const who=[];for(let j=0;j<per;j++){who.push(AM()[idx%n].id);idx++}
+    const row={id:"s"+Math.random().toString(36).slice(2,7),d:mo?mDate(a[0],a[1]-1+i,a[2]):dk(new Date(a[0],a[1]-1,a[2]+i*ev)),who,done:0,note:""};if(kind==="b")row.e=dk(new Date(a[0],a[1]-1,a[2]+i*ev+ev-1));arr.push(row)}
+  sc[kind]=arr;save();render()}
+function scIn(t){const d=t.dataset,k=d.sc,it=SCw()[k].find(x=>x.id===d.id);if(!it)return;
+  if(d.k==="w"){it.who[+d.j]=t.value;return}if(!t.value)return;
+  if(d.k==="d"){if(k==="b"){const span=Math.max(0,dayDiff(it.d,it.e||it.d));it.d=t.value;it.e=shiftD(t.value,span)}else it.d=t.value}
+  else if(d.k==="e")it.e=t.value<it.d?it.d:t.value}
+function scText(){const T=todayK();let t=`📅 ${S.name||"মেস"} — রুটিন\n`;["b","w"].forEach(k=>{const L=SC()[k].filter(x=>!x.done&&scEnd(x)>=T).slice(0,8);if(!L.length)return;t+="\n"+SCN[k]+"\n"+L.map(x=>"• "+fdr(x)+" — "+x.who.map(i=>mname(i)).join(", ")).join("\n")+"\n"});return t}
+
+/* ---------- PDF রিপোর্ট (বাজার প্ল্যান ও রুটিন) ---------- */
+const rptHead=(t,s)=>`<div class="rh"><div><div class="rt">🏠 ${esc(S.name||"Bachelors Paradise")}</div><div class="rs">Bachelors Paradise • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">${t}</div><div class="rt" style="font-size:22px">${s}</div></div></div>`;
+const rptFoot=()=>`<p class="mute" style="text-align:center;margin:6px 0 0">Bachelors Paradise • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>`;
+function scReportHTML(){
+  const T=todayK(),tbl=k=>`<table class="c"><tr><th>#</th><th style="text-align:left">তারিখ</th><th style="text-align:left">দায়িত্বে</th><th>অবস্থা</th></tr>${SC()[k].map((x,i)=>`<tr><td>${bd(i+1)}</td><td style="text-align:left">${fdr(x)}</td><td style="text-align:left">${x.who.map(w=>esc(mname(w))).join(", ")}</td><td>${x.done?"✔ হয়েছে":scEnd(x)<T?"⚠ বাকি":"⏳ সামনে"}</td></tr>`).join("")||'<tr><td colspan="4">তালিকা নেই</td></tr>'}</table>`;
+  return `<div class="rp pg">${rptHead("মেস রুটিন",fd(T))}<div class="box"><h2>${SCN.w}</h2>${tbl("w")}</div></div><div class="rp pg"><div class="box"><h2>${SCN.b}</h2>${tbl("b")}</div>${rptFoot()}</div>`}
+function bzReportHTML(){
+  const z=BZ(),c=bzCalc(),N=bzN(),K=(t,v,cl)=>`<div><small>${t}</small><b class="${cl||""}">${v}</b></div>`,nb=scNext("b"),T=todayK();
+  const L=(x)=>`style="text-align:left${x||""}"`;
+  const menu=z.menu.slice(0,z.days).map((m,i)=>`<tr><td ${L()}>${DAYN[i]}</td><td ${L()}>${esc(m[0]||"")}</td><td ${L()}>${esc(m[1]||"")}</td><td ${L()}>${esc(m[2]||"")}</td><td ${L()}>${esc(m[3]||"")}</td></tr>`).join("");
+  const bl=["সকাল","দুপুর","রাত"],mt=z.mt||[],perDay=[0,1,2].map(i=>p(mt[i])>0?p(mt[i]):N*p(z.ml[i]));
+  const setT=`<table class="c"><tr><th ${L()}>বেলা</th>${bl.map(x=>`<th>${x}</th>`).join("")}<th>মোট</th></tr>
+   <tr><td ${L()}>প্রতি জনের মিল (ওজন)</td>${[0,1,2].map(i=>`<td>${f(p(z.ml[i]))}</td>`).join("")}<td>${f(z.ml.reduce((q,x)=>q+p(x),0))}</td></tr>
+   <tr><td ${L()}>মোট মিল / দিন</td>${perDay.map(v=>`<td>${f(v)}</td>`).join("")}<td>${f(perDay.reduce((q,x)=>q+x,0))}</td></tr>
+   <tr><td ${L()}>${bd(z.days)} দিনে মোট মিল</td>${perDay.map(v=>`<td>${f(v*z.days)}</td>`).join("")}<td><b>${f(c.meals)}</b></td></tr></table>`;
+  const rota=SC().b.filter(x=>!x.done&&scEnd(x)>=T).slice(0,5);
+  const rotaT=rota.length?`<div class="box"><h2>🗓 বাজারের তারিখ ও দায়িত্ব</h2><table class="c"><tr><th ${L()}>তারিখ</th><th ${L()}>কে বাজার করবেন</th></tr>${rota.map(x=>`<tr><td ${L()}>${fdr(x)}</td><td ${L()}>${x.who.map(i=>esc(mname(i))).join(", ")}</td></tr>`).join("")}</table></div>`:"";
+  const cat=BZC.map(([k,l])=>{const rs=c.rows.filter(r=>r.it.c===k&&bzVis(r));if(!rs.length)return"";
+    return `<tr><td colspan="8" ${L(";font-weight:700;background:var(--bg)")}>${l}</td><td style="font-weight:700;background:var(--bg)">${f(sum(rs,"cost"))}</td><td style="background:var(--bg)"></td></tr>`+rs.map(r=>`<tr><td ${L()}>${r.it.d?"✔":"☐"} ${esc(r.it.n)}</td><td>${f(r.pq)}</td><td>${esc(r.it.u)}</td><td>${p(r.it.hv)>0?f(p(r.it.hv)):""}</td><td>${f(p(r.it.ep))}</td><td>${f(r.eq)}</td><td>${r.it.aq!==""?f(p(r.it.aq)):""}</td><td>${r.it.ap!==""?f(p(r.it.ap)):""}</td><td>${r.it.d||r.it.aq!==""||r.it.ap!==""?f(r.cost):""}</td><td>${r.it.d?"কেনা":"বাকি"}</td></tr>`).join("")}).join("");
+  const opt=c.rows.filter(r=>!bzVis(r)).map(r=>esc(r.it.n));
+  const H=(S.rounds||[]).slice(-3).reverse();
+  const hist=H.length?`<div class="box"><h2>🗂 আগের বাজার</h2><table class="c"><tr><th ${L()}>তারিখ</th><th>দিন</th><th>জন</th><th>মিল</th><th>খরচ</th><th>মিল রেট</th></tr>${H.map(x=>`<tr><td ${L()}>${fd(x.d)}</td><td>${bd(x.days)}</td><td>${x.n!=null?bd(x.n):""}</td><td>${f(x.meals)}</td><td>৳${f(x.tot)}</td><td>৳${f(x.rate)}</td></tr>`).join("")}</table></div>`:"";
+  return `<div class="rp pg">${rptHead("বাজার প্ল্যান",bd(z.days)+" দিন • "+bd(N)+" জন")}
+  <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট মিল",f(c.meals))}${K("মিল মূল্য","৳"+f(p(z.price)))}${K("বাজেট","৳"+f(c.budget))}${K("আনুমানিক খরচ","৳"+f(c.est))}${K("বর্তমান খরচ","৳"+f(c.cur))}${K("মিল রেট (লক্ষ্য ৳"+f(c.tg)+")","৳"+f(c.rate),c.rate>c.tg?"neg":"pos")}${K("জনপ্রতি","৳"+f(N?c.cur/N:0))}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start"><div class="box"><h2>⚙ মিলের হিসাব</h2>${setT}<p class="mute" style="margin:6px 0 0">সদস্য ${bd(N)} জন • ${bd(z.days)} দিন • বাজেট = মোট মিল × মিল মূল্য</p></div>
+  <div>${nb?`<div class="warnb" style="background:var(--soft);color:var(--pri-d);border-color:var(--pri)">🛒 পরের বাজার: <b>${fdr(nb)}</b> — ${nb.who.map(i=>esc(mname(i))).join(", ")}</div>`:""}${rotaT}</div></div>
+  <div class="box"><h2>🍽 ${bd(z.days)} দিনের মেনু</h2><table class="c"><tr><th ${L()}>দিন</th><th ${L()}>সকাল</th><th ${L()}>দুপুর</th><th ${L()}>রাত</th><th ${L()}>নোট</th></tr>${menu}</table></div></div>
+  <div class="rp pg"><div class="box"><h2>🛒 কেনাকাটা তালিকা</h2><table class="c"><tr><th ${L()}>পণ্য</th><th>প্ল্যান পরিমাণ</th><th>একক</th><th>ঘরে আছে</th><th>দাম/একক</th><th>আনুমানিক ৳</th><th>কেনা পরিমাণ</th><th>আসল দাম</th><th>খরচ ৳</th><th>অবস্থা</th></tr>${cat}
+  <tr class="tot"><td ${L()}>মোট</td><td></td><td></td><td></td><td></td><td>${f(c.est)}</td><td></td><td></td><td>${f(c.cur)}</td><td></td></tr></table>${opt.length?`<p class="mute" style="margin:6px 0 0">ঐচ্ছিক (পরিমাণ ০): ${opt.join(", ")}</p>`:""}</div>${hist}${rptFoot()}</div>`}
+async function makePDF(html,fn,btn,W){
+  W=W||1123;
+  const old=btn?btn.textContent:"";if(btn){btn.disabled=true;btn.textContent="PDF তৈরি হচ্ছে…"}
+  try{
+    if(!window.html2canvas||!window.jspdf)throw new Error("lib");
+    const el=document.createElement("div");el.style.cssText="position:absolute;left:-10000px;top:0;width:"+W+"px";
+    const setW=w=>{el.style.width=w+"px";el.querySelectorAll(".rp").forEach(x=>{x.style.width=w+"px"})};
+    el.innerHTML=html;setW(W);document.body.appendChild(el);
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    /* সবচেয়ে ছোট চওড়ায় শুরু করে, লেখা উপচে পড়লে নিজে চওড়া করে — যাতে অক্ষর যতটা সম্ভব বড় থাকে */
+    for(let n=0;n<8;n++){const sw=Math.max(el.scrollWidth,...[...el.querySelectorAll(".rp")].map(x=>x.scrollWidth));if(sw<=W+1)break;W=sw;setW(W)}
+    const cv=await html2canvas(el,{scale:2,backgroundColor:"#eef2fb"});el.remove();
+    const pg=a4Fit(cv.width,cv.height,6),pdf=new window.jspdf.jsPDF({orientation:pg.land?"landscape":"portrait",unit:"mm",format:"a4"});
+    pdf.setFillColor(238,242,251);pdf.rect(0,0,pg.pw,pg.ph,"F");
+    pdf.addImage(cv.toDataURL("image/jpeg",.95),"JPEG",(pg.pw-pg.w)/2,pg.m,pg.w,pg.h);
+    await DL.save({filename:fn,data:pdf.output("blob")});
+  }catch(x){if(!x||x.code!=="declined"){if(confirm("PDF তৈরি করা যায়নি। এর বদলে প্রিন্ট করে 'Save as PDF' করবেন?"))printHTML(html,W)}}
+  if(btn){btn.disabled=false;btn.textContent=old}
+}
+/* একটি A4 পাতায় ঢোকানো: লম্বালম্বি/আড়াআড়ি যেটায় লেখা বড় থাকে সেটা বেছে নেয়; কখনো ২ পাতা হয় না */
+function a4Fit(cw,ch,m){const fit=(pw,ph)=>Math.min((pw-2*m)/cw,(ph-2*m)/ch),sl=fit(297,210),sp=fit(210,297),land=sl>=sp,s=land?sl:sp;
+  return{land,pw:land?297:210,ph:land?210:297,m,w:cw*s,h:ch*s}}
+
+/* ---------- চ্যাট (এনক্রিপ্টেড) ---------- */
+let CODE="",CH=[],CHLAST="",chTimer=null,chBusy=false,chErr="",chSnap=true;
+const getMe=()=>{if(!MGR&&IDM){const q=S.members.find(x=>x.id===IDM);if(q)return q.name}let m="";try{m=localStorage.getItem("bpMe")||""}catch(e){}return m||(MGR?"ম্যানেজার":"")};
+function chatStart(){if(chTimer)return;chPoll();chTimer=setInterval(()=>{if(!document.hidden)chPoll()},4000)}
+function chatStop(){if(chTimer){clearInterval(chTimer);chTimer=null}}
+async function chPoll(){
+  if(chBusy||!CODE||!Kraw)return;chBusy=true;
+  try{const r=await fetch("/api/chat?lk="+await lkOf(CODE)+"&after="+CHLAST,{cache:"no-store"});
+    if(r.status===404&&!MGR&&VAULT){kickOut();return}
+    if(r.status===404)chErr='চ্যাট এখনো চালু হয়নি — ম্যানেজার একবার "প্রকাশ করুন" চাপলে চালু হবে।';
+    else if(r.ok){chErr="";const j=await r.json(),key=await dkey(Kraw);
+      for(const m of j.msgs){CHLAST=m.k;try{const o=JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(m.iv)},key,ub(m.ct))));CH.push(Object.assign({k:m.k},o))}catch(e){}}}
+    else chErr="চ্যাট লোড হয়নি";
+  }catch(e){chErr="ইন্টারনেট সংযোগ নেই"}
+  chBusy=false;chPaint()}
+function chPaint(){
+  const el=$("clist");if(!el)return;const near=el.scrollHeight-el.scrollTop-el.clientHeight<80,me=getMe();let day="";
+  el.innerHTML=(chErr?`<p class="mute">${chErr}</p>`:"")+(!CH.length&&!chErr?'<p class="mute">এখনো কোনো মেসেজ নেই। প্রথম মেসেজটি আপনিই পাঠান 👋</p>':"")+
+   CH.map(m=>{const d=new Date(m.ts),dd=dk(d);let h="";if(dd!==day){day=dd;h=`<div class="cday">${fd(dd)}</div>`}
+    return h+`<div class="cm${m.n===me?" me":""}"><small>${esc(m.n)} • ${bd(pad(d.getHours()))}:${bd(pad(d.getMinutes()))}</small>${esc(m.t)}</div>`}).join("");
+  if(near||chSnap){el.scrollTop=el.scrollHeight;if(CH.length||chErr)chSnap=false}}
+async function chSend(){
+  const inp=$("cin"),t=inp&&inp.value.trim();if(!t||!Kraw)return;if(!getMe()){alert("আগে ওপরের \"আমি\" থেকে নিজের নাম বেছে নিন");return}inp.value="";
+  try{const o={n:getMe(),t:t.slice(0,1000),ts:Date.now()},iv=rnd(12),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify(o))));
+    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({lk:await lkOf(CODE),iv:b64(iv),ct})});
+    if(!r.ok)throw new Error(r.status);chSnap=true;setTimeout(chPoll,250)}
+  catch(e){inp.value=t;alert("মেসেজ পাঠানো যায়নি"+(String(e.message)==="404"?" — ম্যানেজার একবার প্রকাশ করলে চ্যাট চালু হবে।":"। ইন্টারনেট চেক করুন।"))}}
+function meSel(){
+  if(!MGR&&IDM)return `<div class="row"><span class="fix mute">আমি:</span><b>${esc(getMe())}</b><span class="mute">(আপনার নিজস্ব কোড)</span></div>`;
+  const me=getMe(),names=(MGR?["ম্যানেজার"]:[]).concat(AM().map(m=>m.name));if(me&&names.indexOf(me)<0)names.unshift(me);
+  return `<div class="row"><span class="fix mute">আমি:</span><select data-me="1" aria-label="আমি কে">${me?"":'<option value="">— নিজের নাম বেছে নিন —</option>'}${names.map(n=>`<option${n===me?" selected":""}>${esc(n)}</option>`).join("")}</select></div>`}
+function vChat(){
+  return `<div class="box">${meSel()}
+  <div id="clist" class="clist"></div><div class="row" style="margin:8px 0 0"><input id="cin" placeholder="মেসেজ লিখুন…" maxlength="1000" autocomplete="off"><button class="p fix" data-act="csend">পাঠান</button></div>
+  <p class="mute">🔒 মেসেজ মেসের কোডের চাবিতে এনক্রিপ্ট হয়ে জমা হয়; সার্ভারও পড়তে পারে না। শুধু শেষ ৩০০টি থাকে। নাম নিজে বেছে নিতে হয়, তাই বিশ্বস্ত মেম্বারদের মধ্যেই ব্যবহার করুন।</p></div>`}
+
+/* ---------- লাইভ ইভেন্ট (মেম্বারও লিখতে পারে; এনক্রিপ্টেড; প্রকাশে vault-এ বসে যায়) ---------- */
+let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null;
+function evApply(e){
+  try{
+    if(e.y==="bz"){const it=BZw().items.find(x=>x.id===e.id);if(it){if(e.f==="d")it.d=e.v?1:0;else if(e.f==="aq"||e.f==="ap"||e.f==="hv")it[e.f]=String(e.v)}}
+    else if(e.y==="ml"){S.ml=S.ml||{};const d=S.ml[e.dt]=S.ml[e.dt]||{},m=d[e.m]=d[e.m]||{};m[e.f]=e.v}
+    else if(e.y==="sub"){const x=((S.sc||{})[e.k]||[]).find(z=>z.id===e.id);if(x&&x.who[e.j]!==undefined){x.who[e.j]=e.to;x.sb=1}}
+    else if(e.y==="sd"){const x=((S.sc||{})[e.k]||[]).find(z=>z.id===e.id);if(x)x.done=e.v?1:0}
+    else if(e.y==="mlr"){S.ml=S.ml||{};let dd=e.a,n=0;while(dd<=e.z&&n<93){const o=S.ml[dd]=S.ml[dd]||{};o[e.m]=Object.assign(o[e.m]||{},{b:e.v?1:0,l:e.v?1:0,n:e.v?1:0});dd=shiftD(dd,1);n++}}
+  }catch(err){}}
+async function evSend(o){
+  try{const iv=rnd(12),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify(o))));
+    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({lk:await lkOf(CODE),iv:b64(iv),ct,kind:"e"})});
+    if(r.ok)return true;if(r.status===404||r.status===400||r.status===413)return"drop";return false}catch(e){return false}}
+async function evPost(o){
+  o.ts=Date.now();evApply(o);updBar();
+  if(!CODE||!Kraw)return;const r=await evSend(o);
+  if(r===false&&EVQ.length<200)EVQ.push(o);else if(r===true)setTimeout(evPoll,400)}
+async function evPoll(){
+  if(evBusy||!CODE||!Kraw||!ROLE)return;evBusy=true;let n=0,fail=0,okc=0;
+  try{while(EVQ.length){const r=await evSend(EVQ[0]);if(r===false)break;EVQ.shift()}
+    for(let i=0;i<6;i++){
+      const r=await fetch("/api/chat?kind=e&lk="+await lkOf(CODE)+"&after="+EVLAST,{cache:"no-store"});if(r.status===404&&!MGR&&VAULT){kickOut();break}if(!r.ok)break;
+      const j=await r.json(),key=await dkey(Kraw);
+      for(const m of j.msgs){EVLAST=m.k;try{evApply(JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(m.iv)},key,ub(m.ct)))));n++;okc++}catch(e){fail++}}
+      if(j.msgs.length<200)break}
+  }catch(e){}
+  evBusy=false;
+  if(fail&&!okc){try{const t0=+(sessionStorage.getItem("bpRl")||0);if(Date.now()-t0>60000){sessionStorage.setItem("bpRl",String(Date.now()));location.reload();return}}catch(e){}}
+  if(n)evRefresh()}
+function evRefresh(){
+  updBar();if(!ROLE)return;const a=document.activeElement;
+  if(a&&(a.tagName==="TEXTAREA"||a.tagName==="SELECT"||(a.tagName==="INPUT"&&a.type!=="checkbox"))){paintBz();return}
+  if(tab==="chat"||tab==="rep")return;render()}
+function evStart(){if(evTimer||!ROLE)return;EVLAST=S.bk||"";evPoll();evTimer=setInterval(()=>{if(!document.hidden)evPoll()},12000)}
+
+/* ---------- প্রতি-মেম্বার লগইন কোড ও বাতিল ---------- */
+let VW={},MCW=null,MCODES={},DROP=[],IDM="",SHOWC={},kicked=false;
+const isMem=(m,k)=>!m.till||k<=m.till;
+const isAct=(m,k)=>{if(!isMem(m,k))return false;const st=((S.months[k]||{}).st||{})[m.id];return st!=="0"};
+const AM=()=>S.members.filter(m=>isMem(m,nowK));
+async function lgSaveMC(){MCW=await wrap(MCODE,enc.encode(JSON.stringify(MCODES)))}
+async function rekey(){
+  Kraw=rnd(32);VA=await wrap(MCODE,Kraw);VW={};
+  for(const m of S.members){const c=MCODES[m.id];if(c){m.lk=await lkOf(c);VW[m.lk]=await wrap(c,Kraw)}else delete m.lk}
+  if(S.mcode)VW[await lkOf(S.mcode)]=await wrap(S.mcode,Kraw);
+  if(MCODES.__co)VW[await lkOf(MCODES.__co)]=await wrap(MCODES.__co,Kraw);
+  VM=null;await lgSaveMC()}
+const lgSnap=()=>({K:Kraw,VA,VM,VW:Object.assign({},VW),MC:Object.assign({},MCODES),MCW,DROP:DROP.slice(),S:JSON.stringify({m:S.members,mc:S.mcode})});
+function lgRestore(s){Kraw=s.K;VA=s.VA;VM=s.VM;VW=s.VW;MCODES=s.MC;MCW=s.MCW;DROP=s.DROP;const o=JSON.parse(s.S);S.members=o.m;S.mcode=o.mc}
+async function lgAct(k,id){
+  if(!MGR||CO)return;const m=S.members.find(x=>x.id===id);
+  if(k==="show"){SHOWC[id]=!SHOWC[id];render();return}
+  if(k==="wa"&&id==="__co"){if(MCODES.__co)shareSheet("🤝 "+(S.name||"মেস")+" — সহ-ম্যানেজার কোড: "+MCODES.__co+"\nসাইট: "+location.origin+"\nম্যানেজার লগইনের ঘরে এই কোড দিন। কাউকে দেবেন না।","সহ-ম্যানেজার কোড");return}
+  if(k==="wa"){if(id==="__sh"){if(S.mcode)shareSheet("🏠 "+(S.name||"মেস")+" — লগইন কোড (সবার জন্য): "+S.mcode+"\nসাইট: "+location.origin+"\nঢুকে ওপর থেকে নিজের নাম বেছে নিন।","লগইন কোড")}
+    else{const c=MCODES[id];if(c&&m)shareSheet(m.name+", আপনার নিজস্ব লগইন কোড: "+c+"\nসাইট: "+location.origin+"\n(এই কোড অন্য কাউকে দেবেন না)","লগইন কোড — "+m.name)}return}
+  const snap=lgSnap(),tail="\n\n(এই সময় বাকি অপ্রকাশিত পরিবর্তনও প্রকাশ হয়ে যাবে।)";
+  try{
+    if(k==="sh"){S.mcode=genCode("MEM");SHOWC.__sh=true;VW[await lkOf(S.mcode)]=await wrap(S.mcode,Kraw)}
+    else if(k==="con"){let fv=0;try{const r=await fetch("/api/vault?v=1",{cache:"no-store"});fv=(await r.json()).fv||0}catch(e){alert("ইন্টারনেট সংযোগ নেই বা সার্ভারে পৌঁছানো যাচ্ছে না। নেট চেক করে আবার চেষ্টা করুন।");return}
+      if(fv<3){alert("⚠ সার্ভারের ফাংশন (api/vault.js) পুরোনো, তাই সহ-ম্যানেজার কোড কাজ করবে না। পুরো প্রজেক্ট (api ফোল্ডারসহ) Vercel-এ আবার deploy করুন, তারপর আবার চেষ্টা করুন।");return}
+      const had=!!MCODES.__co;if(had&&!confirm("পুরোনো সহ-ম্যানেজার কোড বাতিল হয়ে নতুন কোড হবে।"+tail))return;MCODES.__co=genCode("CMG");SHOWC.__co=true;if(had)await rekey();else{VW[await lkOf(MCODES.__co)]=await wrap(MCODES.__co,Kraw);await lgSaveMC()}}
+    else if(k==="coff"){if(!confirm("সহ-ম্যানেজার সরানো হবে; ওই কোডে আর ঢোকা যাবে না।"+tail))return;delete MCODES.__co;delete SHOWC.__co;await rekey()}
+    else if(k==="shnew"){if(!confirm("সবার-কোড বদলে নতুন হবে; পুরোনোটা বন্ধ হবে। নতুনটা সবাইকে জানাতে হবে। নিজস্ব কোডগুলো একই থাকবে।"+tail))return;
+      S.mcode=genCode("MEM");SHOWC.__sh=true;await rekey()}
+    else if(k==="shoff"){if(!confirm("সবার-কোড বন্ধ হবে — যারা এই কোডে ঢুকত তারা আর ঢুকতে পারবে না। নিজস্ব কোডগুলো একই থাকবে।"+tail))return;
+      S.mcode="";delete SHOWC.__sh;await rekey()}
+    else if(k==="all"){if(!confirm("প্রত্যেক সদস্য আলাদা কোড পাবে। সবার-কোড আগের মতোই চলবে (চাইলে আলাদা করে বন্ধ করতে পারবেন)। তারপর প্রত্যেককে নিজের কোড পাঠাতে হবে।"+tail))return;
+      AM().forEach(x=>{MCODES[x.id]=genCode("MEM");SHOWC[x.id]=true});await rekey()}
+    else if(!m)return;
+    else if(k==="new"){const had=!!MCODES[id];if(had&&!confirm(m.name+"-এর পুরোনো কোড বাতিল হয়ে নতুন কোড হবে।"+tail))return;
+      MCODES[id]=genCode("MEM");SHOWC[id]=true;
+      if(had)await rekey();else{m.lk=await lkOf(MCODES[id]);VW[m.lk]=await wrap(MCODES[id],Kraw);await lgSaveMC()}}
+    else if(k==="off"){if(!confirm(m.name+"-এর লগইন বন্ধ হবে; বাকিদের কোড একই থাকবে। চ্যাটের পুরোনো মেসেজ মুছে যাবে।"+tail))return;delete MCODES[id];delete SHOWC[id];await rekey()}
+    else if(k==="left"){const t=prompt(m.name+" মেস ছেড়ে গেছেন। শেষ কোন মাস পর্যন্ত হিসাবে ধরা হবে? (YYYY-MM)\nলগইনও বন্ধ হবে।",nowK);if(t===null)return;
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(t)){alert("মাসের ফরম্যাট ঠিক নয় (যেমন 2026-10)");return}
+      m.till=t;delete MCODES[id];delete SHOWC[id];await rekey()}
+    else return;
+  }catch(e){lgRestore(snap);alert("কাজটি করা যায়নি: "+(e&&e.message||e));return}
+  const ok=await publish();
+  if(!ok){lgRestore(snap);alert("প্রকাশ হয়নি, তাই আগের অবস্থায় ফেরানো হয়েছে।")}
+  else if(k==="con"&&MCODES.__co){try{const r=await fetch("/api/vault?lk="+await lkOf(MCODES.__co),{cache:"no-store"}),j=await r.json();if(!j.co)alert("⚠ সহ-ম্যানেজার চালু হয়নি: সার্ভার ফাংশন (api/vault.js) পুরোনো। পুরো প্রজেক্ট (api ফোল্ডারসহ) আবার Vercel-এ deploy করুন, তারপর নতুন কোড বানান।")}catch(e){}}
+  render()}
+function vLogins(){
+  if(!MGR||CO)return"";
+  const indiv=Object.keys(MCODES).filter(x=>x!=="__co").length>0||S.members.some(m=>m.lk),sc=S.mcode;
+  const rows=S.members.map(m=>{const c=MCODES[m.id];
+    return `<div class="srow" style="align-items:flex-start"><div style="flex:1 1 150px;min-width:0"><b>${esc(m.name)}</b>${m.till?`<div class="mute">শেষ মাস: ${lab(m.till)}</div>`:""}<div class="mute">${c?"🔑 নিজস্ব কোড আছে":"— নিজস্ব কোড নেই"}</div>${c&&SHOWC[m.id]?`<input class="code" readonly value="${c}" aria-label="কোড">`:""}</div>
+    <div class="btns" style="margin:0;flex:1 1 220px;justify-content:flex-end">${c?`<button data-lg="show:${m.id}">${SHOWC[m.id]?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:${m.id}" aria-label="কোড পাঠান">📤 পাঠান</button>`:""}
+    ${m.till&&m.till<nowK&&!c?"":`<button data-lg="new:${m.id}">${c?"🔄 নতুন কোড":"➕ কোড তৈরি"}</button>`}${c?`<button class="x" data-lg="off:${m.id}">🚫 বন্ধ</button>`:""}<button class="x" data-lg="left:${m.id}">🚪 ছেড়ে গেছে</button></div></div>`}).join("");
+  const shared=sc?`<p class="mute">এই কোড যার কাছে থাকবে সে ঢুকতে পারবে; ঢুকে ওপর থেকে নিজের নাম বেছে নেবে। গ্রুপে পাঠানো সহজ, কিন্তু একজনকে বাদ দিতে নতুন কোড বানাতে হয়।</p>${SHOWC.__sh?`<input class="code" readonly value="${esc(sc)}" aria-label="সবার কোড">`:""}
+    <div class="btns"><button data-lg="show:__sh">${SHOWC.__sh?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__sh">📤 শেয়ার</button><button data-lg="shnew:">🔄 নতুন কোড</button><button class="x" data-lg="shoff:">🚫 বন্ধ</button></div>`
+    :`<p class="mute">এখন কোনো সবার-কোড নেই। চাইলে এক কোডেই সবাইকে ঢোকাতে পারেন।</p><button class="p" style="width:100%" data-lg="sh:">➕ সবার জন্য একটি কোড তৈরি করুন</button>`;
+  const ind=indiv?rows+'<p class="mute">🚫 বন্ধ করলে ওই কোড দিয়ে আর ঢোকা যাবে না, বাকিদের কোড একই থাকে (ডেটার চাবি নিজে নতুন হয়; বাকিদের অ্যাপ নিজে একবার রিলোড নেয়)। চ্যাটের পুরোনো মেসেজ মুছে যায়। "🚪 ছেড়ে গেছে" মানে লগইন বন্ধ + ওই মাসের পর থেকে ভাড়া/হিসাবে আর ধরা হবে না, আগের হিসাব থাকবে। নিজস্ব কোডে ঢুকলে নাম নিজে ঠিক হয়ে যায়। ⚠ নিজস্ব কোড গ্রুপে নয়, ব্যক্তিগত মেসেজে পাঠান।</p>'
+    :'<p class="mute">প্রত্যেক সদস্যের আলাদা কোড — একজনকে বাদ দিলে বাকিদের কিছু বদলাতে হয় না। সবার-কোড আগের মতোই চলতে থাকবে।</p><button class="p" style="width:100%" data-lg="all:">সবার নিজস্ব কোড চালু করুন</button>';
+  const cc=MCODES.__co,coBox=`<div class="box"><h2>🤝 সহ-ম্যানেজার</h2><p class="mute">সহ-ম্যানেজার আপনার মতোই হিসাব, বাজার, মিল, খরচ ও সক্রিয়/নিষ্ক্রিয় ঠিক করতে ও প্রকাশ করতে পারবেন। পারবেন না: সদস্য মোছা/যোগ, লগইন কোড বদলানো, সহ-ম্যানেজার বদলানো। ম্যানেজার লগইনের ঘরে এই কোড দিয়ে ঢুকবেন।</p>${cc?`<div class="mute">🔑 সহ-ম্যানেজারের কোড আছে</div>${SHOWC.__co?`<input class="code" readonly value="${esc(cc)}" aria-label="সহ-ম্যানেজার কোড">`:""}<div class="btns"><button data-lg="show:__co">${SHOWC.__co?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__co">📤 পাঠান</button><button data-lg="con:__co">🔄 নতুন কোড</button><button class="x" data-lg="coff:__co">🚫 সরান</button></div>`:`<button class="p" style="width:100%" data-lg="con:__co">➕ সহ-ম্যানেজার কোড তৈরি করুন</button>`}</div>`;
+  return coBox+`<div class="box"><h2>🔑 লগইন কোড</h2><h3 style="margin-top:0">👥 সবার জন্য এক কোড</h3>${shared}<h3>🙋 প্রত্যেকের নিজস্ব কোড</h3>${ind}</div>`}
+function kickOut(){if(kicked)return;kicked=true;try{localStorage.removeItem(SKEY)}catch(e){}alert("আপনার লগইন বন্ধ করা হয়েছে বা ম্যানেজার নতুন কোড দিয়েছেন। নতুন কোড দিয়ে আবার ঢুকুন।");location.reload()}
+
+/* ---------- UI: টোস্ট, শেয়ার শিট, ডেভেলপার কার্ড ---------- */
+const DEV={fb:"https://www.facebook.com/hellotorifat",name:"রিফাত",role:"Developer • Bachelors Paradise",
+ bio:"আমি রিফাত। মেসের বাজার, মিল আর হিসাব নিয়ে রোজকার ঝামেলা কমাতে Bachelors Paradise বানিয়েছি — যেন সবকিছু এক জায়গায়, সহজ বাংলায় থাকে আর হিসাব সবার সামনে স্বচ্ছ থাকে। সাইটে কিছু ভালো না লাগলে বা নতুন আইডিয়া থাকলে Facebook-এ জানাতে পারেন।"};
+function toast(msg){const o=document.querySelector(".toast");if(o)o.remove();const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+async function copyText(txt){
+  try{await navigator.clipboard.writeText(txt);return true}
+  catch(e){try{const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;left:-9999px";document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();return ok}catch(x){return false}}}
+const closeOv=()=>{const o=$("ov");if(o)o.remove()};
+let SHT="",SHTT="";
+function shareSheet(text,title){
+  closeOv();SHT=text;SHTT=title||"Bachelors Paradise";
+  const o=document.createElement("div");o.className="ov";o.id="ov";
+  o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="শেয়ার"><div class="shh"><h2>📤 ${esc(SHTT)}</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><pre class="shp">${esc(text)}</pre>
+  <div class="shg">${navigator.share?'<button class="p wide" data-sh="native">📤 যে কোনো অ্যাপে পাঠান</button>':""}<button data-sh="msgr">💙 Messenger</button><button data-sh="wa">💬 WhatsApp</button><button data-sh="tg">✈️ Telegram</button><button data-sh="sms">✉️ SMS</button><button data-sh="mail">📧 Email</button><button data-sh="copy">📋 কপি</button></div>
+  <p class="mute">Messenger গ্রুপে পাঠাতে "Messenger" চাপুন — লেখাটি কপি হয়ে Messenger খুলবে, গ্রুপে পেস্ট করে পাঠিয়ে দিন।</p></div>`;
+  document.body.appendChild(o)}
+function devCard(){
+  closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
+  o.innerHTML=`<div class="sh dv" role="dialog" aria-modal="true" aria-label="ডেভেলপার পরিচিতি"><button class="x dvx" data-sh="close" aria-label="বন্ধ করুন">✕</button><img class="dvp" src="rifat.jpg" alt="${DEV.name}-এর ছবি"><h2 class="dvn">${DEV.name}</h2><div class="dvr">${DEV.role}</div><p class="dvb">${esc(DEV.bio)}</p><a class="btn p" href="${DEV.fb}" target="_blank" rel="noopener">Facebook প্রোফাইল দেখুন</a></div>`;
+  document.body.appendChild(o)}
+document.addEventListener("click",async e=>{
+  const ov=$("ov");if(!ov)return;
+  if(e.target===ov){closeOv();return}
+  const b=e.target.closest("[data-sh]");if(!b)return;const k=b.dataset.sh,q=encodeURIComponent(SHT);
+  if(k==="close")closeOv();
+  else if(k==="native"){try{await navigator.share({title:SHTT,text:SHT})}catch(x){}}
+  else if(k==="copy"){toast(await copyText(SHT)?"কপি হয়েছে ✔":"কপি করা যায়নি")}
+  else if(k==="wa")window.open("https://wa.me/?text="+q,"_blank");
+  else if(k==="tg")window.open("https://t.me/share/url?url="+encodeURIComponent(location.origin)+"&text="+q,"_blank");
+  else if(k==="sms")location.href="sms:?&body="+q;
+  else if(k==="mail")location.href="mailto:?subject="+encodeURIComponent(SHTT)+"&body="+q;
+  else if(k==="msgr"){const ok=await copyText(SHT);toast(ok?"কপি হয়েছে — Messenger গ্রুপে পেস্ট করুন":"কপি করা যায়নি");
+    if(/Android|iPhone|iPad/i.test(navigator.userAgent))setTimeout(()=>{location.href="fb-messenger://"},500);else window.open("https://www.messenger.com/","_blank")}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeOv()});
+document.addEventListener("error",e=>{if(e.target&&e.target.tagName==="IMG")e.target.style.display="none"},true);
+const vQuick=()=>`<div class="qk">${[["ml","🍽","আজকের মিল","মিল চালু বা বন্ধ করুন"],["bz","🛒","বাজার","তালিকা, দাম ও খরচ"],["sc","📅","রুটিন","বাজার ও ওয়াশরুমের পালা"],["chat","💬","চ্যাট","মেসের সবার সাথে কথা"]].map(q=>`<button data-t="${q[0]}"><i>${q[1]}</i><b>${q[2]}</b><small>${q[3]}</small></button>`).join("")}</div>`;
+
+/* ---------- সক্রিয়/নিষ্ক্রিয় সদস্য (মাসভিত্তিক) ---------- */
+function vAct(){
+  if(!MGR)return"";
+  const k=mon,n=S.members.filter(b=>isAct(b,k)).length;
+  const chips=S.members.map(b=>{const left=b.till&&k>b.till,on=isAct(b,k);
+    return `<button class="mch${on?" on":""}" data-st="${b.id}"${left?" disabled":""} aria-pressed="${on?"true":"false"}">${on?"✔":"⏸"} ${esc(b.name)}${left?" (ছেড়ে গেছেন)":""}</button>`}).join("");
+  return `<div class="box"><h2>👥 ${lab(k)} — কাদের নিয়ে হিসাব?</h2><div class="chips">${chips}</div>
+  <p class="mute">✔ সক্রিয় সদস্যরাই এই মাসের হিসাব, ভাড়া, ভাগ ও PDF-এ আসবেন (এখন <b>${bd(n)}</b> জন)। ⏸ নিষ্ক্রিয় সদস্য এই মাসে একদম বাদ — তার লেখা ডেটা মুছে যায় না, আবার সক্রিয় করলেই ফিরে আসে।</p></div>`}
+
+/* ---------- খরচের তালিকা ও মেস ফান্ড ---------- */
+const XQ=["গ্যাস","মেরামত","পানি","সরঞ্জাম","অন্যান্য"];
+const xpOf=k=>(S.months[k]||{}).xp||[];
+const fuOf=k=>(S.months[k]||{}).fu||[];
+const fuFind=id=>fuOf(mon).find(x=>x.id===id);
+function fundInfo(k){
+  let prev=0;
+  for(const m of MONTHS){
+    if(m>k)break;
+    const c=calc(m),mo=S.months[m]||{},ob=mo.ob!==undefined&&String(mo.ob).trim()!==""?p(mo.ob):null;
+    if(m<k&&!c.active&&c.exp===0&&ob===null)continue;
+    const open=ob!==null?ob:prev,close=open+c.net;
+    if(m===k)return{open,auto:prev,manual:ob!==null,income:c.income,spent:c.cost+c.exp,bib:c.shared,incX:c.income-c.shared,spX:c.cost-c.shared+c.exp,net:c.net,close};
+    prev=close}
+  const c=calc(k);return{open:0,auto:0,manual:false,income:c.income,spent:c.cost+c.exp,bib:c.shared,incX:c.income-c.shared,spX:c.cost-c.shared+c.exp,net:c.net,close:c.net}}
+function lastFund(){let last=null;for(const k of MONTHS){const c=calc(k),mo=S.months[k]||{};if(c.active||c.exp>0||(mo.ob!==undefined&&String(mo.ob).trim()!==""))last=k}return last?{k:last,fi:fundInfo(last)}:null}
+function vXp(c){
+  const fi=fundInfo(mon),mo=S.months[mon]||{};
+  const list=c.xl.map(e=>MGR?`<div class="xrow"><input data-xn="${e.id}" list="xpn" value="${esc(e.n||"")}" placeholder="কোথায় খরচ (যেমন: গ্যাস)" aria-label="খরচের খাত"><input data-xa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-xdel="${e.id}" aria-label="মুছুন">✕</button></div>`
+    :`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("");
+  const add=MGR?`<datalist id="xpn">${XQ.map(q=>`<option value="${q}">`).join("")}</datalist><div class="chips" style="margin:8px 0">${XQ.slice(0,4).map(q=>`<button class="mch" data-xadd="${q}">+ ${q}</button>`).join("")}<button class="mch on" data-xadd="">➕ অন্য খরচ</button></div>`:"";
+  const ob=MGR?`<input data-ob="1" inputmode="decimal" value="${esc(mo.ob||"")}" placeholder="${f(fi.auto)} (অটো)" style="max-width:150px;text-align:right" aria-label="আগের মাসের জের">`:`<b>${f(fi.open)}</b>`;
+  const ax=[["rent","🏠 বাড়িভাড়া"],["khala","🧹 খালার বিল"]];
+  const fl=fuOf(mon).map(e=>MGR?`<div class="xrow"><input data-fn="${e.id}" value="${esc(e.n||"")}" placeholder="কী কাজে লেগেছে (যেমন: গ্যাস সিলিন্ডার)" aria-label="কাজ"><input data-fa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-fdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${e.a?f(p(e.a)):""}</b></div>`).join("");
+  return `<div class="box"><h2>💸 এই মাসের সব খরচ — কোথায় কত গেল</h2>
+  <table class="fndt">${ax.map(x=>`<tr data-ar="${x[0]}"><td>${x[1]}</td><td data-o="ax:${x[0]}"></td></tr>`).join("")}</table>
+  <h3>✍ নিজে লেখা অন্যান্য খরচ</h3>${list}${add}
+  <p class="mute">ভাড়া ও খালার বিল নিজে নিজে ধরা হয়। এর বাইরে গ্যাস, মেরামত ইত্যাদি যা খরচ হলো এখানে লিখুন। বিবিধ খরচ সদস্যদের বিলের ভেতরেই ধরা আছে, তাই এখানে আলাদা দেখানো হয়নি। এই সবই মেস ফান্ড থেকে বাদ যায় — সদস্যদের বিল বদলায় না।</p>
+  <table class="fndt"><tr class="tot"><td>মোট খরচ</td><td data-o="xall"></td></tr></table>
+  <h3>🏦 মেস ফান্ড</h3>
+  <table class="fndt"><tr><td>আগের মাসের জের</td><td>${ob}</td></tr><tr><td>এই মাসে মোট আয় (সদস্যদের প্রদান, বিবিধ বাদে)</td><td data-o="finc"></td></tr><tr><td>মোট খরচ (−)</td><td data-o="xall2"></td></tr><tr class="tot"><td>ফান্ড বাকি (সব খরচের পর জমা)</td><td data-o="fclose"></td></tr></table>
+  <h3>📝 আগের মাসের জমা ফান্ড (জের ৳${f(fi.open)}) কী কী কাজে খরচ হয়েছে</h3>${fl||(MGR?"":'<p class="mute">কিছু লেখা হয়নি।</p>')}${MGR?`<div class="chips" style="margin:8px 0"><button class="mch on" data-fadd="1">➕ কাজ যোগ করুন</button></div>`:""}
+  ${fuOf(mon).length?'<table class="fndt"><tr class="tot"><td>এই কাজগুলোর মোট</td><td data-o="fuT"></td></tr></table>':""}
+  <p class="mute">এটি শুধু রেকর্ডের জন্য — জেরের টাকা কোন কোন কাজে গেছে তা লিখে রাখুন, PDF-এও আসবে। এখানকার টাকা আলাদা করে ফান্ড থেকে বাদ যায় না; ফান্ড কমাতে চাইলে ওপরের "নিজে লেখা অন্যান্য খরচ"-এ লিখুন।</p>
+  ${MGR?'<p class="mute">"আগের মাসের জের" ফাঁকা রাখলে আগের মাসের "ফান্ড বাকি" নিজে ধরা হয়; নিজে লিখলে সেটাই ধরা হবে।</p>':""}</div>`}
+const xpFind=id=>((S.months[mon]||{}).xp||[]).find(x=>x.id===id);
+document.addEventListener("input",e=>{
+  if(!MGR)return;const t=e.target,d=t.dataset;
+  if(d.xn){const x=xpFind(d.xn);if(x){x.n=t.value;save()}}
+  else if(d.xa){const x=xpFind(d.xa);if(x){x.a=t.value;save();paint()}}
+  else if(d.fn){const x=fuFind(d.fn);if(x){x.n=t.value;save()}}
+  else if(d.fa){const x=fuFind(d.fa);if(x){x.a=t.value;save();paint()}}
+  else if(d.ob!==undefined){ens(mon).ob=t.value;save();paint()}});
+document.addEventListener("click",e=>{const t=e.target;
+  const st=t.closest("[data-st]");if(st&&MGR){const b=S.members.find(x=>x.id===st.dataset.st);if(!b||(b.till&&mon>b.till))return;const mo=ens(mon);mo.st=mo.st||{};mo.st[b.id]=isAct(b,mon)?"0":"1";save();render();return}
+  const xa=t.closest("[data-xadd]");if(xa&&MGR){const mo=ens(mon);mo.xp=(mo.xp||[]).concat([{id:"x"+Math.random().toString(36).slice(2,7),n:xa.dataset.xadd,a:""}]);save();render();
+    setTimeout(()=>{const l=[...document.querySelectorAll("[data-xa]")].pop();if(l)l.focus()},60);return}
+  const fa=t.closest("[data-fadd]");if(fa&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).concat([{id:"u"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-fn]")].pop();if(l)l.focus()},60);return}
+  const fd2=t.closest("[data-fdel]");if(fd2&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).filter(x=>x.id!==fd2.dataset.fdel);save();render();return}
+  const xd=t.closest("[data-xdel]");if(xd&&MGR){const mo=ens(mon);mo.xp=(mo.xp||[]).filter(x=>x.id!==xd.dataset.xdel);save();render();return}
+});
+
+/* ---------- মিল (দৈনিক এন্ট্রি) ---------- */
+let mld=todayK();
+const wts=()=>{const z=BZ();return[p(z.ml[0]),p(z.ml[1]),p(z.ml[2])]};
+const meId=()=>{if(!MGR&&IDM)return IDM;const m=S.members.find(x=>x.name===getMe());return m?m.id:""};
+function mlGet(dt,m){const e=(S.ml&&S.ml[dt]&&S.ml[dt][m])||{};return{b:e.b===undefined?1:+e.b,l:e.l===undefined?1:+e.l,n:e.n===undefined?1:+e.n,g:p(e.g)}}
+function mlVal(dt,m){const e=mlGet(dt,m),w=wts();return e.b*w[0]+e.l*w[1]+e.n*w[2]+e.g}
+function mlMonth(k){
+  const T=todayK(),a=k.split("-").map(Number),dim=new Date(a[0],a[1],0).getDate(),last=k<T.slice(0,7)?dim:k===T.slice(0,7)?+T.slice(8):0;
+  return S.members.filter(b=>isAct(b,k)).map(b=>{let tot=0;for(let d=1;d<=last;d++)tot+=mlVal(k+"-"+pad(d),b.id);return{id:b.id,name:b.name,tot:Math.round(tot*100)/100}})}
+const shiftD=(k,n)=>{const a=k.split("-").map(Number);return dk(new Date(a[0],a[1]-1,a[2]+n))};
+let mls="",mlm="";
+const WDS=["রবি","সোম","মঙ্গল","বুধ","বৃহ","শুক্র","শনি"];
+function mlTgt(){const mid=meId();if(MGR)return mlm&&S.members.some(x=>x.id===mlm)?mlm:(mid||(AM()[0]?AM()[0].id:""));return mid}
+function mlText(dt){
+  const MA=S.members.filter(b=>isAct(b,dt.slice(0,7))),g=sum(MA.map(b=>({v:mlGet(dt,b.id).g})),"v"),
+  L=[["b","☀️ সকাল"],["l","🍛 দুপুর"],["n","🌙 রাত"]].map(q=>{const a=MA.filter(b=>mlGet(dt,b.id)[q[0]]).map(b=>b.name);return q[1]+" ("+bd(a.length)+" জন): "+(a.length===MA.length?"সবাই":a.join(", ")||"কেউ না")});
+  return `🍽 ${S.name||"মেস"} — ${fd(dt)}\n`+L.join("\n")+(g?`\nঅতিথি: ${f(g)}`:"")+`\nমোট মিল: ${f(sum(MA.map(b=>({v:mlVal(dt,b.id)})),"v"))}`}
+function vMl(){
+  const w=wts(),k=mld.slice(0,7),mid=meId(),T=todayK(),MA=S.members.filter(b=>isAct(b,k)),tg=mlTgt(),tm=S.members.find(x=>x.id===tg),can=!!tg&&(MGR||tg===mid);
+  if(!mls)mls=T;if(mld<mls||mld>shiftD(mls,6))mls=mld;
+  const e=tg?mlGet(mld,tg):{b:1,l:1,n:1,g:0};
+  const strip=[...Array(7)].map((_,i)=>{const dt=shiftD(mls,i),a=dt.split("-").map(Number),x=tg?mlGet(dt,tg):{b:1,l:1,n:1};
+    return `<button class="dy${dt===mld?" on":""}${dt===T?" td":""}" data-mlday="${dt}" aria-label="${fd(dt)}"><small>${dt===T?"আজ":WDS[new Date(a[0],a[1]-1,a[2]).getDay()]}</small><b>${bd(a[2])}</b><span class="dts"><i class="${x.b?"f":""}"></i><i class="${x.l?"f":""}"></i><i class="${x.n?"f":""}"></i></span></button>`}).join("");
+  const bt=(fl,ic,l,i)=>`<button class="mtb${e[fl]?" on":""}" data-mlt="${tg}:${fl}"${can?"":" disabled"} aria-pressed="${e[fl]?"true":"false"}"><i>${ic}</i><b>${l}</b><small>${e[fl]?"✔ চালু":"বন্ধ"} • ${f(w[i])}</small></button>`;
+  const who=MGR?`<div class="row"><span class="fix mute">কার মিল:</span><select data-mlm="1" aria-label="কার মিল">${AM().map(b=>`<option value="${b.id}"${b.id===tg?" selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`:meSel();
+  const warn=!MGR&&!mid?'<div class="warnb">⚠ আগে ওপর থেকে নিজের নাম বেছে নিন, তারপর মিল বদলাতে পারবেন।</div>':"";
+  const rows=MA.map(b=>{const x=mlGet(mld,b.id);
+    return `<div class="srow${b.id===tg?" cur":""}"${MGR?` data-mlpick="${b.id}"`:""}><b style="flex:1 1 70px;min-width:0">${esc(b.name)}${b.id===mid?" (আমি)":""}</b><span class="mini">${[["b","স"],["l","দু"],["n","রা"]].map(q=>`<em class="${x[q[0]]?"f":""}">${q[1]}</em>`).join("")}</span><span class="mute" style="min-width:52px">${x.g?"+"+f(x.g)+" অতিথি":""}</span><b style="min-width:38px;text-align:right">${f(mlVal(mld,b.id))}</b></div>`}).join("");
+  const sl=[0,1,2].map(i=>sum(MA.map(b=>{const x=mlGet(mld,b.id);return{v:[x.b,x.l,x.n][i]*w[i]}}),"v")),gs=sum(MA.map(b=>({v:mlGet(mld,b.id).g})),"v"),day=sum(MA.map(b=>({v:mlVal(mld,b.id)})),"v"),ms=mlMonth(k),tot=sum(ms,"tot");
+  return `<div class="box"><h2>🍽 ${tm?esc(tm.name)+"-এর মিল":"আমার মিল"}</h2>${who}${warn}
+  <div class="days">${strip}</div>
+  <div class="row" style="margin:6px 0 0"><button class="fix" data-mlw="-7" aria-label="আগের সপ্তাহ">◀</button><button class="fix" data-mlw="7" aria-label="পরের সপ্তাহ">▶</button><input type="date" data-mldate="1" value="${mld}" aria-label="অন্য তারিখ"></div><h3 style="margin:8px 0 0">${fd(mld)}${mld===T?" (আজ)":""}</h3>
+  <div class="mtg">${bt("b","☀️","সকাল",0)}${bt("l","🍛","দুপুর",1)}${bt("n","🌙","রাত",2)}</div>
+  <div class="row" style="margin:0"><div><b>অতিথি মিল</b><div class="mute">বাইরের কেউ খেলে</div></div><div class="stp fix"><button data-mlgs="${tg}:-1"${can&&e.g>0?"":" disabled"} aria-label="কমান">−</button><b>${f(e.g)}</b><button data-mlgs="${tg}:1"${can?"":" disabled"} aria-label="বাড়ান">+</button></div></div>
+  <div class="btns"><button data-mlq="0"${can?"":" disabled"}>🚫 পুরো দিন বন্ধ</button><button data-mlq="1"${can?"":" disabled"}>✅ পুরো দিন চালু</button></div>
+  <details class="mr"><summary>📆 কয়েক দিন বাইরে থাকলে এক সাথে বন্ধ করুন</summary><div class="g2" style="margin-top:10px"><div><label>কোন তারিখ থেকে</label><input type="date" id="mra" value="${mld}"></div><div><label>কোন তারিখ পর্যন্ত</label><input type="date" id="mrz" value="${shiftD(mld,1)}"></div></div>
+  <div class="btns"><button data-mlrg="0"${can?"":" disabled"}>🚫 এই দিনগুলো বন্ধ</button><button data-mlrg="1"${can?"":" disabled"}>✅ এই দিনগুলো চালু</button></div></details>
+  <p class="mute">এই দিনে ${tm?esc(tm.name):""}-এর মিল: <b>${f(tg?mlVal(mld,tg):0)}</b> (সকাল ${f(w[0])} • দুপুর ${f(w[1])} • রাত ${f(w[2])} ওজন)। কিছু না চাপলে তিন বেলাই ধরা হয়।</p></div>
+  <div class="box"><h2>👥 সবার মিল — ${fd(mld)}</h2>${rows}${MGR?'<p class="mute">নাম চাপলে ওপরে তার মিল বদলানো যাবে।</p>':""}<p class="mute">দিনের মোট: <b>${f(day)}</b> মিল (সকাল ${f(sl[0])} • দুপুর ${f(sl[1])} • রাত ${f(sl[2])}${gs?" • অতিথি "+f(gs):""})</p>
+  <button style="width:100%" data-act="mlshare">📤 এই দিনের মিল শেয়ার করুন</button></div>
+  <div class="box scroll"><h2>${lab(k)} — মাসের মিল (আজ পর্যন্ত)</h2><table><tr><th>সদস্য</th><th>মোট মিল</th></tr>${ms.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.tot)}</td></tr>`).join("")}<tr class="tot"><td>TOTAL</td><td>${f(tot)}</td></tr></table>
+  ${MGR?`<button class="p" style="width:100%;margin-top:10px" data-act="mlapply">📒 ${lab(k)}-এর মাসিক হিসাবে "মিল" বসান</button>`:""}</div>`}
+document.addEventListener("change",e=>{const t=e.target,d=t.dataset;if(d.mlm!==undefined){mlm=t.value;render()}});
+document.addEventListener("click",e=>{const t=e.target;
+  const gs=t.closest("[data-mlgs]");if(gs){const q=gs.dataset.mlgs.split(":");if(!q[0])return;evPost({y:"ml",dt:mld,m:q[0],f:"g",v:Math.max(0,mlGet(mld,q[0]).g+(+q[1]))});render();return}
+  const dy=t.closest("[data-mlday]");if(dy){mld=dy.dataset.mlday;render();return}
+  const wk=t.closest("[data-mlw]");if(wk){const n=+wk.dataset.mlw;mls=shiftD(mls||todayK(),n);mld=shiftD(mld,n);render();return}
+  const pk=t.closest("[data-mlpick]");if(pk&&MGR){mlm=pk.dataset.mlpick;render();scrollTo({top:0,behavior:"smooth"});return}
+  const qa=t.closest("[data-mlq]");if(qa){const tg=mlTgt();if(!tg)return;const v=+qa.dataset.mlq;evPost({y:"mlr",a:mld,z:mld,m:tg,v});toast("পুরো দিন "+(v?"চালু":"বন্ধ")+" ✔");render();return}
+  const rg=t.closest("[data-mlrg]");if(rg){let a=$("mra").value,z=$("mrz").value;if(!a||!z){toast("দুটি তারিখই দিন");return}if(z<a){const x=a;a=z;z=x}
+    const n=dayDiff(a,z)+1;if(n>93){toast("একবারে সর্বোচ্চ ৯৩ দিন");return}const tg=mlTgt();if(!tg)return;const v=+rg.dataset.mlrg;
+    evPost({y:"mlr",a,z,m:tg,v});toast(bd(n)+" দিনের মিল "+(v?"চালু":"বন্ধ")+" হয়েছে ✔");render();return}});
+
+/* ---------- টাকা জমার ট্র্যাকার (মাসিক ট্যাবে) ---------- */
+const payOf=(k,id)=>((S.pay&&S.pay[k])||{})[id]||{};
+function vPay(c){
+  const k=mon;
+  return `<div class="box scroll"><h2>💰 টাকা জমার ট্র্যাকার</h2><table><tr><th>সদস্য</th><th>দেয়</th><th>জমা দিয়েছে</th><th>বাকি</th><th></th></tr>${c.rows.map(r=>{const pd=p(payOf(k,r.id).a),bal=r.P-pd;
+    return `<tr><td>${esc(r.name)}</td><td>${f(r.P)}</td><td>${MGR?`<input data-pay="${r.id}" inputmode="decimal" value="${esc(payOf(k,r.id).a||"")}" aria-label="জমা">`:f(pd)}</td><td data-pb="${r.id}" class="${bal>0.5?"neg":"pos"}">${f(bal)}</td><td data-ps="${r.id}">${bal>0.5?"⚠ বাকি":"✔"}</td></tr>`}).join("")}
+  <tr class="tot"><td>TOTAL</td><td>${f(c.income)}</td><td data-pt="p">${f(sum(c.rows.map(r=>({v:p(payOf(k,r.id).a)})),"v"))}</td><td data-pt="b"></td><td></td></tr></table><p class="mute">"দেয়" = ওপরের "মোট প্রদান"। ম্যানেজার জমার অঙ্ক লিখলে বাকি নিজে হিসাব হয়।</p></div>`}
+function payPaint(){
+  const c=calc(mon);let tp=0,tb=0;
+  c.rows.forEach(r=>{const pd=p(payOf(mon,r.id).a),bal=r.P-pd;tp+=pd;tb+=Math.max(0,bal);
+    const b=document.querySelector(`[data-pb="${r.id}"]`),s=document.querySelector(`[data-ps="${r.id}"]`);
+    if(b){b.textContent=f(bal);b.className=bal>0.5?"neg":"pos"}if(s)s.textContent=bal>0.5?"⚠ বাকি":"✔"});
+  const a=document.querySelector('[data-pt="p"]'),b=document.querySelector('[data-pt="b"]');if(a)a.textContent=f(tp);if(b)b.textContent=f(tb)}
+
+/* ---------- ঘোষণা ---------- */
+function vNotice(){
+  const L=S.nt||[];if(!L.length&&!MGR)return"";
+  return `<div class="box"><h2>📢 ঘোষণা</h2>${L.slice().reverse().map(n=>`<div class="srow" style="align-items:flex-start"><div style="flex:1;white-space:pre-wrap;word-break:break-word">${esc(n.t)}<div class="mute">${fd(dk(new Date(n.ts)))}</div></div><button class="x" data-act="ntshare" data-id="${n.id}" aria-label="শেয়ার" style="color:var(--pri)">📤</button>${MGR?`<button class="x" data-ntdel="${n.id}" aria-label="মুছুন">✕</button>`:""}</div>`).join("")||'<p class="mute">কোনো ঘোষণা নেই।</p>'}
+  ${MGR?`<div class="row" style="margin-top:8px"><input id="ntx" placeholder="নতুন ঘোষণা লিখুন…" maxlength="300"><button class="p fix" data-act="ntadd">পোস্ট</button></div>`:""}</div>`}
+
+/* ---------- বাজারের ইতিহাস ও দামের গ্রাফ ---------- */
+let bzph="";
+function spark(v){
+  if(v.length<2)return'<p class="mute">গ্রাফের জন্য অন্তত দুটি বাজারের দাম লাগবে।</p>';
+  const W=300,H=70,l=8,r=8,t=14,b=8,mn=Math.min(...v),mx=Math.max(...v),sp=mx-mn||1,x=i=>l+i*(W-l-r)/(v.length-1),y=q=>t+(H-t-b)*(1-(q-mn)/sp);
+  return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="দামের গ্রাফ"><polyline fill="none" stroke="var(--pri)" stroke-width="2.5" points="${v.map((q,i)=>x(i)+","+y(q)).join(" ")}"/>${v.map((q,i)=>`<circle cx="${x(i)}" cy="${y(q)}" r="3.5" fill="var(--pri)"/>${i===0||i===v.length-1?`<text x="${x(i)}" y="${y(q)-7}" font-size="10" text-anchor="${i?"end":"start"}" fill="var(--ink)">${f(q)}</text>`:""}`).join("")}</svg>`}
+function bzHist(){
+  const R=(S.rounds||[]).slice(-8).reverse(),items=BZ().items.filter(i=>S.ph&&S.ph[i.id]);
+  if(!R.length&&!items.length)return"";
+  if(!bzph||!items.some(i=>i.id===bzph))bzph=items[0]?items[0].id:"";
+  const ph=bzph?S.ph[bzph]:[];
+  return `<div class="box"><h2>🗂 বাজারের ইতিহাস</h2>${R.length?`<div class="scroll"><table><tr><th>তারিখ</th><th>দিন</th><th>মিল</th><th>খরচ</th><th>মিল রেট</th></tr>${R.map(x=>`<tr><td>${fd(x.d)}</td><td>${bd(x.days)}</td><td>${f(x.meals)}</td><td>৳${f(x.tot)}</td><td>৳${f(x.rate)}</td></tr>`).join("")}</table></div>`:""}
+  ${items.length?`<h2 style="margin-top:12px">📈 পণ্যের দাম</h2><select data-phs="1" aria-label="পণ্য">${items.map(i=>`<option value="${i.id}"${i.id===bzph?" selected":""}>${esc(i.n)}</option>`).join("")}</select>${spark(ph.map(q=>q[1]))}<p class="mute">${ph.map(q=>fd(q[0])+": ৳"+f(q[1])).slice(-4).join(" • ")}</p>`:""}</div>`}
+
+/* ---------- ব্যাকআপ / ইম্পোর্ট, ইনস্টল ---------- */
+let DIP=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();DIP=e;const b=$("inst");if(b)b.hidden=false});
+function vBackup(){return `<div class="box"><h2>💾 ব্যাকআপ</h2><p class="mute">পুরো ডেটার একটি কপি ফাইলে নামান। ⚠ ফাইলটি এনক্রিপ্টেড নয়, তাই নিরাপদ জায়গায় রাখুন। ম্যানেজার কোড হারালেও এই ফাইল থেকে নতুন মেসে ডেটা ফেরানো যাবে।</p>
+  <button class="p" style="width:100%" data-act="expb">⬇ ব্যাকআপ ডাউনলোড</button><label class="mute" style="margin-top:10px">ব্যাকআপ ফাইল থেকে ফেরান</label><input type="file" accept=".json,application/json" data-impf="1" style="border:1.5px dashed var(--line);padding:8px">
+  <p class="mute">📲 ফোনে অ্যাপের মতো রাখতে: Android Chrome-এ "ইনস্টল" বাটন আসবে; iPhone-এ Share → Add to Home Screen।</p></div>`}
+function expBackup(){DL.save({filename:"BP-backup-"+todayK()+".json",data:new Blob([JSON.stringify({app:"bachelors-paradise",v:4,at:new Date().toISOString(),data:S},null,1)],{type:"application/json"})})}
+async function applyBackup(d){
+  // চলতি ভল্টের কোড/চাবির সাথে সামঞ্জস্য রাখা: সবার-কোড চলতিটাই থাকে; ব্যক্তিগত কোডের লুকআপ চলতি কোড থেকে বসে
+  const keep=S.mcode||"";S=Object.assign(blank(),d);S.mcode=keep;
+  for(const m of S.members){const c=MCODES[m.id];if(c)m.lk=await lkOf(c);else delete m.lk}
+  S.bk=EVLAST||S.bk||""}
+function impBackup(file){
+  const r=new FileReader();r.onload=async()=>{try{const o=JSON.parse(r.result),d=o&&o.data?o.data:o;if(!d||!Array.isArray(d.members))throw 0;
+    if(!confirm("বর্তমান ডেটা এই ব্যাকআপ দিয়ে বদলে যাবে। চালিয়ে যাবেন?"))return;
+    await applyBackup(d);save();render();alert("ফেরানো হয়েছে — সবাইকে দেখাতে \"প্রকাশ করুন\" চাপুন।")}catch(e){alert("ফাইলটি ঠিক নয়")}};r.readAsText(file)}
+/* লগইন পেজ থেকে ব্যাকআপ ফেরানো: আগের ম্যানেজার কোড দিলে একই ম্যানেজার ও মেম্বার কোডে মেস আবার চালু হয় */
+async function recoverBackup(){
+  const f=RECF,raw=($("rc")||{}).value||"",code=norm(raw);
+  if(!f)return setMsg("আগে ব্যাকআপ ফাইল (.json) বেছে নিন");
+  if(!/^MGR[A-Z0-9]{12}$/.test(code))return setMsg("আগের ম্যানেজার কোড দিন (MGR-XXXX-XXXX-XXXX)");
+  let d;try{const o=JSON.parse(await f.text());d=o&&o.data?o.data:o;if(!d||!Array.isArray(d.members))throw 0}catch(e){return setMsg("ব্যাকআপ ফাইলটি ঠিক নয়")}
+  const mgr=code.slice(0,3)+"-"+code.slice(3).match(/.{4}/g).join("-");
+  setMsg("ফেরানো হচ্ছে…");busy=true;
+  try{
+    let exists=false,srv="";
+    try{const r=await fetch("/api/vault?lk="+await lkOf(mgr),{cache:"no-store"});if(r.ok)exists=true;else if(r.status!==404){const j=await r.json().catch(()=>({}));srv=j.error||("http_"+r.status)}}
+    catch(e){busy=false;return setMsg("ইন্টারনেট সংযোগ নেই বা সার্ভারে পৌঁছানো যাচ্ছে না")}
+    if(srv){busy=false;return setMsg(srvMsg(srv))}
+    let note="";
+    if(exists){
+      // সার্ভারে এই কোডের মেস আগে থেকেই আছে: ঢুকে ব্যাকআপের ডেটা বসিয়ে প্রকাশ
+      if(!await login(mgr,true)||!MGR||CO){busy=false;return setMsg("এই কোডের মেস সার্ভারে আছে, কিন্তু ম্যানেজার হিসেবে ঢোকা যায়নি")}
+      await applyBackup(d);
+    }else{
+      let mc=norm(d.mcode||"");
+      if(/^MEM[A-Z0-9]{12}$/.test(mc))mc=mc.slice(0,3)+"-"+mc.slice(3).match(/.{4}/g).join("-");
+      else{mc=genCode("MEM");note="\nনতুন মেম্বার কোড: "+mc+" (ব্যাকআপে আগেরটি ছিল না — এটি মেম্বারদের দিন)"}
+      Kraw=rnd(32);CID=b64u(rnd(8));MCODE=mgr;VER=0;VAULT=null;VW={};MCW=null;MCODES={};DROP=[];IDM="";kicked=false;
+      VA=await wrap(mgr,Kraw);VM=await wrap(mc,Kraw);
+      S=Object.assign(blank(),d);S.mcode=mc;S.members.forEach(m=>{delete m.lk});BASE="";ROLE="manager";MGR=true;CO=false;
+      if(Object.keys(MCODES).length===0&&d.members.some(m=>m.lk))note+="\n(সদস্যদের ব্যক্তিগত কোড ব্যাকআপে থাকে না — দরকার হলে সেটিং → লগইন কোড থেকে আবার চালু করুন)"}
+    CODE=mgr;MCODE=mgr;try{localStorage.setItem(SKEY,JSON.stringify({r:"manager",c:mgr}))}catch(x){}
+    S.bk=EVLAST||S.bk||"";save();busy=false;tab="home";render();
+    const ok=await publish();
+    if(ok)alert("✅ ফেরানো ও প্রকাশ হয়েছে। ম্যানেজার কোড ও মেম্বার কোড আগের মতোই আছে।"+note);
+    else alert("ডেটা ফেরানো হয়েছে, কিন্তু এখনো প্রকাশ হয়নি। ওপরের \"প্রকাশ করুন\" বাটনে আবার চাপুন।"+note);
+  }catch(e){busy=false;setMsg("ফেরানো যায়নি: "+(e&&e.message||e))}}
+/* প্রিন্ট ফলব্যাক: লেখা মেপে এক পাতায় বসিয়ে (zoom) আড়াআড়ি/লম্বালম্বি বেছে নেয় */
+function printDoc(html,W){
+  W=W||1123;const lk=document.querySelector('link[href*="fonts.googleapis"]');
+  return "<!doctype html><html><head><meta charset=utf-8>"+(lk?'<link rel="stylesheet" href="'+lk.href+'">':"")+"<style>"+$("css").textContent+"html,body{margin:0!important;padding:0!important;max-width:none!important;background:#eef2fb}body{display:block!important}.rp{width:"+W+"px!important}table{white-space:normal}</style></head><body><div id=fit><div id=in>"+html+"</div></div>"+
+  "<scr"+"ipt>addEventListener('load',function(){var W="+W+",I=document.getElementById('in'),F=document.getElementById('fit');I.style.width=W+'px';var w=Math.max(W,I.scrollWidth);I.style.width=w+'px';var h=I.scrollHeight,L=[1010,696],P=[696,1010],sl=Math.min(L[0]/w,L[1]/h),sp=Math.min(P[0]/w,P[1]/h),land=sl>=sp,s=Math.min(1,land?sl:sp);"+
+  "var AW=land?L[0]:P[0],AH=land?L[1]:P[1];I.style.zoom=s;for(var q=0;q<5;q++){var rc=I.getBoundingClientRect(),kk=Math.min(AW/rc.width,AH/rc.height);if(kk>=0.995)break;s*=kk*0.99;I.style.zoom=s}"+
+  "F.style.cssText='width:'+AW+'px;height:'+(AH-4)+'px;overflow:hidden';var st=document.createElement('style');st.textContent='@page{size:A4 '+(land?'landscape':'portrait')+';margin:8mm}';document.head.appendChild(st);document.documentElement.setAttribute('data-fit',(land?'L':'P')+s.toFixed(3))})</"+"script></body></html>"}
+function printHTML(html,W){
+  const fr=document.createElement("iframe");fr.style.cssText="position:fixed;left:-9999px;width:"+(W||1123)+"px;height:800px";document.body.appendChild(fr);
+  const d=fr.contentDocument;d.open();d.write(printDoc(html,W));d.close();
+  setTimeout(()=>{fr.contentWindow.focus();fr.contentWindow.print();setTimeout(()=>fr.remove(),4000)},900)}
+
+/* ---------- কার কখন পালা + রিমাইন্ডার ---------- */
+function scMine(){const me=getMe(),T=todayK(),Tm=shiftD(T,1),o=[];["w","b"].forEach(k=>SC()[k].forEach(x=>{if(!x.done&&x.who.some(i=>mname(i)===me)){const on=x.d<=T&&scEnd(x)>=T;if(on||x.d===Tm)o.push({k,x,today:on})}}));return o}
+function remText(k){const x=scNext(k);return x?`⏰ রিমাইন্ডার — ${SCN[k]}\n${fdr(x)}: ${x.who.map(i=>mname(i)).join(", ")}\n(${S.name||"মেস"})`:""}
+
+/* ---------- অতিরিক্ত অ্যাকশন ---------- */
+function moreAct(k,a){
+  if(k==="devcard"){devCard();return true}
+  if(k==="scshare"){shareSheet(scText(),"রুটিন");return true}
+  if(k==="mlshare"){shareSheet(mlText(mld),"আজকের মিল");return true}
+  if(k==="ntshare"){const n=(S.nt||[]).find(x=>x.id===a.dataset.id);if(n)shareSheet("📢 "+n.t+"\n— "+(S.name||"মেস"),"ঘোষণা");return true}
+  if(k==="expb"){expBackup();return true}
+  if(k==="install"){if(DIP){DIP.prompt();DIP=null;$("inst").hidden=true}return true}
+  if(k==="screm"){const t=remText(a.dataset.k);if(t)shareSheet(t,"রিমাইন্ডার");return true}
+  if(!MGR&&k!=="screm")return k==="ntadd"||k==="mlapply";
+  if(k==="ntadd"){const x=$("ntx"),t=x&&x.value.trim();if(!t)return true;S.nt=(S.nt||[]).concat([{id:"n"+Math.random().toString(36).slice(2,7),t,ts:Date.now()}]).slice(-20);save();render();return true}
+  if(k==="mlapply"){const km=mld.slice(0,7),ms=mlMonth(km);if(!ms.length)return true;
+    if(!confirm(lab(km)+" মাসের মিল ("+ms.map(r=>r.name+" "+f(r.tot)).join(", ")+") মাসিক হিসাবে বসবে। আগের মিল ঘর বদলে যাবে। চালিয়ে যাবেন?"))return true;
+    const m=ens(km);ms.forEach(r=>{(m.r[r.id]=m.r[r.id]||{}).m=String(r.tot)});save();alert("বসানো হয়েছে — \"মাসিক\" ট্যাবে দেখুন। প্রকাশ করতে ভুলবেন না।");return true}
+  return false}
+
+const evDeb={};
+document.addEventListener("input",e=>{const t=e.target,d=t.dataset;
+  if(d.bz==="i"&&(d.k==="aq"||d.k==="ap"||d.k==="hv")){
+    const it=BZw().items.find(x=>x.id===d.id);if(!it)return;it[d.k]=t.value;paintBz();
+    const key=d.id+d.k;clearTimeout(evDeb[key]);evDeb[key]=setTimeout(()=>evPost({y:"bz",id:d.id,f:d.k,v:t.value}),700)}
+  else if(MGR&&d.pay){const m=(S.pay=S.pay||{})[mon]=(S.pay[mon]||{});(m[d.pay]=m[d.pay]||{}).a=t.value;save();payPaint()}});
+document.addEventListener("change",e=>{const t=e.target,d=t.dataset;
+  if(d.bzdone){evPost({y:"bz",id:d.bzdone,f:"d",v:t.checked?1:0});paintBz()}
+  else if(d.sub){if(!t.value)return;const q=d.sub.split(":");evPost({y:"sub",k:q[0],id:q[1],j:+q[2],to:t.value});render()}
+  else if(d.scdone){evPost({y:"sd",k:d.k,id:d.scdone,v:t.checked?1:0});if(!MGR)render()}
+  else if(d.mlg!==undefined){evPost({y:"ml",dt:mld,m:d.mlg,f:"g",v:p(t.value)});render()}
+  else if(d.mldate){mld=t.value||todayK();render()}
+  else if(d.phs){bzph=t.value;render()}
+  else if(d.impf&&MGR&&t.files[0]){impBackup(t.files[0]);t.value=""}
+  else if(d.recf!==undefined){RECF=t.files[0]||null}});
+document.addEventListener("click",e=>{const t=e.target;
+  const c=t.closest("[data-mlt]");if(c){const q=c.dataset.mlt.split(":"),cur=mlGet(mld,q[0]);evPost({y:"ml",dt:mld,m:q[0],f:q[1],v:cur[q[1]]?0:1});render();return}
+  const n=t.closest("[data-mld]");if(n){mld=n.dataset.mld==="t"?todayK():shiftD(mld,+n.dataset.mld);render();return}
+  const nd=t.closest("[data-ntdel]");if(nd&&MGR){S.nt=(S.nt||[]).filter(x=>x.id!==nd.dataset.ntdel);save();render()}});
+
+/* ---------- publish (Vercel Function) ---------- */
+function merge3(b,t,m){
+  const js=JSON.stringify,O=x=>x&&typeof x==="object"&&!Array.isArray(x);
+  if(js(m)===js(b))return t;if(js(t)===js(b)||js(t)===js(m))return m;
+  if(O(b)&&O(t)&&O(m)){const r={};
+    for(const k of new Set([...Object.keys(b),...Object.keys(t),...Object.keys(m)])){
+      const inb=k in b,int=k in t,inm=k in m;
+      if(!inm&&!int)continue;
+      if(!inm){if(inb&&js(t[k])===js(b[k]))continue;r[k]=t[k];continue}
+      if(!int){if(inb&&js(m[k])===js(b[k]))continue;r[k]=m[k];continue}
+      r[k]=merge3(inb?b[k]:undefined,t[k],m[k])}
+    return r}
+  return m}
+async function resolveConflict(){
+  try{const r=await fetch("/api/vault?lk="+await lkOf(MCODE),{cache:"no-store"});if(!r.ok)return false;const v=await r.json();
+    const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(v.di)},await dkey(Kraw),ub(v.ct));
+    const theirs=JSON.parse(dec.decode(pt));
+    S=Object.assign(blank(),merge3(JSON.parse(BASE),theirs,S));
+    if(!CO){VM=v.M!==undefined?v.M:VM}
+    VER=v.ver||0;VAULT={id:CID,M:VM,A:VA,di:v.di,ct:v.ct};BASE=JSON.stringify(theirs);save();return true}
+  catch(e){return false}}
+async function publish(retry){
+  if(busy||!MGR)return false;busy=true;updBar();let okp=false;
+  try{
+    S.bk=EVLAST||S.bk||"";
+    const iv=rnd(12),di=b64(iv),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify(S))));
+    PUB=ct;save();
+    let body;
+    if(CO)body={id:CID,di,ct,base:VER,token:await tokOf(MCODE),co:true};
+    else{
+      const nw=!!MCW||Object.keys(VW).length>0,alk=await lkOf(MCODE);
+      let lks=[...new Set([S.mcode?await lkOf(S.mcode):"",alk].filter(Boolean))];
+      body={id:CID,name:S.name,M:VM,A:VA,di,ct,base:VER,token:await tokOf(MCODE),lks};
+      if(nw){lks=[alk].concat(S.members.map(m=>m.lk).filter(Boolean));if(S.mcode)lks.push(await lkOf(S.mcode));
+        body.C=[];body.cws=[];
+        if(MCODES.__co){const cl=await lkOf(MCODES.__co);lks.push(cl);body.C=[cl];body.cws=[await tokOf(MCODES.__co)]}
+        body.lks=[...new Set(lks)];body.W=VW;body.alk=alk;if(MCW)body.MC=MCW}
+      if(DROP.length)body.drop=DROP.slice(0,5)}
+    const r=await fetch("/api/vault",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(body)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){
+      if(r.status===409&&j&&j.error==="taken")alert("প্রকাশ হয়নি: এই লগইন কোড সার্ভারে অন্য একটি মেসে ব্যবহৃত হচ্ছে। আগের মেস এই সার্ভারে থাকলে \"ব্যাকআপ থেকে ফেরান\"-এ ঠিক আগের ম্যানেজার কোড দিন, অথবা সরাসরি সেই কোডে লগইন করুন।");
+      else if(r.status===409&&!retry&&VAULT){busy=false;if(await resolveConflict())return publish(true);busy=true;
+        alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।")}
+      else if(r.status===409)alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।");
+      else if(r.status===403)alert(CO?"প্রকাশ হয়নি: আপনার সহ-ম্যানেজার অনুমতি বাতিল হয়েছে বা কোড বদলেছে।":"প্রকাশ হয়নি: ম্যানেজার কোড মেলেনি।");
+      else if(j&&j.error&&/^storage_/.test(j.error))alert(srvMsg(j.error));
+      else alert("প্রকাশ করা যায়নি ("+r.status+(j&&j.error?" • "+j.error:"")+")। ইন্টারনেট চেক করে আবার চেষ্টা করুন।");
+    }else{
+      VER=j.ver;VAULT={id:CID,M:VM,A:VA,di,ct};BASE=JSON.stringify(S);clrPend(CID);if(!CO)DROP=[];okp=true}
+  }catch(e){alert("প্রকাশ করা যায়নি। ইন্টারনেট সংযোগ চেক করুন।")}
+  busy=false;updBar();if(okp&&retry)render();return okp}
+const setMsg=t=>{const m=$("lmsg");if(m)m.textContent=t};
+async function doLogin(code,mgr){
+  if(!code.trim())return setMsg("কোড লিখুন");setMsg("যাচাই হচ্ছে…");
+  if(await login(code,mgr)){CODE=code;try{localStorage.setItem(SKEY,JSON.stringify({r:ROLE,c:code}))}catch(x){}tab="home";render()}
+  else if(SRVERR)setMsg(srvMsg(SRVERR))
+  else setMsg(mgr?"ম্যানেজার কোড মেলেনি":"কোড মেলেনি। মেম্বার কোডটি আবার দেখুন")}
+function srvMsg(e){return e==="storage_not_configured"?"⚠ সার্ভারে ডেটাবেস যুক্ত করা হয়নি। Vercel → Storage → Upstash Redis যুক্ত করে Redeploy করুন।":"⚠ সার্ভারে সমস্যা ("+e+")। একটু পরে আবার চেষ্টা করুন।"}
+
+/* ---------- events ---------- */
+document.addEventListener("input",e=>{
+  if(!MGR)return;const t=e.target,d=t.dataset;
+  if(d.bz){bzIn(t);save();paintBz();return}
+  if(d.sc){scIn(t);save();return}
+  if(d.f){const m=ens(mon);(m.r[d.id]=m.r[d.id]||{})[d.f]=t.value}
+  else if(d.s)ens(mon).s[d.s]=t.value;
+  else if(d.n!==undefined)ens(mon).n=t.value;
+  else if(d.ck){const m=ens(mon);m.x=m.x||{};if(t.checked)delete m.x[d.ck];else m.x[d.ck]=1}
+  else if(d.cnt!==undefined)ens(mon).c=t.value;
+  else if(d.nm)S.name=t.value;
+  else if(d.mn)S.members.find(x=>x.id===d.mn).name=t.value;
+  else if(d.mr)S.members.find(x=>x.id===d.mr).rent=p(t.value);
+  else if(d.df)S.def[d.df]=p(t.value);
+  else return;
+  save();paint()});
+document.addEventListener("change",e=>{const d=e.target.dataset;if(d.mon){mon=e.target.value;render()}
+  else if(d.bzdone&&MGR){const it=BZw().items.find(x=>x.id===d.bzdone);if(it){it.d=e.target.checked?1:0;save();paintBz()}}
+  else if(d.bz==="i"&&d.k==="c"&&MGR)render();
+  else if(d.me){try{localStorage.setItem("bpMe",e.target.value)}catch(x){}if(tab==="chat")chPaint();else render()}
+  else if(d.scdone&&MGR){const it=SCw()[d.k].find(x=>x.id===d.scdone);if(it){it.done=e.target.checked?1:0;save();render()}}
+  else if(d.sc&&MGR){SCw()[d.sc].sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="cin"){e.preventDefault();chSend()}});
+document.addEventListener("click",async e=>{
+  const t=e.target;
+  if(t.classList&&t.classList.contains("code")){t.select();return}
+  const rm=t.closest("[data-rm]");if(rm){NEW.name=$("mn").value;NEWMEM.splice(+rm.dataset.rm,1);render();return}
+  const o=t.closest("[data-open]");if(o){e.preventDefault();mon=o.dataset.open;tab="month";render();return}
+  const tb=t.closest("[data-t]");if(tb){closeOv();tab=tb.dataset.t;render();return}
+  const dl=t.closest("[data-del]");if(dl&&MGR){if(!confirm("এই সদস্য ও তার হিসাব মুছবেন?"))return;const id=dl.dataset.del;if(MCODES[id]){alert("আগে 🚫 বন্ধ বা 🚪 ছেড়ে গেছে দিন (সেটিং → লগইন কোড), তারপর মুছুন।");return}S.members=S.members.filter(x=>x.id!==id);Object.values(S.months).forEach(m=>delete m.r[id]);save();render();return}
+  const lgb=t.closest("[data-lg]");if(lgb&&MGR){const q=lgb.dataset.lg.split(":");lgAct(q[0],q[1]);return}
+  const rr_=t.closest("[data-rrm]");if(rr_&&MGR){if(!confirm("এই মাসিক নিয়ম বন্ধ হবে; ভবিষ্যতের বাকি তারিখগুলোও মুছে যাবে।"))return;const z=SCw(),id=rr_.dataset.rrm,T=todayK();z.rep=(z.rep||[]).filter(r=>r.id!==id);z.w=z.w.filter(x=>x.rp!==id||x.done||x.d<T);save();render();return}
+  const sv_=t.closest("[data-scv]");if(sv_){scv=sv_.dataset.scv;render();return}
+  const sd_=t.closest("[data-scdel]");if(sd_&&MGR){if(!confirm("এই তারিখটি মুছবেন?"))return;const q=sd_.dataset.scdel.split(":");if(q[1][0]==="r"){const z=SCw();z.rs=z.rs||{};z.rs[q[1]]=1}SCw()[q[0]]=SCw()[q[0]].filter(x=>x.id!==q[1]);save();render();return}
+  const bv=t.closest("[data-bzv]");if(bv){bzv=bv.dataset.bzv;render();return}
+  const bdy=t.closest("[data-bzd]");if(bdy&&MGR){BZw().days=+bdy.dataset.bzd;save();render();return}
+  const bxx=t.closest("[data-bzdel]");if(bxx&&MGR){if(!confirm("এই পণ্য তালিকা থেকে মুছবেন?"))return;const z=BZw();z.items=z.items.filter(i=>i.id!==bxx.dataset.bzdel);save();render();return}
+  const a=t.closest("[data-act]");if(!a)return;const k=a.dataset.act;
+  if(moreAct(k,a))return;
+  if(k==="pdfbz"){makePDF(bzReportHTML(),"Bazar-Plan-"+todayK()+".pdf",a,794);return}
+  if(k==="pdfsc"){makePDF(scReportHTML(),"Routine-"+todayK()+".pdf",a,794);return}
+  if(k==="csend"){chSend();return}
+  if(k==="scgen"||k==="scadd"||k==="scone"){scAct(k);return}
+  if(k.indexOf("bz")===0){bzAct(k);return}
+  if(k==="logout"){try{localStorage.removeItem(SKEY)}catch(x){}location.reload()}
+  else if(k==="pub")publish();
+  else if(k==="pdf")makePDF(reportHTML(mon),"Bachelors-Paradise-"+mon+".pdf",a,900);
+  else if(k==="mlogin")doLogin($("mc").value,false);
+  else if(k==="alogin")doLogin($("ac").value,true);
+  else if(k==="recover")recoverBackup();
+  else if(k==="newmess"){NEW={a:genCode("MGR"),m:genCode("MEM"),name:""};NEWMEM=[];stage="codes";render()}
+  else if(k==="back"){stage="login";render()}
+  else if(k==="tosetup"){if(!$("saved").checked){alert("আগে কোড দুটি সংরক্ষণ করে টিক দিন");return}stage="setup";render()}
+  else if(k==="addnew"){NEW.name=$("mn").value;const n=$("nn").value.trim();if(n)NEWMEM.push(mk(n,p($("nr").value)));render()}
+  else if(k==="create"){const name=$("mn").value.trim();if(!name)return setMsg("মেসের নাম লিখুন");if(!NEWMEM.length)return setMsg("অন্তত একজন সদস্য যোগ করুন");
+    setMsg("তৈরি হচ্ছে…");Kraw=rnd(32);CID=b64u(rnd(8));MCODE=NEW.a;CODE=NEW.a;VER=0;VAULT=null;VM=await wrap(NEW.m,Kraw);VA=await wrap(NEW.a,Kraw);
+    S=Object.assign(blank(),{name,members:NEWMEM,mcode:NEW.m});BASE="";ROLE="manager";MGR=true;stage="login";
+    try{localStorage.setItem(SKEY,JSON.stringify({r:"manager",c:NEW.a}))}catch(x){}save();tab="home";render()}
+  else if(k==="add"&&MGR){const n=$("nn").value.trim();if(!n)return;S.members.push(mk(n,p($("nr").value)));save();render()}
+});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+(async function boot(){
+  let ss=null;try{ss=JSON.parse(localStorage.getItem(SKEY))}catch(e){}
+  if(ss&&ss.c){$("view").innerHTML='<p class="mute">লগইন হচ্ছে…</p>';if(!await login(ss.c,ss.r==="manager")){try{localStorage.removeItem(SKEY)}catch(e){}}else CODE=ss.c}
+  render();
+  DL={save:async o=>{const a=document.createElement("a");a.href=URL.createObjectURL(o.data);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};if(tab==="rep")render();
+})();
+</script></body>
+</html>
