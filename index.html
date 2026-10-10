@@ -193,7 +193,7 @@ const lkOf=c=>hsh("bp-lk:",c),tokOf=c=>hsh("bp-tok:",c);
 async function login(code,wantMgr){
   try{
   let v=null;const lk0=await lkOf(code);OFFLINE=false;SRVERR="";
-  try{const r=await fetch("/api/vault?lk="+lk0,{cache:"no-store"});if(r.ok){v=await r.json();try{localStorage.setItem("bpVc:"+lk0,JSON.stringify(v))}catch(x){}}else if(r.status===404){try{localStorage.removeItem("bpVc:"+lk0)}catch(x){}}else{const j=await r.json().catch(()=>({}));SRVERR=j.error||("http_"+r.status)}}
+  try{const r=await fetch("/api/vault?lk="+lk0,{cache:"no-store"});if(r.ok){v=await r.json();try{localStorage.setItem("bpVc:"+lk0,JSON.stringify(v))}catch(x){}}else if(r.status===404){const j=await r.json().catch(()=>null);if(j&&j.error)try{localStorage.removeItem("bpVc:"+lk0)}catch(x){}else SRVERR="no_api"}else{const j=await r.json().catch(()=>({}));SRVERR=j.error||("http_"+r.status)}}
   catch(e){try{v=JSON.parse(localStorage.getItem("bpVc:"+lk0));OFFLINE=!!v}catch(x){}}
   if(v)for(const w of v.co?["M"]:wantMgr?["A"]:["M","A"]){const raw=await unwrap(code,v[w]);if(!raw)continue;
     const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(v.di)},await dkey(raw),ub(v.ct));
@@ -750,7 +750,7 @@ function vLogins(){
   const ind=indiv?rows+'<p class="mute">🚫 বন্ধ করলে ওই কোড দিয়ে আর ঢোকা যাবে না, বাকিদের কোড একই থাকে (ডেটার চাবি নিজে নতুন হয়; বাকিদের অ্যাপ নিজে একবার রিলোড নেয়)। চ্যাটের পুরোনো মেসেজ মুছে যায়। "🚪 ছেড়ে গেছে" মানে লগইন বন্ধ + ওই মাসের পর থেকে ভাড়া/হিসাবে আর ধরা হবে না, আগের হিসাব থাকবে। নিজস্ব কোডে ঢুকলে নাম নিজে ঠিক হয়ে যায়। ⚠ নিজস্ব কোড গ্রুপে নয়, ব্যক্তিগত মেসেজে পাঠান।</p>'
     :'<p class="mute">প্রত্যেক সদস্যের আলাদা কোড — একজনকে বাদ দিলে বাকিদের কিছু বদলাতে হয় না। সবার-কোড আগের মতোই চলতে থাকবে।</p><button class="p" style="width:100%" data-lg="all:">সবার নিজস্ব কোড চালু করুন</button>';
   const cc=MCODES.__co,coBox=`<div class="box"><h2>🤝 সহ-ম্যানেজার</h2><p class="mute">সহ-ম্যানেজার আপনার মতোই হিসাব, বাজার, মিল, খরচ ও সক্রিয়/নিষ্ক্রিয় ঠিক করতে ও প্রকাশ করতে পারবেন। পারবেন না: সদস্য মোছা/যোগ, লগইন কোড বদলানো, সহ-ম্যানেজার বদলানো। ম্যানেজার লগইনের ঘরে এই কোড দিয়ে ঢুকবেন।</p>${cc?`<div class="mute">🔑 সহ-ম্যানেজারের কোড আছে</div>${SHOWC.__co?`<input class="code" readonly value="${esc(cc)}" aria-label="সহ-ম্যানেজার কোড">`:""}<div class="btns"><button data-lg="show:__co">${SHOWC.__co?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__co">📤 পাঠান</button><button data-lg="con:__co">🔄 নতুন কোড</button><button class="x" data-lg="coff:__co">🚫 সরান</button></div>`:`<button class="p" style="width:100%" data-lg="con:__co">➕ সহ-ম্যানেজার কোড তৈরি করুন</button>`}</div>`;
-  return coBox+`<div class="box"><h2>🔑 লগইন কোড</h2><h3 style="margin-top:0">👥 সবার জন্য এক কোড</h3>${shared}<h3>🙋 প্রত্যেকের নিজস্ব কোড</h3>${ind}</div>`}
+  return `<div class="box"><h2>🔑 লগইন কোড</h2><h3 style="margin-top:0">👥 সবার জন্য এক কোড</h3>${shared}<h3>🙋 প্রত্যেকের নিজস্ব কোড</h3>${ind}</div>`}
 function kickOut(){if(kicked)return;kicked=true;try{localStorage.removeItem(SKEY)}catch(e){}alert("আপনার লগইন বন্ধ করা হয়েছে বা ম্যানেজার নতুন কোড দিয়েছেন। নতুন কোড দিয়ে আবার ঢুকুন।");location.reload()}
 
 /* ---------- UI: টোস্ট, শেয়ার শিট, ডেভেলপার কার্ড ---------- */
@@ -965,7 +965,7 @@ async function recoverBackup(){
   setMsg("ফেরানো হচ্ছে…");busy=true;
   try{
     let exists=false,srv="";
-    try{const r=await fetch("/api/vault?lk="+await lkOf(mgr),{cache:"no-store"});if(r.ok)exists=true;else if(r.status!==404){const j=await r.json().catch(()=>({}));srv=j.error||("http_"+r.status)}}
+    try{const r=await fetch("/api/vault?lk="+await lkOf(mgr),{cache:"no-store"});if(r.ok)exists=true;else{const j=await r.json().catch(()=>null);if(r.status===404){if(!(j&&j.error))srv="no_api"}else srv=(j&&j.error)||("http_"+r.status)}}
     catch(e){busy=false;return setMsg("ইন্টারনেট সংযোগ নেই বা সার্ভারে পৌঁছানো যাচ্ছে না")}
     if(srv){busy=false;return setMsg(srvMsg(srv))}
     let note="";
@@ -1086,6 +1086,7 @@ async function publish(retry){
       else if(r.status===409)alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।");
       else if(r.status===403)alert(CO?"প্রকাশ হয়নি: আপনার সহ-ম্যানেজার অনুমতি বাতিল হয়েছে বা কোড বদলেছে।":"প্রকাশ হয়নি: ম্যানেজার কোড মেলেনি।");
       else if(j&&j.error&&/^storage_/.test(j.error))alert(srvMsg(j.error));
+      else if(r.status===404||r.status===405)alert(srvMsg("no_api"));
       else alert("প্রকাশ করা যায়নি ("+r.status+(j&&j.error?" • "+j.error:"")+")। ইন্টারনেট চেক করে আবার চেষ্টা করুন।");
     }else{
       VER=j.ver;VAULT={id:CID,M:VM,A:VA,di,ct};BASE=JSON.stringify(S);clrPend(CID);if(!CO)DROP=[];okp=true}
@@ -1097,7 +1098,7 @@ async function doLogin(code,mgr){
   if(await login(code,mgr)){CODE=code;try{localStorage.setItem(SKEY,JSON.stringify({r:ROLE,c:code}))}catch(x){}tab="home";render()}
   else if(SRVERR)setMsg(srvMsg(SRVERR))
   else setMsg(mgr?"ম্যানেজার কোড মেলেনি":"কোড মেলেনি। মেম্বার কোডটি আবার দেখুন")}
-function srvMsg(e){return e==="storage_not_configured"?"⚠ সার্ভারে ডেটাবেস যুক্ত করা হয়নি। Vercel → Storage → Upstash Redis যুক্ত করে Redeploy করুন।":"⚠ সার্ভারে সমস্যা ("+e+")। একটু পরে আবার চেষ্টা করুন।"}
+function srvMsg(e){return e==="no_api"?"⚠ সার্ভারে api ফোল্ডার (ফাংশন) পাওয়া যায়নি — পুরো প্রজেক্ট, api ও lib ফোল্ডারসহ, Vercel-এ deploy করুন।":e==="storage_not_configured"?"⚠ সার্ভারে ডেটাবেস যুক্ত করা হয়নি। Vercel → Storage → Upstash Redis যুক্ত করে Redeploy করুন।":"⚠ সার্ভারে সমস্যা ("+e+")। একটু পরে আবার চেষ্টা করুন।"}
 
 /* ---------- events ---------- */
 document.addEventListener("input",e=>{
