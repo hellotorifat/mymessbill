@@ -1,6 +1,6 @@
 # Vercel-এ চালু করার ধাপ (Bachelors Paradise)
 
-1. এই ফোল্ডারটি (api, lib, index.html, vercel.json সহ — সবকিছু) Vercel-এ deploy করুন
+1. এই ফোল্ডারটি (api, index.html, vercel.json সহ — সবকিছু) Vercel-এ deploy করুন
    (GitHub repo বা `vercel --prod`)। Framework Preset: **Other**, Build Command ফাঁকা।
 2. ডেটা রাখার জন্য ডেটাবেস দরকার (Netlify Blobs-এর বদলে):
    Vercel Dashboard → আপনার Project → **Storage** → **Create Database** → **Upstash Redis** (Free) → Connect to Project।

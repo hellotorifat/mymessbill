@@ -1098,7 +1098,7 @@ async function doLogin(code,mgr){
   if(await login(code,mgr)){CODE=code;try{localStorage.setItem(SKEY,JSON.stringify({r:ROLE,c:code}))}catch(x){}tab="home";render()}
   else if(SRVERR)setMsg(srvMsg(SRVERR))
   else setMsg(mgr?"ম্যানেজার কোড মেলেনি":"কোড মেলেনি। মেম্বার কোডটি আবার দেখুন")}
-function srvMsg(e){return e==="no_api"?"⚠ সার্ভারে api ফোল্ডার (ফাংশন) পাওয়া যায়নি — পুরো প্রজেক্ট, api ও lib ফোল্ডারসহ, Vercel-এ deploy করুন।":e==="storage_not_configured"?"⚠ সার্ভারে ডেটাবেস যুক্ত করা হয়নি। Vercel → Storage → Upstash Redis যুক্ত করে Redeploy করুন।":"⚠ সার্ভারে সমস্যা ("+e+")। একটু পরে আবার চেষ্টা করুন।"}
+function srvMsg(e){return e==="no_api"?"⚠ সার্ভারে api ফোল্ডার (ফাংশন) পাওয়া যায়নি — পুরো প্রজেক্ট, api , Vercel-এ deploy করুন।":e==="storage_not_configured"?"⚠ সার্ভারে ডেটাবেস যুক্ত করা হয়নি। Vercel → Storage → Upstash Redis যুক্ত করে Redeploy করুন।":"⚠ সার্ভারে সমস্যা ("+e+")। একটু পরে আবার চেষ্টা করুন।"}
 
 /* ---------- events ---------- */
 document.addEventListener("input",e=>{
