@@ -64,6 +64,19 @@ const guard = (fn) => async (req) => {
 };
 
 
+/* ---------- সেটিং, প্ল্যান ও মেম্বার সীমা ---------- */
+const DEF_PLANS = [
+  { id: "p25", name: "২৫ জন পর্যন্ত", limit: 25, price: 100, days: 0 },
+  { id: "p50", name: "৫০ জন পর্যন্ত", limit: 50, price: 200, days: 0 },
+];
+async function getCfg() {
+  const c = (await getJSON("cfg")) || {};
+  return { free: c.free || 15, plans: Array.isArray(c.plans) && c.plans.length ? c.plans : DEF_PLANS, methods: Array.isArray(c.methods) ? c.methods : [], support: c.support || "", notice: c.notice || "" };
+}
+async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
+function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
+const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
+
 
 // Google লগইন: Google অ্যাকাউন্টের সাথে মেসের কোড লিংক করা। কোড ডেটাবেসে এনক্রিপ্ট করে থাকে;
 // এনক্রিপশনের চাবি শুধু Vercel env-এ (SERVER_SECRET, না থাকলে ডেটাবেস টোকেন থেকে) — ডেটাবেস একা ফাঁস হলে কোড পড়া যায় না।

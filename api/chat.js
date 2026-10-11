@@ -63,6 +63,19 @@ const guard = (fn) => async (req) => {
 };
 
 
+/* ---------- সেটিং, প্ল্যান ও মেম্বার সীমা ---------- */
+const DEF_PLANS = [
+  { id: "p25", name: "২৫ জন পর্যন্ত", limit: 25, price: 100, days: 0 },
+  { id: "p50", name: "৫০ জন পর্যন্ত", limit: 50, price: 200, days: 0 },
+];
+async function getCfg() {
+  const c = (await getJSON("cfg")) || {};
+  return { free: c.free || 15, plans: Array.isArray(c.plans) && c.plans.length ? c.plans : DEF_PLANS, methods: Array.isArray(c.methods) ? c.methods : [], support: c.support || "", notice: c.notice || "" };
+}
+async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
+function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
+const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
+
 // এনক্রিপ্টেড মেস চ্যাট ও লাইভ ইভেন্ট (kind=e): সার্ভার শুধু ciphertext রাখে।
 const okLk = (x) => typeof x === "string" && /^[A-Za-z0-9_-]{20,64}$/.test(x);
 const okAfter = (x) => x === "" || /^\d{13}-[a-z0-9]{6}$/.test(x);

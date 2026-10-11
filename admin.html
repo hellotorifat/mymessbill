@@ -1,37 +1,84 @@
 <!DOCTYPE html>
-<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Super Admin — Bachelors Paradise</title>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Super Admin — mymessbill</title>
 <style>
-:root{--bg:#eef3f1;--card:#fff;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--pri-d:#08463d;--bad:#d23f2c}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1513;--card:#13211e;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--bad:#ff8a77}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,"Hind Siliguri","Noto Sans Bengali",sans-serif;padding:16px;max-width:1000px;margin:auto}
-h1{margin:0 0 4px;font-size:22px}.mute{color:var(--mute);font-size:13px}.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-input,button{font:inherit;border-radius:10px;border:1.5px solid var(--line);padding:9px 12px;background:var(--card);color:inherit}input{width:100%}button{cursor:pointer;font-weight:600}
-button.p{background:var(--pri);color:#fff;border-color:var(--pri)}button.x{color:var(--bad)}.row{display:flex;gap:8px}.big{font-size:34px;font-weight:700;color:var(--pri)}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:600;font-size:12px}.scroll{overflow-x:auto}
+:root{--bg:#eef3f1;--card:#fff;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--soft:#e0f1ec;--bad:#d23f2c;--acc:#f4a300}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1513;--card:#13211e;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--soft:#173833;--bad:#ff8a77}}
+[hidden]{display:none!important}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,"Hind Siliguri","Noto Sans Bengali",sans-serif;padding:14px;max-width:1040px;margin:auto}
+h1{margin:0 0 4px;font-size:22px}h2{font-size:17px;margin:0 0 8px}h3{font-size:14px;margin:12px 0 6px}.mute{color:var(--mute);font-size:13px}.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+input,button,select,textarea{font:inherit;border-radius:10px;border:1.5px solid var(--line);padding:8px 11px;background:var(--card);color:inherit}input,select,textarea{width:100%}button{cursor:pointer;font-weight:600;white-space:nowrap}
+button.p{background:var(--pri);color:#fff;border-color:var(--pri)}button.x{color:var(--bad)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>input,.row>select{flex:1 1 140px;width:auto}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.kp div{background:var(--soft);border-radius:14px;padding:10px 12px}.kp small{display:block;color:var(--mute);font-size:12px}.kp b{font-size:24px;color:var(--pri)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:600;font-size:12px}.scroll{overflow-x:auto}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:10px 0}.tabs button{border-radius:20px}.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.st{font-size:12px;font-weight:700;border-radius:10px;padding:2px 8px}.st.pending{background:#fff2d2;color:#6b4600}.st.approved{background:var(--soft);color:var(--pri)}.st.rejected{background:#fde9e5;color:var(--bad)}
+.qr{width:90px;height:90px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px}.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}.dot{display:inline-block;min-width:18px;padding:0 6px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;margin-left:4px}
 </style></head><body>
-<h1>🛡 Super Admin</h1><div class="mute">শুধু মালিকের জন্য • মেসের ভেতরের হিসাব/সদস্য/চ্যাট এনক্রিপ্টেড, তাই এখানে দেখা যায় না</div>
+<h1>🛡 Super Admin</h1><div class="mute">mymessbill • শুধু মালিকের জন্য • মেসের ভেতরের হিসাব/সদস্য/চ্যাট এনক্রিপ্টেড, এখানে দেখা যায় না</div>
 <div class="box" id="lg"><div class="row"><input id="k" type="password" placeholder="অ্যাডমিন কী (ADMIN_KEY)" autocomplete="current-password"><button class="p" id="go">ঢুকুন</button></div><p class="mute" id="m"></p></div>
 <div id="app" hidden>
- <div class="box"><div class="mute">মোট মেস</div><div class="big" id="tot">0</div><div class="row"><button id="rf">🔄 রিফ্রেশ</button><button id="out">বের হন</button></div></div>
- <div class="box scroll"><table><thead><tr><th>#</th><th>মেসের নাম</th><th>তৈরি</th><th>সর্বশেষ আপডেট</th><th>প্রকাশ</th><th>লগইন কোড</th><th>মেসেজ</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+ <div class="tabs" id="tabs"><button data-t="ov" class="on">📊 ওভারভিউ</button><button data-t="ms">🏠 মেস</button><button data-t="pay">💳 পেমেন্ট<span class="dot" id="pb" hidden></span></button><button data-t="mt">🧾 পদ্ধতি ও QR</button><button data-t="pl">📦 প্ল্যান ও সেটিং</button><button id="out">বের হন</button></div>
+ <div id="v"></div>
 </div>
 <script>
-const $=id=>document.getElementById(id);let K="";try{K=sessionStorage.getItem("bpAdm")||""}catch(e){}
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);let K="",T="ov",D={list:[],total:0},CFG=null,ST={},PAYS=[];try{K=sessionStorage.getItem("bpAdm")||""}catch(e){}
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const dt=t=>t?new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
-async function api(m,q){const r=await fetch("/api/admin"+(q||""),{method:m,headers:{"x-admin-key":K},cache:"no-store"});const j=await r.json().catch(()=>({}));return{r,j}}
-async function load(){
-  $("m").textContent="লোড হচ্ছে…";
-  let x;try{x=await api("GET")}catch(e){$("m").textContent="সংযোগ নেই";return}
+const bn=n=>Number(n||0).toLocaleString("en-IN");
+async function call(m,q,body){const r=await fetch("/api/admin"+(q||""),{method:m,headers:Object.assign({"x-admin-key":K},body?{"content-type":"application/json"}:{}),body:body?JSON.stringify(body):undefined,cache:"no-store"});const j=await r.json().catch(()=>({}));return{r,j}}
+const post=b=>call("POST","",b);
+async function loadAll(){
+  $("m").textContent="লোড হচ্ছে…";let x;try{x=await call("GET")}catch(e){$("m").textContent="সংযোগ নেই";return}
   if(x.r.status===403){K="";try{sessionStorage.removeItem("bpAdm")}catch(e){}$("lg").hidden=false;$("app").hidden=true;$("m").textContent="কী মেলেনি";return}
   if(!x.r.ok){$("lg").hidden=false;$("m").textContent=x.j.error==="admin_not_configured"?"Vercel-এ ADMIN_KEY (কমপক্ষে ৮ অক্ষর) সেট করে Redeploy করুন":"সমস্যা: "+(x.j.error||x.r.status);return}
   try{sessionStorage.setItem("bpAdm",K)}catch(e){}
-  $("lg").hidden=true;$("app").hidden=false;$("tot").textContent=x.j.total;
-  $("tb").innerHTML=x.j.list.map((v,i)=>`<tr><td>${i+1}</td><td><b>${esc(v.name||"(নাম নেই)")}</b><div class="mute">${esc(v.id)}</div></td><td>${dt(v.cat)}</td><td>${dt(v.uat)}</td><td>v${v.ver}</td><td>${v.codes}</td><td>${v.chat} / ${v.ev}</td><td><button class="x" data-id="${esc(v.id)}" data-n="${esc(v.name)}">মুছুন</button></td></tr>`).join("")||'<tr><td colspan="8">কোনো মেস নেই</td></tr>'}
-$("go").onclick=()=>{K=$("k").value;load()};$("k").onkeydown=e=>{if(e.key==="Enter")$("go").click()};$("rf").onclick=load;
+  D=x.j;const [c,p]=await Promise.all([post({a:"cfgget"}),post({a:"pays"})]);CFG=c.j.cfg;ST=c.j.stats||{};PAYS=p.j.list||[];
+  $("lg").hidden=true;$("app").hidden=false;const pe=PAYS.filter(x=>x.st==="pending").length;$("pb").hidden=!pe;$("pb").textContent=pe;draw()}
+function draw(){document.querySelectorAll("#tabs button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===T));$("v").innerHTML=({ov,ms,pay,mt,pl}[T])()}
+function ov(){const tm=D.list.reduce((s,v)=>s+(v.mc||0),0),paid=D.list.filter(v=>v.lim>(CFG.free||15)).length;
+  return `<div class="box"><div class="kp"><div><small>মোট মেস</small><b>${D.total}</b></div><div><small>মোট সদস্য (জানা)</small><b>${tm}</b></div><div><small>পেইড মেস</small><b>${paid}</b></div><div><small>অপেক্ষায় পেমেন্ট</small><b>${ST.pending||0}</b></div><div><small>অনুমোদিত পেমেন্ট</small><b>${ST.approved||0}</b></div><div><small>মোট আয় (৳)</small><b>${bn(ST.revenue)}</b></div></div></div>
+  <div class="box"><h2>সর্বশেষ মেস</h2>${tbl(D.list.slice(0,5))}</div>`}
+function tbl(L){return `<div class="scroll"><table><thead><tr><th>#</th><th>মেসের নাম</th><th>তৈরি</th><th>আপডেট</th><th>সদস্য</th><th>প্রকাশ</th><th>কোড</th><th>মেসেজ</th><th></th></tr></thead><tbody>${L.map((v,i)=>`<tr><td>${i+1}</td><td><b>${esc(v.name||"(নাম নেই)")}</b><div class="mute">${esc(v.id)}</div></td><td>${dt(v.cat)}</td><td>${dt(v.uat)}</td><td>${v.mc==null?"—":v.mc} / ${v.lim}${v.until?`<div class="mute">${dt(v.until)} পর্যন্ত</div>`:""}</td><td>v${v.ver}</td><td>${v.codes}</td><td>${v.chat}/${v.ev}</td><td><button data-lim="${esc(v.id)}">সীমা</button> <button class="x" data-del="${esc(v.id)}" data-n="${esc(v.name)}">মুছুন</button></td></tr>`).join("")||'<tr><td colspan="9">কোনো মেস নেই</td></tr>'}</tbody></table></div>`}
+function ms(){const q=(ST.q||"").toLowerCase(),L=D.list.filter(v=>!q||(v.name||"").toLowerCase().includes(q)||v.id.toLowerCase().includes(q));
+  return `<div class="box"><div class="row"><input id="sq" placeholder="মেসের নাম / আইডি খুঁজুন" value="${esc(ST.q||"")}"><button id="rf">🔄 রিফ্রেশ</button></div>${tbl(L)}<p class="mute">"সীমা" দিয়ে কোনো মেসকে হাতে সদস্য সীমা দিতে পারবেন (যেমন ফ্রি/উপহার)। 0 দিলে হাতে দেওয়া সীমা মুছে যায়।</p></div>`}
+function pay(){const f=ST.pf||"pending",L=PAYS.filter(p=>f==="all"||p.st===f);
+  return `<div class="box"><div class="row"><select id="pf"><option value="pending"${f==="pending"?" selected":""}>অপেক্ষায়</option><option value="approved"${f==="approved"?" selected":""}>অনুমোদিত</option><option value="rejected"${f==="rejected"?" selected":""}>বাতিল</option><option value="all"${f==="all"?" selected":""}>সব</option></select><button id="csv">⬇ CSV</button></div>
+  <div class="scroll"><table><thead><tr><th>সময়</th><th>মেস</th><th>প্ল্যান</th><th>৳</th><th>পদ্ধতি</th><th>প্রেরক / TrxID</th><th>অবস্থা</th><th></th></tr></thead><tbody>${L.map(p=>`<tr><td>${dt(p.at)}</td><td><b>${esc(p.mname||"—")}</b><div class="mute">${esc(p.mid)}</div></td><td>${esc(p.plan.name)}<div class="mute">${p.plan.limit} জন${p.plan.days?" • "+p.plan.days+" দিন":""}</div></td><td>${bn(p.amount)}</td><td>${esc(p.method.name)}</td><td>${esc(p.sender)}<div><b>${esc(p.trx)}</b></div></td><td><span class="st ${p.st}">${p.st==="pending"?"অপেক্ষায়":p.st==="approved"?"অনুমোদিত":"বাতিল"}</span>${p.note?`<div class="mute">${esc(p.note)}</div>`:""}</td><td>${p.st==="pending"?`<button class="p" data-pa="approve" data-id="${esc(p.id)}">✔ অনুমোদন</button> <button class="x" data-pa="reject" data-id="${esc(p.id)}">✕ বাতিল</button>`:""}</td></tr>`).join("")||'<tr><td colspan="8">কিছু নেই</td></tr>'}</tbody></table></div>
+  <p class="mute">bKash/Nagad অ্যাপে TrxID ও পরিমাণ মিলিয়ে তারপর অনুমোদন দিন। একই TrxID দ্বিতীয়বার নেওয়া হয় না।</p></div>`}
+function mt(){return `<div class="box"><h2>🧾 পেমেন্ট পদ্ধতি (বিকাশ, নগদ, রকেট, ব্যাংক…)</h2><p class="mute">চালু থাকা পদ্ধতি ম্যানেজাররা দেখবে। QR ছবি আপলোড করা যায়।</p>
+  ${(CFG.methods||[]).map(m=>`<div class="box" data-mid="${esc(m.id)}"><div class="g2"><div><label class="mute">নাম</label><input data-f="name" value="${esc(m.name)}" maxlength="30"></div><div><label class="mute">নম্বর / অ্যাকাউন্ট</label><input data-f="num" value="${esc(m.num)}" maxlength="60"></div><div><label class="mute">নোট (যেমন: Send Money / Personal)</label><input data-f="note" value="${esc(m.note)}" maxlength="200"></div></div>
+  <div class="row" style="margin-top:8px">${m.q?`<img class="qr" src="/api/pay?qr=${encodeURIComponent(m.id)}&v=${m.q}" alt="QR">`:'<span class="mute">QR নেই</span>'}<input type="file" accept="image/*" data-qr style="max-width:230px">${m.q?'<button class="x" data-qrdel>QR সরান</button>':""}<label><input type="checkbox" data-f="on" ${m.on?"checked":""} style="width:auto"> চালু</label><button class="p" data-msave>সেভ</button><button class="x" data-mdel>মুছুন</button></div></div>`).join("")||'<p class="mute">এখনো কোনো পদ্ধতি নেই।</p>'}
+  <h3>➕ নতুন পদ্ধতি</h3><div class="row"><select id="nmq"><option>বিকাশ</option><option>নগদ</option><option>রকেট</option><option>উপায়</option><option>ব্যাংক</option><option>অন্য</option></select><input id="nmn" placeholder="নম্বর / অ্যাকাউন্ট"><button class="p" id="nma">যোগ করুন</button></div></div>`}
+function pl(){const c=CFG;return `<div class="box"><h2>📦 প্ল্যান</h2><p class="mute">ফ্রি সীমার বেশি সদস্য লাগলে ম্যানেজার এই প্ল্যান কিনবে। "দিন" 0 মানে একবার কিনলেই সারাজীবন।</p>
+  <div class="row"><label>ফ্রি সদস্য সীমা</label><input id="free" type="number" min="1" value="${c.free}" style="max-width:100px"></div>
+  <div class="scroll"><table><thead><tr><th>প্ল্যানের নাম</th><th>সদস্য সীমা</th><th>দাম ৳</th><th>দিন (০=একবার)</th><th></th></tr></thead><tbody id="plb">${c.plans.map(p=>planRow(p)).join("")}</tbody></table></div><button id="pladd">➕ প্ল্যান যোগ</button></div>
+  <div class="box"><h2>📣 সাইট নোটিশ</h2><p class="mute">সব ইউজারের হোম/লগইন পেজের ওপরে দেখাবে (ফাঁকা রাখলে কিছু দেখাবে না)।</p><textarea id="notice" rows="2" maxlength="300">${esc(c.notice)}</textarea>
+  <h3>☎ সাপোর্ট / যোগাযোগ (পেমেন্ট পেজে দেখাবে)</h3><input id="support" maxlength="200" value="${esc(c.support)}" placeholder="যেমন: WhatsApp 01XXXXXXXXX">
+  <div class="row" style="margin-top:10px"><button class="p" id="plsave">💾 সব সেভ করুন</button></div></div>`}
+const planRow=p=>`<tr><td><input data-pf="name" value="${esc(p.name)}" maxlength="40"></td><td><input data-pf="limit" type="number" min="1" value="${p.limit}"><input type="hidden" data-pf="id" value="${esc(p.id)}"></td><td><input data-pf="price" type="number" min="0" value="${p.price}"></td><td><input data-pf="days" type="number" min="0" value="${p.days||0}"></td><td><button class="x" data-plrm>✕</button></td></tr>`;
+function resizeQR(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const n=Math.min(480,Math.max(im.width,im.height)),k=n/Math.max(im.width,im.height),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.85))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+$("go").onclick=()=>{K=$("k").value;loadAll()};$("k").onkeydown=e=>{if(e.key==="Enter")$("go").click()};
 $("out").onclick=()=>{K="";try{sessionStorage.removeItem("bpAdm")}catch(e){}location.reload()};
-$("tb").onclick=async e=>{const b=e.target.closest("button[data-id]");if(!b)return;
-  const n=b.dataset.n||b.dataset.id;if(prompt("⚠ এই মেস চিরতরে মুছে যাবে (ডেটা, কোড, চ্যাট)। নিশ্চিত হতে মেসের নাম লিখুন:\n"+n)!==n)return;
-  const x=await api("DELETE","?id="+encodeURIComponent(b.dataset.id));if(x.r.ok)load();else alert("মোছা যায়নি: "+(x.j.error||x.r.status))};
-if(K)load();
+$("tabs").onclick=e=>{const b=e.target.closest("button[data-t]");if(b){T=b.dataset.t;draw()}};
+const v=$("v");
+v.onclick=async e=>{const t=e.target;
+  if(t.id==="rf"){loadAll();return}
+  if(t.id==="csv"){const rows=[["time","mess","plan","limit","amount","method","sender","trx","status","note"]].concat(PAYS.map(p=>[new Date(p.at).toISOString(),p.mname,p.plan.name,p.plan.limit,p.amount,p.method.name,p.sender,p.trx,p.st,p.note||""]));const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n")],{type:"text/csv"}));a.download="payments.csv";a.click();return}
+  const del=t.closest("[data-del]");if(del){const n=del.dataset.n||del.dataset.del;if(prompt("⚠ এই মেস চিরতরে মুছে যাবে (ডেটা, কোড, চ্যাট)। নিশ্চিত হতে মেসের নাম লিখুন:\n"+n)!==n)return;const x=await call("DELETE","?id="+encodeURIComponent(del.dataset.del));if(x.r.ok)loadAll();else alert("মোছা যায়নি: "+(x.j.error||x.r.status));return}
+  const lim=t.closest("[data-lim]");if(lim){const a=prompt("কত জন পর্যন্ত সীমা দেবেন? (0 = হাতে দেওয়া সীমা মুছুন)");if(a===null)return;const d=prompt("কত দিনের জন্য? (0 = সারাজীবন)","0");if(d===null)return;const x=await post({a:"ent",id:lim.dataset.lim,limit:+a,days:+d});if(x.r.ok)loadAll();else alert("হয়নি: "+(x.j.error||x.r.status));return}
+  const pa=t.closest("[data-pa]");if(pa){const act=pa.dataset.pa,note=prompt(act==="approve"?"নোট (ঐচ্ছিক):":"বাতিলের কারণ (ম্যানেজার দেখবে):","")??null;if(note===null)return;if(act==="approve"&&!confirm("TrxID ও টাকা মিলিয়ে দেখেছেন? অনুমোদন দিলে সীমা সাথে সাথে বাড়বে।"))return;const x=await post({a:"payact",id:pa.dataset.id,act,note});if(x.r.ok)loadAll();else alert("হয়নি: "+(x.j.error||x.r.status));return}
+  const box=t.closest("[data-mid]");
+  if(t.dataset.msave!==undefined&&box){const g=f=>box.querySelector(`[data-f=${f}]`);const x=await post({a:"method",method:{id:box.dataset.mid,name:g("name").value,num:g("num").value,note:g("note").value,on:g("on").checked}});if(x.r.ok){toast("সেভ হয়েছে");loadAll()}else alert("হয়নি: "+(x.j.error||x.r.status));return}
+  if(t.dataset.mdel!==undefined&&box){if(!confirm("এই পদ্ধতি মুছবেন?"))return;const x=await post({a:"mdel",id:box.dataset.mid});if(x.r.ok)loadAll();return}
+  if(t.dataset.qrdel!==undefined&&box){const m=CFG.methods.find(z=>z.id===box.dataset.mid);const x=await post({a:"method",method:m,qr:null});if(x.r.ok)loadAll();return}
+  if(t.id==="nma"){const nm=$("nmq").value,num=$("nmn").value;const x=await post({a:"method",method:{name:nm,num,note:"",on:true}});if(x.r.ok)loadAll();else alert("হয়নি: "+(x.j.error||x.r.status));return}
+  if(t.id==="pladd"){$("plb").insertAdjacentHTML("beforeend",planRow({id:"",name:"",limit:(CFG.free||15)+10,price:0,days:0}));return}
+  if(t.dataset.plrm!==undefined){t.closest("tr").remove();return}
+  if(t.id==="plsave"){const plans=[...document.querySelectorAll("#plb tr")].map(tr=>{const g=f=>tr.querySelector(`[data-pf=${f}]`).value;return{id:g("id"),name:g("name"),limit:g("limit"),price:g("price"),days:g("days")}});
+    const x=await post({a:"cfg",free:$("free").value,plans,notice:$("notice").value,support:$("support").value});if(x.r.ok){toast("সেভ হয়েছে");loadAll()}else alert("হয়নি: "+(x.j.error||x.r.status));return}};
+v.onchange=async e=>{const t=e.target;
+  if(t.id==="pf"){ST.pf=t.value;draw();return}
+  if(t.dataset.qr!==undefined&&t.files[0]){const box=t.closest("[data-mid]"),m=CFG.methods.find(z=>z.id===box.dataset.mid);try{const d=await resizeQR(t.files[0]);const x=await post({a:"method",method:m,qr:d});if(x.r.ok){toast("QR আপলোড হয়েছে");loadAll()}else alert("আপলোড হয়নি: "+(x.j.error||x.r.status))}catch(er){alert("ছবি পড়া যায়নি")}}};
+v.oninput=e=>{if(e.target.id==="sq"){ST.q=e.target.value;const p=e.target.selectionStart;draw();const i=$("sq");i.focus();i.setSelectionRange(p,p)}};
+function toast(m){const d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10201d;color:#fff;padding:10px 16px;border-radius:12px;z-index:9";document.body.appendChild(d);setTimeout(()=>d.remove(),1800)}
+if(K)loadAll();
 </script></body></html>

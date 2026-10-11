@@ -63,6 +63,19 @@ const guard = (fn) => async (req) => {
 };
 
 
+/* ---------- সেটিং, প্ল্যান ও মেম্বার সীমা ---------- */
+const DEF_PLANS = [
+  { id: "p25", name: "২৫ জন পর্যন্ত", limit: 25, price: 100, days: 0 },
+  { id: "p50", name: "৫০ জন পর্যন্ত", limit: 50, price: 200, days: 0 },
+];
+async function getCfg() {
+  const c = (await getJSON("cfg")) || {};
+  return { free: c.free || 15, plans: Array.isArray(c.plans) && c.plans.length ? c.plans : DEF_PLANS, methods: Array.isArray(c.methods) ? c.methods : [], support: c.support || "", notice: c.notice || "" };
+}
+async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
+function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
+const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
+
 const okLk = (x) => typeof x === "string" && /^[A-Za-z0-9_-]{20,64}$/.test(x);
 const okId = (x) => typeof x === "string" && /^[A-Za-z0-9+/=_-]{4,32}$/.test(x);
 const okWrapN = (w, max) => w && typeof w.s === "string" && typeof w.i === "string" && typeof w.w === "string" && w.w.length < max;
@@ -141,8 +154,16 @@ export const PUT = guard(async (req) => {
         if (o && o.wh !== sha(token)) return J({ error: "taken" }, 409);
       }
     }
+    // মেম্বার সীমা: ফ্রি সীমার বেশি সদস্য দিতে হলে অ্যাডমিনের অনুমোদিত প্ল্যান লাগে। আগে থেকে থাকা সংখ্যা বাড়ানো ছাড়া আটকায় না।
+    const mcn = Number.isInteger(b.mc) && b.mc >= 0 && b.mc <= 1000 ? b.mc : 0;
+    const cfg = await getCfg(), lim = limFrom(await entOf(id), cfg);
+    if (mcn > lim) {
+      const prev = old ? (old.mc === undefined ? mcn : old.mc) : null;
+      const grow = old ? mcn > prev : b.rs !== 1;
+      if (grow) return J({ error: "member_limit", limit: lim, free: cfg.free }, 402);
+    }
     const ver = (old ? old.ver : 0) + 1;
-    const rec = { id, name: String(name || "").slice(0, 50), A, di, ct, ver, wh: sha(token), lks, cat: (old && old.cat) || Date.now(), uat: Date.now() };
+    const rec = { id, name: String(name || "").slice(0, 50), A, di, ct, ver, wh: sha(token), lks, mc: mcn, cat: (old && old.cat) || Date.now(), uat: Date.now() };
     if (M != null) rec.M = M;
     if (W != null) rec.W = W;
     if (MC != null) rec.MC = MC;

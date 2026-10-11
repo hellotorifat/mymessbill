@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><script>try{var t=localStorage.getItem("bpTheme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#08463d"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Bachelors Paradise — মেস ম্যানেজমেন্ট</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Baloo+Da+2:wght@600;700&display=swap"><style id="css">
+<meta charset="utf-8"><script>try{var t=localStorage.getItem("bpTheme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#08463d"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>mymessbill — মেস ম্যানেজমেন্ট</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Baloo+Da+2:wght@600;700&display=swap"><style id="css">
 :root{--bg:#eef3f1;--card:#ffffff;--field:#f4f8f6;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--pri-d:#08463d;--onpri:#ffffff;--soft:#e0f1ec;--acc:#f4a300;--acc-soft:#fff2d2;--acc-ink:#6b4600;--bad:#d23f2c;--good:#0b6b5c;--info:#2a6fdb;--info-soft:#e3edff;--rose:#e0685a;--rose-soft:#fde9e5;--sh:0 1px 2px rgba(16,32,29,.06),0 12px 28px -18px rgba(16,32,29,.35)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1513;--card:#13211e;--field:#0e1a18;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--onpri:#06241d;--soft:#173833;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#4fd1b5;--info:#7aa8ff;--info-soft:#18284a;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}}
 :root[data-theme="dark"]{--bg:#0b1513;--card:#13211e;--field:#0e1a18;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--onpri:#06241d;--soft:#173833;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#4fd1b5;--info:#7aa8ff;--info-soft:#18284a;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}
@@ -152,6 +152,12 @@ details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;pa
 .pfi{width:100%;height:100%;object-fit:cover;display:block}.pfl{font-weight:700;font-size:16px;color:#fff}
 .pfc{display:flex;align-items:center;gap:14px;margin:6px 0 12px}.pfb{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--acc);flex:none}
 .pfb.pfl{display:grid;place-items:center;background:var(--pri);color:var(--onpri);font-size:30px}.pfm b{font-size:18px}
+.lgw{background:#fff;border-radius:14px;padding:5px 12px;display:inline-block;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}.lgi{height:34px;width:auto;display:block}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}.lgl{max-width:min(300px,80%);height:auto}
+.plb{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0}.plb i{display:block;height:100%;background:var(--pri)}.plb.full i{background:var(--bad)}
+.pcard{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0;cursor:pointer;background:var(--field)}.pcard.on{border-color:var(--pri);background:var(--soft)}
+.pcard img{width:150px;height:150px;object-fit:contain;background:#fff;border-radius:10px;display:block;margin-top:6px}
+.pst{font-size:12px;font-weight:700;border-radius:10px;padding:2px 8px}.pst.pending{background:var(--acc-soft);color:var(--acc-ink)}.pst.approved{background:var(--soft);color:var(--pri)}.pst.rejected{background:var(--rose-soft);color:var(--bad)}
 </style>
 </head>
 <body><div id="shell"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script id="app">
@@ -160,7 +166,16 @@ const $=id=>document.getElementById(id);
 const BN=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
 const SM=["জানু","ফেব্রু","মার্চ","এপ্রি","মে","জুন","জুলাই","আগ","সেপ্টে","অক্টো","নভে","ডিসে"];
 const bd=s=>String(s).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
-const MONTHS=[];for(let y=2026;y<=2027;y++)for(let m=1;m<=12;m++)if(y*100+m>=202609)MONTHS.push(y+"-"+String(m).padStart(2,"0"));
+const mk2=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+const MINM="2026-01",MAXM="2027-12";
+let MONTHS=[mk2(new Date())];
+const nextM=k=>{let y=+k.slice(0,4),m=+k.slice(5)+1;if(m>12){m=1;y++}return y+"-"+String(m).padStart(2,"0")};
+const monHas=m=>!!m&&(Object.values(m.r||{}).some(o=>Object.values(o||{}).some(v=>v!==""&&v!=null))||Object.values(m.s||{}).some(v=>v!==""&&v!=null)||(m.xp||[]).length>0||(m.fu||[]).length>0||!!m.n||(m.ob!==undefined&&String(m.ob).trim()!=="")||!!m.c||Object.keys(m.x||{}).length>0||Object.keys(m.st||{}).length>0);
+/* মাসের তালিকা: প্রথম ডেটার মাস (বা বর্তমান মাস) থেকে বর্তমান মাস পর্যন্ত নিজে নিজে; মাস শেষ হলে পরের মাস নিজে যোগ হয়। ম্যানেজার চাইলে ২০২৭ পর্যন্ত আরও মাস যোগ করতে পারেন (S.xm) */
+function refreshMonths(){
+  const now=mk2(new Date()),ks=Object.keys(S.months||{}).filter(k=>/^\d{4}-\d{2}$/.test(k)&&monHas(S.months[k])),set=new Set(ks.concat([now],(S.xm||[]).filter(k=>/^\d{4}-\d{2}$/.test(k))));
+  let a=[...set].sort()[0];while(a<now){set.add(a);a=nextM(a)}
+  MONTHS=[...set].sort()}
 const lab=k=>BN[+k.slice(5)-1]+" "+bd(k.slice(0,4));
 const SH=[["wifi","ওয়াইফাই"],["garbage","ময়লা"],["fridge","ফ্রিজ"],["bibidh","বিবিধ"],["bidyut","বিদ্যুৎ"],["unnoyon","মেস উন্নয়ন"],["extra","অতিরিক্ত"]];
 const mk=(n,r)=>({id:"m"+Math.random().toString(36).slice(2,8),name:n,rent:r});
@@ -245,30 +260,31 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(
   else if(a.dataset.act==="more"){e.stopPropagation();closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
     o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="আরও"><div class="shh"><h2>আরও মেনু</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><div class="mg6">${(window.__MORE||[]).map(x=>`<button data-t="${x[0]}" class="${tab===x[0]?"on":""}">${IC[x[0]]}<span>${x[1]}</span></button>`).join("")}</div></div>`;document.body.appendChild(o)}},true);
 /* ---------- shell / render ---------- */
-$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div class="logo" aria-hidden="true">🏠</div><div><h1>Bachelors Paradise</h1><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><nav class="tabs" id="tabs"></nav>';
+$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div><h1 class="sr">mymessbill</h1><div class="lgw"><img class="lgi" src="logo.png" alt="mymessbill" width="150" height="38"></div><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><nav class="tabs" id="tabs"></nav>';
 paintTheme();
 function updBar(){const b=$("bar");if(OFFLINE&&ROLE&&!MGR){b.innerHTML='<div class="bar warn">📴 অফলাইন — সর্বশেষ সেভ করা ডেটা দেখাচ্ছে</div>';return}if(!MGR||!ROLE){b.innerHTML="";return}const pend=JSON.stringify(S)!==BASE;
   b.innerHTML=`<div class="bar${pend?" warn":""}"><span>${pend?(VAULT?"⚠ অপ্রকাশিত পরিবর্তন আছে — মেম্বাররা এখনো দেখছে না":"🆕 মেস তৈরি হয়েছে — প্রকাশ করুন চাপলে কোড দিয়ে মেম্বাররা ঢুকতে পারবে"):"✓ সব পরিবর্তন প্রকাশিত"}</span><button class="p" data-act="pub"${pend&&!busy?"":" disabled"}>${busy?"প্রকাশ হচ্ছে…":"প্রকাশ করুন"}</button></div>`}
 function render(){
   if(ROLE&&S.bz&&!S.bz.v&&S.bz.ml&&p(S.bz.ml[0])===.5&&p(S.bz.ml[1])===.75&&p(S.bz.ml[2])===.75){S.bz.ml=[.5,1,1];S.bz.v=2;if(MGR)save()}
+  refreshMonths();if(!MONTHS.includes(mon))mon=MONTHS.includes(nowK)?nowK:MONTHS[MONTHS.length-1];
   if(MGR&&scTop())save();
   const L=!ROLE;$("out").hidden=L;if(!L)pfPaint();$("tabs").style.display=L?"none":"flex";
   $("sub").textContent=L?"মেসের হিসাব ও মাসিক রিপোর্ট":(S.name?"🏠 "+S.name+" • ":"")+(CO?"🤝 সহ-ম্যানেজার":MGR?"🔑 ম্যানেজার":"👤 মেম্বার")+" • "+AM().length+" জন সদস্য";
   updBar();
-  if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();gHook();return}
+  if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();gHook();sitePaint();return}
   if(tab==="set"&&(!MGR||CO))tab="home";
   const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["chat","চ্যাট"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
   const inMore=MORE.some(x=>x[0]===tab);
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
-  paint();paintBz();fit();gHook();
+  paint();paintBz();fit();gHook();sitePaint();if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
   const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
 }
 function vLogin(){
-  return `<div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
+  return `<div id="site"></div><div class="box" style="text-align:center"><img class="lgl" src="logo.png" alt="mymessbill"></div><div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
   <h2 style="margin-top:14px">🔑 ম্যানেজার লগইন</h2><div class="row"><input id="ac" class="code" placeholder="MGR-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="alogin">লগইন</button></div>
   <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল, বাজারের টিক ও চ্যাট করা যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
   <div class="box"><h2>🏠 নতুন মেস তৈরি করুন</h2><p class="mute">নিজের মেসের হিসাব রাখতে চান? নতুন মেস তৈরি করলে আপনি একটি ম্যানেজার কোড ও একটি মেম্বার কোড পাবেন।</p><button class="p" data-act="newmess" style="width:100%">➕ মেস তৈরি করুন</button>
@@ -281,7 +297,7 @@ function vCodes(){return `<div class="box"><h2>🔐 আপনার ইউনি
   <div class="warnb">⚠ সতর্কতা: কোড দুটি এখনই লিখে বা স্ক্রিনশট নিয়ে সংরক্ষণ করুন। কোড হারিয়ে গেলে ডেটা আর ফেরত পাওয়া যাবে না এবং কেউ কোড রিসেট করতে পারবে না। ম্যানেজার কোড কাউকে দেবেন না।</div>
   <label><input type="checkbox" id="saved" style="width:auto"> আমি কোড দুটি সংরক্ষণ করেছি</label>
   <div class="row" style="margin-top:10px"><button class="fix" data-act="back">← ফিরে যান</button><button class="p" data-act="tosetup">পরবর্তী ধাপ: মেস তৈরি</button></div></div>`}
-function vSetup(){return `<div class="box"><h2>🏠 মেস তৈরি করুন</h2><label class="mute">মেসের নাম</label><input id="mn" value="${esc(NEW.name||"")}" placeholder="যেমন: Bachelors Paradise" maxlength="50">
+function vSetup(){return `<div class="box"><h2>🏠 মেস তৈরি করুন</h2><label class="mute">মেসের নাম</label><input id="mn" value="${esc(NEW.name||"")}" placeholder="যেমন: আমাদের মেস" maxlength="50">
   <h2 style="margin-top:12px">সদস্য যোগ করুন</h2>${NEWMEM.map((b,i)=>`<div class="row"><span>${esc(b.name)} — ভাড়া ${b.rent}</span><button class="x fix" data-rm="${i}">মুছুন</button></div>`).join("")||'<p class="mute">এখনো কোনো সদস্য নেই।</p>'}
   <div class="row"><input id="nn" placeholder="সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="fix" data-act="addnew">যোগ</button></div>
   <button class="p" style="width:100%;margin-top:6px" data-act="create">মেস তৈরি করুন</button><p class="mute" id="lmsg"></p></div>`}
@@ -299,17 +315,33 @@ function chart(title,key,fm){
   return `<div class="box"><h2>${title}</h2><svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${title}">${grid}${xl}<polyline fill="none" stroke="var(--pri)" stroke-width="2.5" points="${P.map(q=>q[0]+","+q[1]).join(" ")}"/>${pts}</svg>
   <p class="mute">সর্বনিম্ন: <b>${fm(lo)}</b> (${at(lo)}) • সর্বোচ্চ: <b>${fm(hi)}</b> (${at(hi)})</p></div>`}
 
+
+/* ---------- গ্রাফ (বার) ---------- */
+function bars(title,rows,fm,note){
+  rows=rows.filter(r=>r&&isFinite(r.v));
+  if(!rows.length||rows.every(r=>!r.v))return `<div class="box"><h2>${title}</h2><p class="mute">হিসাব যোগ হলে গ্রাফ দেখা যাবে।</p></div>`;
+  const W=640,H=220,l=42,r=12,t=26,b=30,n=rows.length,mx=Math.max(...rows.map(q=>q.v))*1.18||1,step=(W-l-r)/n,bw=Math.min(44,step*.64),y=v=>t+(H-t-b)*(1-v/mx),dense=n>14,mxv=Math.max(...rows.map(q=>q.v));
+  const grid=[0,.5,1].map(q=>`<line x1="${l}" x2="${W-r}" y1="${y(mx*q)}" y2="${y(mx*q)}" stroke="var(--line)"/><text x="${l-5}" y="${y(mx*q)+3}" font-size="10" text-anchor="end" fill="var(--mute)">${fm(mx*q)}</text>`).join("");
+  const bs=rows.map((q,i)=>{const cx=l+step*i+step/2,yy=y(q.v),h=Math.max(q.v>0?2:0,H-b-yy);
+    return `<rect x="${cx-bw/2}" y="${H-b-h}" width="${bw}" height="${h}" rx="4" fill="${q.hl?"var(--acc)":"var(--pri)"}"><title>${esc(q.l)}: ${fm(q.v)}</title></rect>${(!dense||q.v===mxv||q.hl)&&q.v>0?`<text x="${cx}" y="${H-b-h-5}" font-size="${dense?8:10}" text-anchor="middle" fill="var(--ink)">${fm(q.v)}</text>`:""}<text x="${cx}" y="${H-11}" font-size="${dense?8:9}" text-anchor="middle" fill="var(--mute)">${esc(q.l)}</text>`}).join("");
+  return `<div class="box"><h2>${title}</h2><svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">${grid}${bs}</svg>${note?`<p class="mute">${note}</p>`:""}</div>`}
+function dailyMeals(){
+  const T=todayK(),k=T.slice(0,7),a=k.split("-").map(Number),dim=new Date(a[0],a[1],0).getDate(),last=+T.slice(8),ids=S.members.filter(b=>isAct(b,k)).map(b=>b.id);
+  if(!ids.length)return"";
+  const rows=[];let tot=0;for(let d=1;d<=dim;d++){const dt=k+"-"+pad(d);let v=0;if(d<=last)ids.forEach(id=>{v+=mlVal(dt,id)});v=Math.round(v*100)/100;if(d<=last)tot+=v;rows.push({l:bd(d),v,hl:d===last})}
+  if(!tot)return"";
+  return bars("📅 এই মাসের দৈনিক মিল — "+lab(k),rows,v=>f(v),`এখন পর্যন্ত মোট <b>${f(Math.round(tot*100)/100)}</b> মিল • গড় <b>${f(Math.round(tot/last*100)/100)}</b> / দিন`)}
 /* ---------- views ---------- */
 function vHome(){
   const LF=lastFund(),A=act(),tb=sum(A.map(x=>x.c),"tb"),tm=sum(A.map(x=>x.c),"tm"),inc=sum(A.map(x=>x.c),"income"),cst=sum(A.map(x=>x.c),"cost")+sum(MONTHS.map(k=>({v:calc(k).exp})),"v");
-  return vQuick()+vMine()+vNotice()+vNext()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
-  ${chart("📈 মাসভিত্তিক মিল রেট (৳)","rate",v=>f(v))}${chart("🍽 মাসভিত্তিক মোট মিল","tm",v=>f(v))}
+  return `<div id="site"></div>`+vNotice()+vNext()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
+  ${bars("📈 মাসভিত্তিক মিল রেট (৳)",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.rate,hl:x.k===nowK})),v=>f(v))}${bars("🍽 মাসভিত্তিক মোট মিল",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.tm,hl:x.k===nowK})),v=>f(v))}${dailyMeals()}
   <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
-  ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div><div id="gbox"></div>`}
+  ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
 const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
-  return `<div class="row">${msel()}</div>${vAct()}
+  return `<div class="row">${msel()}${MGR?'<button class="fix" data-act="monsheet">➕ মাস</button>':""}</div>${vAct()}
   <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
   <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
@@ -339,21 +371,21 @@ function vMem(){
   <tr class="tot"><td>TOTAL</td><td>${f(sum(rows,"tb"))}</td><td>${f(sum(rows,"tm"))}</td><td></td><td>${f(sum(rows,"mc"))}</td><td>${f(sum(rows,"N"))}</td><td>${f(sum(rows,"P"))}</td><td>${sg(sum(rows,"net"))}</td><td></td></tr></table></div>`}
 function vYear(){
   const yr=y=>{const A=MONTHS.filter(k=>k.startsWith(y)).map(k=>calc(k)).filter(c=>c.active),t=g=>sum(A,g);return`<tr class="tot"><td>${bd(y)} সর্বমোট</td><td>${f(t("tb"))}</td><td>${f(t("tm"))}</td><td>${f(t("tm")?t("tb")/t("tm"):0)}</td><td>${f(t("cost")+t("exp"))}</td><td>${f(t("income"))}</td><td>${sg(t("net"))}</td><td>${f(t("exp"))}</td><td></td></tr>`};
-  return `<div class="box scroll"><h2>বার্ষিক সারাংশ — ২০২৬ বনাম ২০২৭</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
-  ${MONTHS.map(k=>{const c=calc(k),a=c.active,d=v=>a?v:"—";return`<tr class="${a?"":"off"}"><td><a href="#" data-open="${k}">${lab(k)}</a></td><td>${d(f(c.tb))}</td><td>${d(f(c.tm))}</td><td>${d(f(c.rate))}</td><td>${d(f(c.cost+c.exp))}</td><td>${d(f(c.income))}</td><td class="${c.net>=0?"pos":"neg"}">${d(sg(c.net))}</td><td>${a||c.exp?f(c.exp):"—"}</td><td>${a||c.exp?f(fundInfo(k).close):"—"}</td></tr>`}).join("")}${yr("2026")}${yr("2027")}</table></div>`}
+  return `<div class="box scroll"><h2>বার্ষিক সারাংশ</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
+  ${MONTHS.map(k=>{const c=calc(k),a=c.active,d=v=>a?v:"—";return`<tr class="${a?"":"off"}"><td><a href="#" data-open="${k}">${lab(k)}</a></td><td>${d(f(c.tb))}</td><td>${d(f(c.tm))}</td><td>${d(f(c.rate))}</td><td>${d(f(c.cost+c.exp))}</td><td>${d(f(c.income))}</td><td class="${c.net>=0?"pos":"neg"}">${d(sg(c.net))}</td><td>${a||c.exp?f(c.exp):"—"}</td><td>${a||c.exp?f(fundInfo(k).close):"—"}</td></tr>`}).join("")}${[...new Set(MONTHS.map(k=>k.slice(0,4)))].map(yr).join("")}</table></div>`}
 function vSet(){
   return `<div class="box"><h2>মেসের নাম</h2><input data-nm="1" value="${esc(S.name)}" maxlength="50"></div>
   <div class="box"><h2>সদস্য তালিকা ও ডিফল্ট ভাড়া</h2>${S.members.map(b=>`<div class="row"><input data-mn="${b.id}" value="${esc(b.name)}" aria-label="নাম"><input data-mr="${b.id}" inputmode="decimal" value="${b.rent}" aria-label="ভাড়া" style="max-width:100px"><button class="x fix" data-del="${b.id}">মুছুন</button></div>`).join("")}
   <div class="row"><input id="nn" placeholder="নতুন সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="p fix" data-act="add">যোগ</button></div></div>
   <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div></div>
-  ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vLogins()}${vBackup()}`}
+  ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vPlan()}${vLogins()}${vBackup()}`}
 
 /* ---------- PDF report ---------- */
 function reportHTML(k){
   const c=calc(k),m=S.months[k]||{n:""},fi=fundInfo(k),offn=S.members.filter(b=>isMem(b,k)&&!isAct(b,k)).map(b=>b.name);
   const rows=c.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.bazar)}</td><td>${f(r.meal)}</td><td>${f(r.mc)}</td><td class="${r.G>=0?"pos":"neg"}">${sg(r.G)}</td><td>${f(r.rent)}</td><td>${f(r.khala)}</td><td>${f(r.J)}</td><td>${f(r.deduct)}</td><td>${f(r.N)}</td><td>${f(r.extra)}</td><td><b>${f(r.P)}</b></td></tr>`).join("");
   const ln=(t,v,b)=>`<tr${b?' class="tot"':""}><td>${t}</td><td>${v}</td></tr>`,K=(t,v,cl)=>`<div><small>${t}</small><b class="${cl||""}">${v}</b></div>`;
-  return `<div class="rp"><div class="rh"><div><div class="rt">🏠 ${esc(S.name||"Bachelors Paradise")}</div><div class="rs">Bachelors Paradise • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">মাসিক হিসাব রিপোর্ট</div><div class="rt" style="font-size:22px">${lab(k)}</div></div></div>
+  return `<div class="rp"><div class="rh"><div><div class="rt">🏠 ${esc(S.name||"mymessbill")}</div><div class="rs">mymessbill • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">মাসিক হিসাব রিপোর্ট</div><div class="rt" style="font-size:22px">${lab(k)}</div></div></div>
   <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট বাজার","৳"+f(c.tb))}${K("মোট মিল",f(c.tm))}${K("মিল রেট","৳"+f(c.rate),"pos")}${K("মোট খরচ","৳"+f(fi.spX))}${K("মেস আয় (বিবিধ বাদে)","৳"+f(fi.incX))}${K("এ মাসে জমা",sg(c.net),c.net>=0?"pos":"neg")}${K("🏦 ফান্ড বাকি","৳"+f(fi.close),fi.close>=0?"pos":"neg")}</div>
   <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>${rows}
   <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td><td>${f(sum(c.rows,"deduct"))}</td><td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${f(c.income)}</td></tr></table></div>
@@ -362,7 +394,7 @@ function reportHTML(k){
   <p class="mute" style="margin:8px 0 0">বিবিধ খরচ ${f(c.shared)} ÷ ${bd(c.div)} জন = জনপ্রতি ${f(c.share)} — সদস্যদের বিলের ভেতরেই ধরা, তাই খরচের তালিকায় আলাদা নেই${c.exn.length?" • যাদের ওপর যায়নি: "+esc(c.exn.join(", ")):""}</p>${offn.length?`<p class="mute" style="margin:4px 0 0">এই মাসের হিসাবে বাদ (নিষ্ক্রিয়): ${esc(offn.join(", "))}</p>`:""}</div></div></div>
   ${fuOf(k).length?`<div class="box"><h2>📝 আগের মাসের জমা ফান্ড (জের ৳${f(fi.open)}) যে কাজে খরচ হয়েছে</h2><table class="c" style="max-width:560px">${fuOf(k).filter(e=>e.n||p(e.a)>0).map(e=>`<tr><td style="text-align:left">${esc(e.n||"অন্যান্য")}</td><td>${p(e.a)>0?f(p(e.a)):""}</td></tr>`).join("")}${sum(fuOf(k).map(e=>({v:p(e.a)})),"v")>0?`<tr class="tot"><td style="text-align:left">মোট</td><td>${f(sum(fuOf(k).map(e=>({v:p(e.a)})),"v"))}</td></tr>`:""}</table></div>`:""}
   ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
-  <p class="mute" style="text-align:center;margin:6px 0 0">Bachelors Paradise • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
+  <p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
 function vRep(){return `<div class="row">${msel()}${DL?'<button class="p fix" data-act="pdf">📄 PDF ডাউনলোড</button>':""}</div>
   ${DL?"":''}
   <div class="box" id="rwrap" style="overflow:hidden;padding:0"><div id="rprev" style="width:1123px;transform-origin:top left">${reportHTML(mon)}</div></div>`}
@@ -571,8 +603,8 @@ function scIn(t){const d=t.dataset,k=d.sc,it=SCw()[k].find(x=>x.id===d.id);if(!i
 function scText(){const T=todayK();let t=`📅 ${S.name||"মেস"} — রুটিন\n`;["b","w"].forEach(k=>{const L=SC()[k].filter(x=>!x.done&&scEnd(x)>=T).slice(0,8);if(!L.length)return;t+="\n"+SCN[k]+"\n"+L.map(x=>"• "+fdr(x)+" — "+x.who.map(i=>mname(i)).join(", ")).join("\n")+"\n"});return t}
 
 /* ---------- PDF রিপোর্ট (বাজার প্ল্যান ও রুটিন) ---------- */
-const rptHead=(t,s)=>`<div class="rh"><div><div class="rt">🏠 ${esc(S.name||"Bachelors Paradise")}</div><div class="rs">Bachelors Paradise • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">${t}</div><div class="rt" style="font-size:22px">${s}</div></div></div>`;
-const rptFoot=()=>`<p class="mute" style="text-align:center;margin:6px 0 0">Bachelors Paradise • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>`;
+const rptHead=(t,s)=>`<div class="rh"><div><div class="rt">🏠 ${esc(S.name||"mymessbill")}</div><div class="rs">mymessbill • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">${t}</div><div class="rt" style="font-size:22px">${s}</div></div></div>`;
+const rptFoot=()=>`<p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>`;
 function scReportHTML(){
   const T=todayK(),tbl=k=>`<table class="c"><tr><th>#</th><th style="text-align:left">তারিখ</th><th style="text-align:left">দায়িত্বে</th><th>অবস্থা</th></tr>${SC()[k].map((x,i)=>`<tr><td>${bd(i+1)}</td><td style="text-align:left">${fdr(x)}</td><td style="text-align:left">${x.who.map(w=>esc(mname(w))).join(", ")}</td><td>${x.done?"✔ হয়েছে":scEnd(x)<T?"⚠ বাকি":"⏳ সামনে"}</td></tr>`).join("")||'<tr><td colspan="4">তালিকা নেই</td></tr>'}</table>`;
   return `<div class="rp pg">${rptHead("মেস রুটিন",fd(T))}<div class="box"><h2>${SCN.w}</h2>${tbl("w")}</div></div><div class="rp pg"><div class="box"><h2>${SCN.b}</h2>${tbl("b")}</div>${rptFoot()}</div>`}
@@ -659,7 +691,7 @@ function vChat(){
   <p class="mute">🔒 মেসেজ মেসের কোডের চাবিতে এনক্রিপ্ট হয়ে জমা হয়; সার্ভারও পড়তে পারে না। শুধু শেষ ৩০০টি থাকে। নাম নিজে বেছে নিতে হয়, তাই বিশ্বস্ত মেম্বারদের মধ্যেই ব্যবহার করুন।</p></div>`}
 
 /* ---------- লাইভ ইভেন্ট (মেম্বারও লিখতে পারে; এনক্রিপ্টেড; প্রকাশে vault-এ বসে যায়) ---------- */
-let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null,GID="",GL=[];
+let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null,GID="",GL=[],PAYC=null,ENT={limit:0,free:15,until:0,mc:0,pays:[]},ENTL="",RSF=false,PS={plan:"",method:""};
 function evApply(e){
   try{
     if(e.y==="bz"){const it=BZw().items.find(x=>x.id===e.id);if(it){if(e.f==="d")it.d=e.v?1:0;else if(e.f==="aq"||e.f==="ap"||e.f==="hv")it[e.f]=String(e.v)}}
@@ -758,8 +790,8 @@ function vLogins(){
 function kickOut(){if(kicked)return;kicked=true;try{localStorage.removeItem(SKEY)}catch(e){}alert("আপনার লগইন বন্ধ করা হয়েছে বা ম্যানেজার নতুন কোড দিয়েছেন। নতুন কোড দিয়ে আবার ঢুকুন।");location.reload()}
 
 /* ---------- UI: টোস্ট, শেয়ার শিট, ডেভেলপার কার্ড ---------- */
-const DEV={fb:"https://www.facebook.com/hellotorifat",name:"রিফাত",role:"Developer • Bachelors Paradise",
- bio:"আমি রিফাত। মেসের বাজার, মিল আর হিসাব নিয়ে রোজকার ঝামেলা কমাতে Bachelors Paradise বানিয়েছি — যেন সবকিছু এক জায়গায়, সহজ বাংলায় থাকে আর হিসাব সবার সামনে স্বচ্ছ থাকে। সাইটে কিছু ভালো না লাগলে বা নতুন আইডিয়া থাকলে Facebook-এ জানাতে পারেন।"};
+const DEV={fb:"https://www.facebook.com/hellotorifat",name:"রিফাত",role:"Developer • mymessbill",
+ bio:"আমি রিফাত। মেসের বাজার, মিল আর হিসাব নিয়ে রোজকার ঝামেলা কমাতে mymessbill বানিয়েছি — যেন সবকিছু এক জায়গায়, সহজ বাংলায় থাকে আর হিসাব সবার সামনে স্বচ্ছ থাকে। সাইটে কিছু ভালো না লাগলে বা নতুন আইডিয়া থাকলে Facebook-এ জানাতে পারেন।"};
 function toast(msg){const o=document.querySelector(".toast");if(o)o.remove();const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 async function copyText(txt){
   try{await navigator.clipboard.writeText(txt);return true}
@@ -767,7 +799,7 @@ async function copyText(txt){
 const closeOv=()=>{const o=$("ov");if(o)o.remove()};
 let SHT="",SHTT="";
 function shareSheet(text,title){
-  closeOv();SHT=text;SHTT=title||"Bachelors Paradise";
+  closeOv();SHT=text;SHTT=title||"mymessbill";
   const o=document.createElement("div");o.className="ov";o.id="ov";
   o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="শেয়ার"><div class="shh"><h2>📤 ${esc(SHTT)}</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><pre class="shp">${esc(text)}</pre>
   <div class="shg">${navigator.share?'<button class="p wide" data-sh="native">📤 যে কোনো অ্যাপে পাঠান</button>':""}<button data-sh="msgr">💙 Messenger</button><button data-sh="wa">💬 WhatsApp</button><button data-sh="tg">✈️ Telegram</button><button data-sh="sms">✉️ SMS</button><button data-sh="mail">📧 Email</button><button data-sh="copy">📋 কপি</button></div>
@@ -950,7 +982,7 @@ addEventListener("beforeinstallprompt",e=>{e.preventDefault();DIP=e;const b=$("i
 function vBackup(){return `<div class="box"><h2>💾 ব্যাকআপ</h2><p class="mute">পুরো ডেটার একটি কপি ফাইলে নামান। ⚠ ফাইলটি এনক্রিপ্টেড নয়, তাই নিরাপদ জায়গায় রাখুন। ম্যানেজার কোড হারালেও এই ফাইল থেকে নতুন মেসে ডেটা ফেরানো যাবে।</p>
   <button class="p" style="width:100%" data-act="expb">⬇ ব্যাকআপ ডাউনলোড</button><label class="mute" style="margin-top:10px">ব্যাকআপ ফাইল থেকে ফেরান</label><input type="file" accept=".json,application/json" data-impf="1" style="border:1.5px dashed var(--line);padding:8px">
   <p class="mute">📲 ফোনে অ্যাপের মতো রাখতে: Android Chrome-এ "ইনস্টল" বাটন আসবে; iPhone-এ Share → Add to Home Screen।</p></div>`}
-function expBackup(){DL.save({filename:"BP-backup-"+todayK()+".json",data:new Blob([JSON.stringify({app:"bachelors-paradise",v:4,at:new Date().toISOString(),data:S},null,1)],{type:"application/json"})})}
+function expBackup(){DL.save({filename:"BP-backup-"+todayK()+".json",data:new Blob([JSON.stringify({app:"mymessbill",v:4,at:new Date().toISOString(),data:S},null,1)],{type:"application/json"})})}
 async function applyBackup(d){
   // চলতি ভল্টের কোড/চাবির সাথে সামঞ্জস্য রাখা: সবার-কোড চলতিটাই থাকে; ব্যক্তিগত কোডের লুকআপ চলতি কোড থেকে বসে
   const keep=S.mcode||"";S=Object.assign(blank(),d);S.mcode=keep;
@@ -988,7 +1020,7 @@ async function recoverBackup(){
       if(Object.keys(MCODES).length===0&&d.members.some(m=>m.lk))note+="\n(সদস্যদের ব্যক্তিগত কোড ব্যাকআপে থাকে না — দরকার হলে সেটিং → লগইন কোড থেকে আবার চালু করুন)"}
     CODE=mgr;MCODE=mgr;try{localStorage.setItem(SKEY,JSON.stringify({r:"manager",c:mgr}))}catch(x){}
     S.bk=EVLAST||S.bk||"";save();busy=false;tab="home";render();
-    const ok=await publish();
+    RSF=true;let ok;try{ok=await publish()}finally{RSF=false}
     if(ok)alert("✅ ফেরানো ও প্রকাশ হয়েছে। ম্যানেজার কোড ও মেম্বার কোড আগের মতোই আছে।"+note);
     else alert("ডেটা ফেরানো হয়েছে, কিন্তু এখনো প্রকাশ হয়নি। ওপরের \"প্রকাশ করুন\" বাটনে আবার চাপুন।"+note);
   }catch(e){busy=false;setMsg("ফেরানো যায়নি: "+(e&&e.message||e))}}
@@ -1009,6 +1041,55 @@ function scMine(){const me=getMe(),T=todayK(),Tm=shiftD(T,1),o=[];["w","b"].forE
 function remText(k){const x=scNext(k);return x?`⏰ রিমাইন্ডার — ${SCN[k]}\n${fdr(x)}: ${x.who.map(i=>mname(i)).join(", ")}\n(${S.name||"মেস"})`:""}
 
 
+
+function monSheet(){
+  closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";const xm=(S.xm||[]).slice().sort();
+  o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="মাস যোগ"><div class="shh"><h2>➕ মাস যোগ করুন</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div>
+  <p class="mute">মাস শেষ হলে পরের মাস নিজে নিজে যোগ হয়। এখান থেকে ${bd(2027)} সাল পর্যন্ত যেকোনো মাস (আগে বা পরে) নিজে যোগ করতে পারবেন, যত খুশি।</p>
+  <div class="row"><input type="month" id="mnew" min="${MINM}" max="${MAXM}" value="${esc(nextM(MONTHS[MONTHS.length-1])>MAXM?MAXM:nextM(MONTHS[MONTHS.length-1]))}"><button class="p fix" data-act="monadd">যোগ করুন</button></div>
+  ${xm.length?`<h3>নিজে যোগ করা মাস</h3>${xm.map(k=>`<div class="srow"><span style="flex:1">${lab(k)}</span><button class="x" data-xmrm="${k}">✕ সরান</button></div>`).join("")}`:""}</div>`;
+  document.body.appendChild(o)}
+
+/* ---------- মেম্বার সীমা ও পেমেন্ট ---------- */
+const FREEL=()=>(PAYC&&PAYC.free)||15,LIMIT=()=>Math.max(ENT.limit||0,FREEL());
+function sitePaint(){const b=$("site");if(!b)return;const n=PAYC&&PAYC.notice;b.innerHTML=n?`<div class="bar warn"><span>📣 ${esc(n)}</span></div>`:""}
+async function payCfg(){try{const r=await fetch("/api/pay",{cache:"no-store"});if(r.ok){PAYC=await r.json();sitePaint()}}catch(e){}}
+async function entLoad(){
+  if(!MGR||!VAULT||CO)return;
+  try{const r=await fetch("/api/pay",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"ent",id:CID,token:await tokOf(MCODE)})});
+    if(r.ok){ENT=await r.json();if(tab==="set"&&!document.getElementById("ov"))render();else if(document.getElementById("pays"))paySheet()}}catch(e){}}
+function vPlan(){
+  if(!MGR||CO)return"";
+  const n=AM().length,lim=LIMIT(),full=n>=lim,pend=(ENT.pays||[]).filter(x=>x.st==="pending").length;
+  return `<div class="box"><h2>💳 সদস্য সীমা ও প্ল্যান</h2><p class="mute">ফ্রিতে ${bd(FREEL())} জন পর্যন্ত সদস্য রাখা যায়। এর বেশি লাগলে টাকা পাঠিয়ে প্ল্যান নিতে হয়।</p>
+  <div class="srow"><span style="flex:1">সদস্য</span><b>${bd(n)} / ${bd(lim)}</b></div><div class="plb${full?" full":""}"><i style="width:${Math.min(100,n/lim*100)}%"></i></div>
+  ${ENT.until?`<p class="mute">প্ল্যান চলবে: ${fd(dk(new Date(ENT.until)))} পর্যন্ত</p>`:""}${pend?`<p class="mute">⏳ ${bd(pend)}টি পেমেন্ট যাচাইয়ের অপেক্ষায় আছে</p>`:""}
+  <button class="p" style="width:100%" data-act="paysheet">⬆ সদস্য সীমা বাড়ান / পেমেন্ট করুন</button></div>`}
+function paySheet(forced){
+  closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
+  const C=PAYC||{free:15,plans:[],methods:[],support:""},plans=C.plans||[],ms=C.methods||[];
+  if(!plans.find(x=>x.id===PS.plan))PS.plan=(plans[0]||{}).id||"";if(!ms.find(x=>x.id===PS.method))PS.method=(ms[0]||{}).id||"";
+  const pl=plans.find(x=>x.id===PS.plan),n=AM().length,lim=LIMIT();
+  const pc=plans.map(x=>`<div class="pcard${x.id===PS.plan?" on":""}" data-act="paypick" data-p="${esc(x.id)}"><b>${esc(x.name)}</b> — ৳${f(x.price)}${x.days?` / ${bd(x.days)} দিন`:" (একবার)"}<div class="mute">সদস্য সীমা ${bd(x.limit)} জন</div></div>`).join("");
+  const mc=ms.map(m=>`<div class="pcard${m.id===PS.method?" on":""}" data-act="paymeth" data-m="${esc(m.id)}"><b>${esc(m.name)}</b>${m.num?` — <span style="user-select:all">${esc(m.num)}</span> <button class="x" data-act="paycopy" data-v="${esc(m.num)}" aria-label="কপি">📋</button>`:""}${m.note?`<div class="mute">${esc(m.note)}</div>`:""}${m.q?`<img src="/api/pay?qr=${encodeURIComponent(m.id)}&v=${m.q}" alt="${esc(m.name)} QR">`:""}</div>`).join("");
+  const my=(ENT.pays||[]).map(x=>`<div class="srow" style="align-items:flex-start"><div style="flex:1"><b>${esc(x.plan)}</b> • ৳${f(x.amount)} • ${esc(x.method)}<div class="mute">TrxID ${esc(x.trx)} • ${fd(dk(new Date(x.at)))}${x.note?" • "+esc(x.note):""}</div></div><span class="pst ${x.st}">${x.st==="pending"?"⏳ যাচাই চলছে":x.st==="approved"?"✅ অনুমোদিত":"❌ বাতিল"}</span></div>`).join("");
+  o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="পেমেন্ট"><div class="shh"><h2>💳 সদস্য সীমা বাড়ান</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div>
+  ${forced?`<div class="warnb">⚠ বর্তমান সীমা ${bd(lim)} জন, এখন সদস্য ${bd(n)} জন। আরও সদস্য যোগ করতে নিচের প্ল্যান নিন।</div>`:`<p class="mute">সদস্য ${bd(n)} / ${bd(lim)} জন (ফ্রি ${bd(C.free||15)} জন)</p>`}
+  ${plans.length&&ms.length?`<h3>১) প্ল্যান বেছে নিন</h3>${pc}<h3>২) টাকা পাঠান${pl?` (৳${f(pl.price)})`:""}</h3>${mc}
+  <h3>৩) পাঠানোর তথ্য দিন</h3><label class="mute">যে নম্বর থেকে টাকা পাঠিয়েছেন</label><input id="pysn" inputmode="tel" placeholder="01XXXXXXXXX" maxlength="20"><label class="mute" style="margin-top:6px;display:block">TrxID (ট্রানজেকশন আইডি)</label><input id="pytx" placeholder="যেমন: 8N7A6D5E4F" maxlength="24" autocapitalize="characters">
+  <button class="p" style="width:100%;margin-top:10px" data-act="paysend">✔ পেমেন্ট জমা দিন</button><p class="mute">আমরা যাচাই করে অনুমোদন দিলে সদস্য সীমা নিজে বেড়ে যাবে।${C.support?"<br>সাহায্য: "+esc(C.support):""}</p>`:`<p class="mute">এখনো পেমেন্ট পদ্ধতি চালু করা হয়নি।${C.support?" যোগাযোগ: "+esc(C.support):""}</p>`}
+  ${my?`<h3 id="pays">আমার পেমেন্ট অনুরোধ</h3>${my}`:'<span id="pays"></span>'}</div>`;
+  document.body.appendChild(o)}
+async function paySend(){
+  const sn=($("pysn")||{}).value||"",tx=(($("pytx")||{}).value||"").trim();
+  if(!PS.plan||!PS.method)return alert("প্ল্যান ও পেমেন্ট পদ্ধতি বেছে নিন");
+  if(!/^[0-9+ -]{6,20}$/.test(sn.trim()))return alert("যে নম্বর থেকে পাঠিয়েছেন সেটি সঠিকভাবে লিখুন");
+  if(!/^[A-Za-z0-9]{6,24}$/.test(tx))return alert("TrxID সঠিকভাবে লিখুন (ইংরেজি অক্ষর ও সংখ্যা)");
+  if(!VAULT){alert("আগে একবার \"প্রকাশ করুন\" চেপে মেস প্রকাশ করুন, তারপর পেমেন্ট করুন।");return}
+  try{const r=await fetch("/api/pay",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"submit",id:CID,token:await tokOf(MCODE),plan:PS.plan,method:PS.method,sender:sn.trim(),trx:tx})}),j=await r.json().catch(()=>({}));
+    if(r.ok){toast("পেমেন্ট জমা হয়েছে — যাচাইয়ের পর অনুমোদন হবে ✔");await entLoad();paySheet()}
+    else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||("জমা হয়নি ("+(j.error||r.status)+")"))
+  }catch(e){alert("ইন্টারনেট সংযোগ নেই")}}
 /* ---------- আমার হিসাব + প্রোফাইল ---------- */
 function vMine(){
   const me=getMe(),m=S.members.find(x=>x.name===me);if(!m)return"";
@@ -1034,15 +1115,24 @@ function profileSheet(){
   <div class="btns" style="margin:0 0 10px"><label class="btn" style="cursor:pointer;min-height:38px;border-color:var(--line)">📷 ছবি বদলান<input type="file" accept="image/*" data-pic="1" hidden></label>${pic?'<button class="x" data-act="picdel">ছবি সরান</button>':""}</div>
   <label class="mute">আমি কে (বাছলে হোমে আপনার নিজের হিসাব দেখাবে)</label><div style="margin:4px 0 12px">${sel}</div>
   <div class="srow"><span style="flex:1">🏠 মেস</span><b>${esc(S.name||"—")}</b></div>
+  <div id="gbox"></div>
   <div class="srow"><span style="flex:1">👥 সদস্য</span><b>${bd(AM().length)} জন</b></div>
   ${r?`<div class="srow"><span style="flex:1">${lab(cur.k)} — মোট প্রদান</span><b>৳${f(r.P)}</b></div>`:""}
   <p class="mute">ছবি শুধু এই ডিভাইসে থাকে। Google দিয়ে ঢুকলে Google-এর ছবি নিজে বসে যায়।</p>
   <button class="p" style="width:100%;margin-top:6px" data-act="logout">🚪 লগআউট</button></div>`;
-  document.body.appendChild(o)}
+  document.body.appendChild(o);gHook()}
 /* ---------- অতিরিক্ত অ্যাকশন ---------- */
 function moreAct(k,a){
   if(k==="devcard"){devCard();return true}
   if(k==="profile"){profileSheet();return true}
+  if(k==="paysheet"){if(MGR){paySheet(false);entLoad()}return true}
+  if(k==="paypick"){PS.plan=a.dataset.p;paySheet();return true}
+  if(k==="paymeth"){PS.method=a.dataset.m;paySheet();return true}
+  if(k==="paycopy"){copyText(a.dataset.v).then(ok=>toast(ok?"কপি হয়েছে ✔":"কপি করা যায়নি"));return true}
+  if(k==="paysend"){paySend();return true}
+  if(k==="monsheet"){if(MGR)monSheet();return true}
+  if(k==="monadd"){if(!MGR)return true;const v=($("mnew")||{}).value||"";if(!/^\d{4}-\d{2}$/.test(v)||v<MINM||v>MAXM){alert("২০২৬ থেকে ২০২৭ এর মধ্যে মাস বেছে নিন");return true}
+    if(MONTHS.includes(v)){alert("এই মাস আগে থেকেই আছে");return true}S.xm=(S.xm||[]).concat([v]).sort();save();refreshMonths();mon=v;render();monSheet();toast("মাস যোগ হয়েছে ✔");return true}
   if(k==="picdel"){try{localStorage.removeItem("bpPic")}catch(e){}pfPaint();profileSheet();return true}
   if(k==="scshare"){shareSheet(scText(),"রুটিন");return true}
   if(k==="mlshare"){shareSheet(mlText(mld),"আজকের মিল");return true}
@@ -1111,7 +1201,7 @@ async function publish(retry){
     else{
       const nw=!!MCW||Object.keys(VW).length>0,alk=await lkOf(MCODE);
       let lks=[...new Set([S.mcode?await lkOf(S.mcode):"",alk].filter(Boolean))];
-      body={id:CID,name:S.name,M:VM,A:VA,di,ct,base:VER,token:await tokOf(MCODE),lks};
+      body={id:CID,name:S.name,M:VM,A:VA,di,ct,base:VER,token:await tokOf(MCODE),lks,mc:AM().length};if(RSF)body.rs=1;
       if(nw){lks=[alk].concat(S.members.map(m=>m.lk).filter(Boolean));if(S.mcode)lks.push(await lkOf(S.mcode));
         body.C=[];body.cws=[];
         if(MCODES.__co){const cl=await lkOf(MCODES.__co);lks.push(cl);body.C=[cl];body.cws=[await tokOf(MCODES.__co)]}
@@ -1120,7 +1210,8 @@ async function publish(retry){
     const r=await fetch("/api/vault",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
     if(!r.ok){
-      if(r.status===409&&j&&j.error==="taken")alert("প্রকাশ হয়নি: এই লগইন কোড সার্ভারে অন্য একটি মেসে ব্যবহৃত হচ্ছে। আগের মেস এই সার্ভারে থাকলে \"ব্যাকআপ থেকে ফেরান\"-এ ঠিক আগের ম্যানেজার কোড দিন, অথবা সরাসরি সেই কোডে লগইন করুন।");
+      if(r.status===402&&j&&j.error==="member_limit"){ENT.limit=j.limit||ENT.limit;alert("প্রকাশ হয়নি: সদস্য সংখ্যা সীমার ("+bd(j.limit||FREEL())+" জন) বেশি। প্ল্যান নিয়ে সীমা বাড়ান।");setTimeout(()=>paySheet(true),50)}
+      else if(r.status===409&&j&&j.error==="taken")alert("প্রকাশ হয়নি: এই লগইন কোড সার্ভারে অন্য একটি মেসে ব্যবহৃত হচ্ছে। আগের মেস এই সার্ভারে থাকলে \"ব্যাকআপ থেকে ফেরান\"-এ ঠিক আগের ম্যানেজার কোড দিন, অথবা সরাসরি সেই কোডে লগইন করুন।");
       else if(r.status===409&&!retry&&VAULT){busy=false;if(await resolveConflict())return publish(true);busy=true;
         alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।")}
       else if(r.status===409)alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।");
@@ -1139,8 +1230,8 @@ const gErr=e=>({google_not_configured:"সার্ভারে GOOGLE_CLIENT_ID
 async function gHook(){
   const b=$("gbox");if(!b||!GID)return;const login=!ROLE;let linked=false;
   try{if(!login&&CODE)linked=!!localStorage.getItem("bpGlk:"+await lkOf(CODE))}catch(e){}
-  if(!$("gbox")||(!login&&tab!=="home"))return;
-  b.innerHTML=`<div class="box"><h2>${login?"🔵 Google দিয়ে লগইন":"🔗 Google অ্যাকাউন্ট লিংক"}</h2><p class="mute">${login?"আগে একবার কোড দিয়ে ঢুকে Google লিংক করা থাকলে এখান থেকে সরাসরি ঢুকতে পারবেন।":(linked?"✓ এই কোড Google-এ লিংক করা আছে। অন্য Google অ্যাকাউন্টও যোগ করতে পারেন।":"লিংক করলে যেকোনো ডিভাইসে শুধু Google দিয়ে ঢুকতে পারবেন, কোড লাগবে না।")}</p><div id="gbtn" style="display:flex;justify-content:center;min-height:44px"></div><div id="gpick"></div><p class="mute" id="gmsg"></p></div>`;
+  if(!$("gbox"))return;
+  b.innerHTML=`<div class="box"><h2>${login?"🔵 Google দিয়ে লগইন":"🔗 Google অ্যাকাউন্ট"}</h2><p class="mute">${login?"আগে একবার কোড দিয়ে ঢুকে Google লিংক করা থাকলে এখান থেকে সরাসরি ঢুকতে পারবেন।":(linked?"✓ এই কোড Google-এ লিংক করা আছে। অন্য Google অ্যাকাউন্টও যোগ করতে পারেন।":"লিংক করলে যেকোনো ডিভাইসে শুধু Google দিয়ে ঢুকতে পারবেন, কোড লাগবে না।")}</p><div id="gbtn" style="display:flex;justify-content:center;min-height:44px"></div><div id="gpick"></div><p class="mute" id="gmsg"></p></div>`;
   try{await gLoad();google.accounts.id.initialize({client_id:GID,callback:gCb});google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",text:login?"signin_with":"continue_with",width:260})}catch(e){gMsg("Google লোড হয়নি — ইন্টারনেট চেক করুন")}}
 async function gCb(r){
   const t=r&&r.credential;if(!t)return;
@@ -1196,6 +1287,7 @@ document.addEventListener("click",async e=>{
   const rm=t.closest("[data-rm]");if(rm){NEW.name=$("mn").value;NEWMEM.splice(+rm.dataset.rm,1);render();return}
   const o=t.closest("[data-open]");if(o){e.preventDefault();mon=o.dataset.open;tab="month";render();return}
   const tb=t.closest("[data-t]");if(tb){closeOv();tab=tb.dataset.t;render();return}
+  const xmr=t.closest("[data-xmrm]");if(xmr&&MGR){S.xm=(S.xm||[]).filter(x=>x!==xmr.dataset.xmrm);save();refreshMonths();if(!MONTHS.includes(mon))mon=MONTHS[MONTHS.length-1];render();monSheet();return}
   const dl=t.closest("[data-del]");if(dl&&MGR){if(!confirm("এই সদস্য ও তার হিসাব মুছবেন?"))return;const id=dl.dataset.del;if(MCODES[id]){alert("আগে 🚫 বন্ধ বা 🚪 ছেড়ে গেছে দিন (সেটিং → লগইন কোড), তারপর মুছুন।");return}S.members=S.members.filter(x=>x.id!==id);Object.values(S.months).forEach(m=>delete m.r[id]);save();render();return}
   const lgb=t.closest("[data-lg]");if(lgb&&MGR){const q=lgb.dataset.lg.split(":");lgAct(q[0],q[1]);return}
   const rr_=t.closest("[data-rrm]");if(rr_&&MGR){if(!confirm("এই মাসিক নিয়ম বন্ধ হবে; ভবিষ্যতের বাকি তারিখগুলোও মুছে যাবে।"))return;const z=SCw(),id=rr_.dataset.rrm,T=todayK();z.rep=(z.rep||[]).filter(r=>r.id!==id);z.w=z.w.filter(x=>x.rp!==id||x.done||x.d<T);save();render();return}
@@ -1213,7 +1305,7 @@ document.addEventListener("click",async e=>{
   if(k.indexOf("bz")===0){bzAct(k);return}
   if(k==="logout"){try{localStorage.removeItem(SKEY)}catch(x){}location.reload()}
   else if(k==="pub")publish();
-  else if(k==="pdf")makePDF(reportHTML(mon),"Bachelors-Paradise-"+mon+".pdf",a,900);
+  else if(k==="pdf")makePDF(reportHTML(mon),"mymessbill-"+mon+".pdf",a,900);
   else if(k==="mlogin")doLogin($("mc").value,false);
   else if(k==="alogin")doLogin($("ac").value,true);
   else if(k==="recover")recoverBackup();
@@ -1221,19 +1313,19 @@ document.addEventListener("click",async e=>{
   else if(k==="newmess"){NEW={a:genCode("MGR"),m:genCode("MEM"),name:""};NEWMEM=[];stage="codes";render()}
   else if(k==="back"){stage="login";render()}
   else if(k==="tosetup"){if(!$("saved").checked){alert("আগে কোড দুটি সংরক্ষণ করে টিক দিন");return}stage="setup";render()}
-  else if(k==="addnew"){NEW.name=$("mn").value;const n=$("nn").value.trim();if(n)NEWMEM.push(mk(n,p($("nr").value)));render()}
+  else if(k==="addnew"){NEW.name=$("mn").value;const n=$("nn").value.trim();if(n&&NEWMEM.length>=FREEL()){alert("ফ্রিতে "+bd(FREEL())+" জন পর্যন্ত সদস্য রাখা যায়। এখন "+bd(FREEL())+" জন নিয়ে মেস তৈরি করুন; পরে সেটিং → সদস্য সীমা থেকে প্ল্যান নিয়ে আরও যোগ করতে পারবেন।")}else if(n)NEWMEM.push(mk(n,p($("nr").value)));render()}
   else if(k==="create"){const name=$("mn").value.trim();if(!name)return setMsg("মেসের নাম লিখুন");if(!NEWMEM.length)return setMsg("অন্তত একজন সদস্য যোগ করুন");
     setMsg("তৈরি হচ্ছে…");Kraw=rnd(32);CID=b64u(rnd(8));MCODE=NEW.a;CODE=NEW.a;VER=0;VAULT=null;VM=await wrap(NEW.m,Kraw);VA=await wrap(NEW.a,Kraw);
     S=Object.assign(blank(),{name,members:NEWMEM,mcode:NEW.m});BASE="";ROLE="manager";MGR=true;stage="login";
     try{localStorage.setItem(SKEY,JSON.stringify({r:"manager",c:NEW.a}))}catch(x){}save();tab="home";render()}
-  else if(k==="add"&&MGR){const n=$("nn").value.trim();if(!n)return;S.members.push(mk(n,p($("nr").value)));save();render()}
+  else if(k==="add"&&MGR){const n=$("nn").value.trim();if(!n)return;if(AM().length>=LIMIT()){paySheet(true);entLoad();return}S.members.push(mk(n,p($("nr").value)));save();render()}
 });
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 (async function boot(){
   let ss=null;try{ss=JSON.parse(localStorage.getItem(SKEY))}catch(e){}
   if(ss&&ss.c){$("view").innerHTML='<p class="mute">লগইন হচ্ছে…</p>';if(!await login(ss.c,ss.r==="manager")){try{localStorage.removeItem(SKEY)}catch(e){}}else CODE=ss.c}
   render();
-  fetch("/api/auth?cfg=1",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.gid){GID=j.gid;gHook()}}).catch(()=>{});
+  payCfg();fetch("/api/auth?cfg=1",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.gid){GID=j.gid;gHook()}}).catch(()=>{});
   DL={save:async o=>{const a=document.createElement("a");a.href=URL.createObjectURL(o.data);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};if(tab==="rep")render();
 })();
 </script></body>
