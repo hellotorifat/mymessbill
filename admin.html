@@ -16,7 +16,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:7px 6px;b
 <h1>🛡 Super Admin</h1><div class="mute">mymessbill • শুধু মালিকের জন্য • মেসের ভেতরের হিসাব/সদস্য/চ্যাট এনক্রিপ্টেড, এখানে দেখা যায় না</div>
 <div class="box" id="lg"><div class="row"><input id="k" type="password" placeholder="অ্যাডমিন কী (ADMIN_KEY)" autocomplete="current-password"><button class="p" id="go">ঢুকুন</button></div><p class="mute" id="m"></p></div>
 <div id="app" hidden>
- <div class="tabs" id="tabs"><button data-t="ov" class="on">📊 ওভারভিউ</button><button data-t="ms">🏠 মেস</button><button data-t="pay">💳 পেমেন্ট<span class="dot" id="pb" hidden></span></button><button data-t="mt">🧾 পদ্ধতি ও QR</button><button data-t="pl">📦 প্ল্যান ও সেটিং</button><button id="out">বের হন</button></div>
+ <div class="tabs" id="tabs"><button data-t="ov" class="on">📊 ওভারভিউ</button><button data-t="ms">🏠 মেস</button><button data-t="pay">💳 পেমেন্ট<span class="dot" id="pb" hidden></span></button><button data-t="rv">💰 আয়</button><button data-t="mt">🧾 পদ্ধতি ও QR</button><button data-t="pl">📦 প্ল্যান ও সেটিং</button><button id="out">বের হন</button></div>
  <div id="v"></div>
 </div>
 <script>
@@ -33,7 +33,7 @@ async function loadAll(){
   try{sessionStorage.setItem("bpAdm",K)}catch(e){}
   D=x.j;const [c,p]=await Promise.all([post({a:"cfgget"}),post({a:"pays"})]);CFG=c.j.cfg;ST=c.j.stats||{};PAYS=p.j.list||[];
   $("lg").hidden=true;$("app").hidden=false;const pe=PAYS.filter(x=>x.st==="pending").length;$("pb").hidden=!pe;$("pb").textContent=pe;draw()}
-function draw(){document.querySelectorAll("#tabs button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===T));$("v").innerHTML=({ov,ms,pay,mt,pl}[T])()}
+function draw(){document.querySelectorAll("#tabs button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===T));$("v").innerHTML=({ov,ms,pay,rv,mt,pl}[T])()}
 function ov(){const tm=D.list.reduce((s,v)=>s+(v.mc||0),0),paid=D.list.filter(v=>v.lim>(CFG.free||15)).length;
   return `<div class="box"><div class="kp"><div><small>মোট মেস</small><b>${D.total}</b></div><div><small>মোট সদস্য (জানা)</small><b>${tm}</b></div><div><small>পেইড মেস</small><b>${paid}</b></div><div><small>অপেক্ষায় পেমেন্ট</small><b>${ST.pending||0}</b></div><div><small>অনুমোদিত পেমেন্ট</small><b>${ST.approved||0}</b></div><div><small>মোট আয় (৳)</small><b>${bn(ST.revenue)}</b></div></div></div>
   <div class="box"><h2>সর্বশেষ মেস</h2>${tbl(D.list.slice(0,5))}</div>`}
@@ -44,6 +44,19 @@ function pay(){const f=ST.pf||"pending",L=PAYS.filter(p=>f==="all"||p.st===f);
   return `<div class="box"><div class="row"><select id="pf"><option value="pending"${f==="pending"?" selected":""}>অপেক্ষায়</option><option value="approved"${f==="approved"?" selected":""}>অনুমোদিত</option><option value="rejected"${f==="rejected"?" selected":""}>বাতিল</option><option value="all"${f==="all"?" selected":""}>সব</option></select><button id="csv">⬇ CSV</button></div>
   <div class="scroll"><table><thead><tr><th>সময়</th><th>মেস</th><th>প্ল্যান</th><th>৳</th><th>পদ্ধতি</th><th>প্রেরক / TrxID</th><th>অবস্থা</th><th></th></tr></thead><tbody>${L.map(p=>`<tr><td>${dt(p.at)}</td><td><b>${esc(p.mname||"—")}</b><div class="mute">${esc(p.mid)}</div></td><td>${esc(p.plan.name)}<div class="mute">${p.plan.limit} জন${p.plan.days?" • "+p.plan.days+" দিন":""}</div></td><td>${bn(p.amount)}</td><td>${esc(p.method.name)}</td><td>${esc(p.sender)}<div><b>${esc(p.trx)}</b></div></td><td><span class="st ${p.st}">${p.st==="pending"?"অপেক্ষায়":p.st==="approved"?"অনুমোদিত":"বাতিল"}</span>${p.note?`<div class="mute">${esc(p.note)}</div>`:""}</td><td>${p.st==="pending"?`<button class="p" data-pa="approve" data-id="${esc(p.id)}">✔ অনুমোদন</button> <button class="x" data-pa="reject" data-id="${esc(p.id)}">✕ বাতিল</button>`:""}</td></tr>`).join("")||'<tr><td colspan="8">কিছু নেই</td></tr>'}</tbody></table></div>
   <p class="mute">bKash/Nagad অ্যাপে TrxID ও পরিমাণ মিলিয়ে তারপর অনুমোদন দিন। একই TrxID দ্বিতীয়বার নেওয়া হয় না।</p></div>`}
+function rv(){const A=PAYS.filter(p=>p.st==="approved"),tot=A.reduce((s,p)=>s+(+p.amount||0),0);
+  const grp=(key)=>{const m={};A.forEach(p=>{const k=key(p);m[k]=m[k]||{n:0,t:0};m[k].n++;m[k].t+=+p.amount||0});return Object.entries(m).sort((a,b)=>a[0]<b[0]?1:-1)};
+  const mon=grp(p=>{const d=new Date(p.at);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}),me=grp(p=>p.method.name),pl=grp(p=>p.plan.name);
+  const T2=(h,L)=>`<div class="scroll"><table><thead><tr><th>${h}</th><th>পেমেন্ট</th><th>৳</th></tr></thead><tbody>${L.map(x=>`<tr><td>${esc(x[0])}</td><td>${x[1].n}</td><td><b>${bn(x[1].t)}</b></td></tr>`).join("")||'<tr><td colspan="3">কিছু নেই</td></tr>'}</tbody></table></div>`;
+  const now=Date.now(),soon=D.list.filter(v=>v.until&&v.until>now&&v.until-now<7*864e5),gone=D.list.filter(v=>v.until&&v.until<=now);
+  const L2=(L)=>L.length?`<div class="scroll"><table><thead><tr><th>মেস</th><th>সীমা</th><th>মেয়াদ</th></tr></thead><tbody>${L.map(v=>`<tr><td><b>${esc(v.name||"—")}</b><div class="mute">${esc(v.id)}</div></td><td>${v.lim}</td><td>${dt(v.until)}</td></tr>`).join("")}</tbody></table></div>`:'<p class="mute">কেউ নেই</p>';
+  return `<div class="box"><div class="kp"><div><small>মোট আয় (৳)</small><b>${bn(tot)}</b></div><div><small>অনুমোদিত পেমেন্ট</small><b>${A.length}</b></div><div><small>গড় পেমেন্ট (৳)</small><b>${A.length?bn(Math.round(tot/A.length)):0}</b></div></div><div class="row" style="margin-top:8px"><button id="csv2">⬇ মাসিক আয় CSV</button></div></div>
+  <div class="box"><h2>📅 মাসভিত্তিক আয়</h2>${T2("মাস",mon)}</div>
+  <div class="box"><h2>🧾 পদ্ধতিভেদে</h2>${T2("পদ্ধতি",me)}</div>
+  <div class="box"><h2>📦 প্ল্যানভেদে</h2>${T2("প্ল্যান",pl)}</div>
+  <div class="box"><h2>⏳ ৭ দিনের মধ্যে মেয়াদ শেষ</h2>${L2(soon)}</div>
+  <div class="box"><h2>⌛ মেয়াদ শেষ হয়েছে</h2>${L2(gone)}</div>
+  <p class="mute">সময়সীমার প্ল্যান না থাকলে (মেয়াদ ০) এই দুই তালিকা ফাঁকা থাকবে। আয় ধরা হয় শুধু অনুমোদিত পেমেন্ট থেকে, পেমেন্ট জমার তারিখ অনুযায়ী মাস।</p>`}
 function mt(){return `<div class="box"><h2>🧾 পেমেন্ট পদ্ধতি (বিকাশ, নগদ, রকেট, ব্যাংক…)</h2><p class="mute">চালু থাকা পদ্ধতি ম্যানেজাররা দেখবে। QR ছবি আপলোড করা যায়।</p>
   ${(CFG.methods||[]).map(m=>`<div class="box" data-mid="${esc(m.id)}"><div class="g2"><div><label class="mute">নাম</label><input data-f="name" value="${esc(m.name)}" maxlength="30"></div><div><label class="mute">নম্বর / অ্যাকাউন্ট</label><input data-f="num" value="${esc(m.num)}" maxlength="60"></div><div><label class="mute">নোট (যেমন: Send Money / Personal)</label><input data-f="note" value="${esc(m.note)}" maxlength="200"></div></div>
   <div class="row" style="margin-top:8px">${m.q?`<img class="qr" src="/api/pay?qr=${encodeURIComponent(m.id)}&v=${m.q}" alt="QR">`:'<span class="mute">QR নেই</span>'}<input type="file" accept="image/*" data-qr style="max-width:230px">${m.q?'<button class="x" data-qrdel>QR সরান</button>':""}<label><input type="checkbox" data-f="on" ${m.on?"checked":""} style="width:auto"> চালু</label><button class="p" data-msave>সেভ</button><button class="x" data-mdel>মুছুন</button></div></div>`).join("")||'<p class="mute">এখনো কোনো পদ্ধতি নেই।</p>'}
@@ -62,6 +75,7 @@ $("tabs").onclick=e=>{const b=e.target.closest("button[data-t]");if(b){T=b.datas
 const v=$("v");
 v.onclick=async e=>{const t=e.target;
   if(t.id==="rf"){loadAll();return}
+  if(t.id==="csv2"){const m={};PAYS.filter(p=>p.st==="approved").forEach(p=>{const d=new Date(p.at),k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");m[k]=m[k]||[0,0];m[k][0]++;m[k][1]+=+p.amount||0});const rows=[["month","payments","revenue"]].concat(Object.entries(m).sort().map(([k,v])=>[k,v[0],v[1]]));const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.join(",")).join("\n")],{type:"text/csv"}));a.download="revenue.csv";a.click();return}
   if(t.id==="csv"){const rows=[["time","mess","plan","limit","amount","method","sender","trx","status","note"]].concat(PAYS.map(p=>[new Date(p.at).toISOString(),p.mname,p.plan.name,p.plan.limit,p.amount,p.method.name,p.sender,p.trx,p.st,p.note||""]));const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n")],{type:"text/csv"}));a.download="payments.csv";a.click();return}
   const del=t.closest("[data-del]");if(del){const n=del.dataset.n||del.dataset.del;if(prompt("⚠ এই মেস চিরতরে মুছে যাবে (ডেটা, কোড, চ্যাট)। নিশ্চিত হতে মেসের নাম লিখুন:\n"+n)!==n)return;const x=await call("DELETE","?id="+encodeURIComponent(del.dataset.del));if(x.r.ok)loadAll();else alert("মোছা যায়নি: "+(x.j.error||x.r.status));return}
   const lim=t.closest("[data-lim]");if(lim){const a=prompt("কত জন পর্যন্ত সীমা দেবেন? (0 = হাতে দেওয়া সীমা মুছুন)");if(a===null)return;const d=prompt("কত দিনের জন্য? (0 = সারাজীবন)","0");if(d===null)return;const x=await post({a:"ent",id:lim.dataset.lim,limit:+a,days:+d});if(x.r.ok)loadAll();else alert("হয়নি: "+(x.j.error||x.r.status));return}
