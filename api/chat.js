@@ -20,7 +20,8 @@ function memCmd(c) {
       const nx = a.includes("NX"); if (nx && alive(k) && mem.has(k)) return null;
       mem.set(k, a[0]); const i = a.indexOf("PX"); if (i >= 0) exp.set(k, Date.now() + +a[i + 1]); else exp.delete(k); return "OK";
     }
-    case "DEL": return mem.delete(k) ? 1 : 0;
+    case "DEL": { const d = mem.delete(k) | zs.delete(k); return d ? 1 : 0; }
+    case "SCAN": { const m = String(a[1] === "MATCH" ? a[2] : "*").replace(/\*$/, ""); return ["0", [...mem.keys()].filter((x) => x.startsWith(m) && alive(x))]; }
     case "ZADD": { const z = Z(); if (!z.includes(a[1])) z.push(a[1]); z.sort(); return 1; }
     case "ZCARD": return (zs.get(k) || []).length;
     case "ZRANGE": { const z = zs.get(k) || []; let s = +a[0], e = +a[1]; if (s < 0) s = Math.max(0, z.length + s); if (e < 0) e = z.length + e; return z.slice(s, e + 1); }
