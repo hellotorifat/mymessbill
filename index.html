@@ -251,20 +251,20 @@ function render(){
   const L=!ROLE;$("out").hidden=L;$("tabs").style.display=L?"none":"flex";
   $("sub").textContent=L?"মেসের হিসাব ও মাসিক রিপোর্ট":(S.name?"🏠 "+S.name+" • ":"")+(CO?"🤝 সহ-ম্যানেজার":MGR?"🔑 ম্যানেজার":"👤 মেম্বার")+" • "+AM().length+" জন সদস্য";
   updBar();
-  if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();return}
+  if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();gHook();return}
   if(tab==="set"&&(!MGR||CO))tab="home";
   const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["chat","চ্যাট"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
   const inMore=MORE.some(x=>x[0]===tab);
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
-  paint();paintBz();fit();
+  paint();paintBz();fit();gHook();
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
   const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
 }
 function vLogin(){
-  return `<div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
+  return `<div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
   <h2 style="margin-top:14px">🔑 ম্যানেজার লগইন</h2><div class="row"><input id="ac" class="code" placeholder="MGR-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="alogin">লগইন</button></div>
   <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল, বাজারের টিক ও চ্যাট করা যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
   <div class="box"><h2>🏠 নতুন মেস তৈরি করুন</h2><p class="mute">নিজের মেসের হিসাব রাখতে চান? নতুন মেস তৈরি করলে আপনি একটি ম্যানেজার কোড ও একটি মেম্বার কোড পাবেন।</p><button class="p" data-act="newmess" style="width:100%">➕ মেস তৈরি করুন</button>
@@ -301,7 +301,7 @@ function vHome(){
   return vQuick()+vNotice()+vNext()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
   ${chart("📈 মাসভিত্তিক মিল রেট (৳)","rate",v=>f(v))}${chart("🍽 মাসভিত্তিক মোট মিল","tm",v=>f(v))}
   <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
-  ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
+  ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div><div id="gbox"></div>`}
 const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
@@ -655,7 +655,7 @@ function vChat(){
   <p class="mute">🔒 মেসেজ মেসের কোডের চাবিতে এনক্রিপ্ট হয়ে জমা হয়; সার্ভারও পড়তে পারে না। শুধু শেষ ৩০০টি থাকে। নাম নিজে বেছে নিতে হয়, তাই বিশ্বস্ত মেম্বারদের মধ্যেই ব্যবহার করুন।</p></div>`}
 
 /* ---------- লাইভ ইভেন্ট (মেম্বারও লিখতে পারে; এনক্রিপ্টেড; প্রকাশে vault-এ বসে যায়) ---------- */
-let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null;
+let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null,GID="",GL=[];
 function evApply(e){
   try{
     if(e.y==="bz"){const it=BZw().items.find(x=>x.id===e.id);if(it){if(e.f==="d")it.d=e.v?1:0;else if(e.f==="aq"||e.f==="ap"||e.f==="hv")it[e.f]=String(e.v)}}
@@ -1092,6 +1092,32 @@ async function publish(retry){
       VER=j.ver;VAULT={id:CID,M:VM,A:VA,di,ct};BASE=JSON.stringify(S);clrPend(CID);if(!CO)DROP=[];okp=true}
   }catch(e){alert("প্রকাশ করা যায়নি। ইন্টারনেট সংযোগ চেক করুন।")}
   busy=false;updBar();if(okp&&retry)render();return okp}
+/* ---------- Google লগইন / লিংক ---------- */
+function gLoad(){return window.google&&google.accounts&&google.accounts.id?Promise.resolve():new Promise((res,rej)=>{if(window.__gl){window.__gl.push([res,rej]);return}window.__gl=[[res,rej]];const sc=document.createElement("script");sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.onload=()=>window.__gl.forEach(x=>x[0]());sc.onerror=()=>{const l=window.__gl;window.__gl=null;l.forEach(x=>x[1]())};document.head.appendChild(sc)})}
+const gMsg=t=>{const m=$("gmsg");if(m)m.textContent=t};
+const gErr=e=>({google_not_configured:"সার্ভারে GOOGLE_CLIENT_ID সেট করা নেই",secret_missing:"সার্ভারে সিক্রেট সেট করা নেই",bad_token:"Google যাচাই হয়নি, আবার চেষ্টা করুন",none:"এই কোডের মেস সার্ভারে পাওয়া যায়নি",google_unreachable:"Google-এ পৌঁছানো যায়নি"}[e]||("সমস্যা ("+e+")"));
+async function gHook(){
+  const b=$("gbox");if(!b||!GID)return;const login=!ROLE;let linked=false;
+  try{if(!login&&CODE)linked=!!localStorage.getItem("bpGlk:"+await lkOf(CODE))}catch(e){}
+  if(!$("gbox")||(!login&&tab!=="home"))return;
+  b.innerHTML=`<div class="box"><h2>${login?"🔵 Google দিয়ে লগইন":"🔗 Google অ্যাকাউন্ট লিংক"}</h2><p class="mute">${login?"আগে একবার কোড দিয়ে ঢুকে Google লিংক করা থাকলে এখান থেকে সরাসরি ঢুকতে পারবেন।":(linked?"✓ এই কোড Google-এ লিংক করা আছে। অন্য Google অ্যাকাউন্টও যোগ করতে পারেন।":"লিংক করলে যেকোনো ডিভাইসে শুধু Google দিয়ে ঢুকতে পারবেন, কোড লাগবে না।")}</p><div id="gbtn" style="display:flex;justify-content:center;min-height:44px"></div><div id="gpick"></div><p class="mute" id="gmsg"></p></div>`;
+  try{await gLoad();google.accounts.id.initialize({client_id:GID,callback:gCb});google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",text:login?"signin_with":"continue_with",width:260})}catch(e){gMsg("Google লোড হয়নি — ইন্টারনেট চেক করুন")}}
+async function gCb(r){
+  const t=r&&r.credential;if(!t)return;
+  try{
+    if(ROLE){
+      if(!CODE)return;
+      const x=await fetch("/api/auth",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"link",t,code:CODE,r:MGR?"a":"m"})}),j=await x.json().catch(()=>({}));
+      if(x.ok){try{localStorage.setItem("bpGlk:"+await lkOf(CODE),"1")}catch(e){}toast("Google লিংক হয়েছে ✔");gHook()}else gMsg(gErr(j.error||x.status));return}
+    gMsg("যাচাই হচ্ছে…");
+    const x=await fetch("/api/auth",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"login",t})}),j=await x.json().catch(()=>({}));
+    if(!x.ok)return gMsg(gErr(j.error||x.status));
+    GL=j.list||[];
+    if(!GL.length)return gMsg("এই Google অ্যাকাউন্টে কোনো মেস লিংক করা নেই। আগে কোড দিয়ে ঢুকে Google লিংক করুন।");
+    if(GL.length===1)return gGo(0);
+    gMsg("কোন মেসে ঢুকবেন?");$("gpick").innerHTML=GL.map((e,i)=>`<button class="p" style="width:100%;margin:4px 0" data-act="glpick" data-i="${i}">${e.r==="a"?"🔑":"👤"} ${esc(e.n||"মেস")}</button>`).join("")
+  }catch(e){gMsg("সংযোগ নেই, আবার চেষ্টা করুন")}}
+async function gGo(i){const e=GL[i];if(!e)return;await doLogin(e.c,e.r==="a");if(!ROLE)gMsg("লিংক করা কোড আর চলছে না (কোড বদলে গেছে)। নতুন কোড দিয়ে ঢুকে আবার Google লিংক করুন।")}
 const setMsg=t=>{const m=$("lmsg");if(m)m.textContent=t};
 async function doLogin(code,mgr){
   if(!code.trim())return setMsg("কোড লিখুন");setMsg("যাচাই হচ্ছে…");
@@ -1150,6 +1176,7 @@ document.addEventListener("click",async e=>{
   else if(k==="mlogin")doLogin($("mc").value,false);
   else if(k==="alogin")doLogin($("ac").value,true);
   else if(k==="recover")recoverBackup();
+  else if(k==="glpick")gGo(+a.dataset.i);
   else if(k==="newmess"){NEW={a:genCode("MGR"),m:genCode("MEM"),name:""};NEWMEM=[];stage="codes";render()}
   else if(k==="back"){stage="login";render()}
   else if(k==="tosetup"){if(!$("saved").checked){alert("আগে কোড দুটি সংরক্ষণ করে টিক দিন");return}stage="setup";render()}
@@ -1165,6 +1192,7 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
   let ss=null;try{ss=JSON.parse(localStorage.getItem(SKEY))}catch(e){}
   if(ss&&ss.c){$("view").innerHTML='<p class="mute">লগইন হচ্ছে…</p>';if(!await login(ss.c,ss.r==="manager")){try{localStorage.removeItem(SKEY)}catch(e){}}else CODE=ss.c}
   render();
+  fetch("/api/auth?cfg=1",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.gid){GID=j.gid;gHook()}}).catch(()=>{});
   DL={save:async o=>{const a=document.createElement("a");a.href=URL.createObjectURL(o.data);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};if(tab==="rep")render();
 })();
 </script></body>

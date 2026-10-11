@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Super Admin — Bachelors Paradise</title>
+<style>
+:root{--bg:#eef3f1;--card:#fff;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--pri-d:#08463d;--bad:#d23f2c}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1513;--card:#13211e;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--bad:#ff8a77}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,"Hind Siliguri","Noto Sans Bengali",sans-serif;padding:16px;max-width:1000px;margin:auto}
+h1{margin:0 0 4px;font-size:22px}.mute{color:var(--mute);font-size:13px}.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+input,button{font:inherit;border-radius:10px;border:1.5px solid var(--line);padding:9px 12px;background:var(--card);color:inherit}input{width:100%}button{cursor:pointer;font-weight:600}
+button.p{background:var(--pri);color:#fff;border-color:var(--pri)}button.x{color:var(--bad)}.row{display:flex;gap:8px}.big{font-size:34px;font-weight:700;color:var(--pri)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:600;font-size:12px}.scroll{overflow-x:auto}
+</style></head><body>
+<h1>🛡 Super Admin</h1><div class="mute">শুধু মালিকের জন্য • মেসের ভেতরের হিসাব/সদস্য/চ্যাট এনক্রিপ্টেড, তাই এখানে দেখা যায় না</div>
+<div class="box" id="lg"><div class="row"><input id="k" type="password" placeholder="অ্যাডমিন কী (ADMIN_KEY)" autocomplete="current-password"><button class="p" id="go">ঢুকুন</button></div><p class="mute" id="m"></p></div>
+<div id="app" hidden>
+ <div class="box"><div class="mute">মোট মেস</div><div class="big" id="tot">0</div><div class="row"><button id="rf">🔄 রিফ্রেশ</button><button id="out">বের হন</button></div></div>
+ <div class="box scroll"><table><thead><tr><th>#</th><th>মেসের নাম</th><th>তৈরি</th><th>সর্বশেষ আপডেট</th><th>প্রকাশ</th><th>লগইন কোড</th><th>মেসেজ</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);let K="";try{K=sessionStorage.getItem("bpAdm")||""}catch(e){}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dt=t=>t?new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+async function api(m,q){const r=await fetch("/api/admin"+(q||""),{method:m,headers:{"x-admin-key":K},cache:"no-store"});const j=await r.json().catch(()=>({}));return{r,j}}
+async function load(){
+  $("m").textContent="লোড হচ্ছে…";
+  let x;try{x=await api("GET")}catch(e){$("m").textContent="সংযোগ নেই";return}
+  if(x.r.status===403){K="";try{sessionStorage.removeItem("bpAdm")}catch(e){}$("lg").hidden=false;$("app").hidden=true;$("m").textContent="কী মেলেনি";return}
+  if(!x.r.ok){$("lg").hidden=false;$("m").textContent=x.j.error==="admin_not_configured"?"Vercel-এ ADMIN_KEY (কমপক্ষে ৮ অক্ষর) সেট করে Redeploy করুন":"সমস্যা: "+(x.j.error||x.r.status);return}
+  try{sessionStorage.setItem("bpAdm",K)}catch(e){}
+  $("lg").hidden=true;$("app").hidden=false;$("tot").textContent=x.j.total;
+  $("tb").innerHTML=x.j.list.map((v,i)=>`<tr><td>${i+1}</td><td><b>${esc(v.name||"(নাম নেই)")}</b><div class="mute">${esc(v.id)}</div></td><td>${dt(v.cat)}</td><td>${dt(v.uat)}</td><td>v${v.ver}</td><td>${v.codes}</td><td>${v.chat} / ${v.ev}</td><td><button class="x" data-id="${esc(v.id)}" data-n="${esc(v.name)}">মুছুন</button></td></tr>`).join("")||'<tr><td colspan="8">কোনো মেস নেই</td></tr>'}
+$("go").onclick=()=>{K=$("k").value;load()};$("k").onkeydown=e=>{if(e.key==="Enter")$("go").click()};$("rf").onclick=load;
+$("out").onclick=()=>{K="";try{sessionStorage.removeItem("bpAdm")}catch(e){}location.reload()};
+$("tb").onclick=async e=>{const b=e.target.closest("button[data-id]");if(!b)return;
+  const n=b.dataset.n||b.dataset.id;if(prompt("⚠ এই মেস চিরতরে মুছে যাবে (ডেটা, কোড, চ্যাট)। নিশ্চিত হতে মেসের নাম লিখুন:\n"+n)!==n)return;
+  const x=await api("DELETE","?id="+encodeURIComponent(b.dataset.id));if(x.r.ok)load();else alert("মোছা যায়নি: "+(x.j.error||x.r.status))};
+if(K)load();
+</script></body></html>
