@@ -382,6 +382,24 @@ function vSet(){
   ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vPlan()}${vLogins()}${vBackup()}`}
 
 /* ---------- PDF report ---------- */
+function flowHTML(k,c,fi,offn){
+  let run=c.income;const R=x=>`<td style="text-align:right">${x}</td>`,V=x=>(x<0?"−":"")+f(Math.abs(x));
+  const hd=t=>`<tr><td colspan="3" style="background:var(--soft);font-weight:700;text-align:left">${t}</td></tr>`;
+  const row=(t,sgn,v)=>{run+=sgn*v;return `<tr><td style="text-align:left">${t}</td>${R((sgn<0?"− ":"+ ")+f(v))}${R(V(run))}</tr>`};
+  const tot=(t,v)=>`<tr class="tot"><td style="text-align:left">${t}</td><td></td>${R("৳"+V(v))}</tr>`;
+  const h1=hd("ধাপ ১ — সদস্যদের কাছ থেকে পাওয়া")+`<tr><td style="text-align:left">সদস্যরা মোট দিয়েছেন (সবার "মোট প্রদান" যোগফল)</td>${R("৳"+f(c.income))}${R(V(run))}</tr>`;
+  const ex=[["🏠 বাড়িভাড়া (মালিককে)",c.rentT],["🧹 খালার বিল",c.khalaT]].filter(x=>x[1]>0).map(x=>row(x[0],-1,x[1])).join("")
+   +SH.filter(x=>p(sv(k,x[0]))>0).map(x=>row("🧾 "+x[1]+" <small>(বিবিধ)</small>",-1,p(sv(k,x[0])))).join("")
+   +c.xl.filter(e=>p(e.a)>0).map(e=>row("✍ "+esc(e.n||"অন্যান্য"),-1,p(e.a))).join("");
+  const h2=hd("ধাপ ২ — এই মাসের খরচ (বাদ যাবে)")+(ex||'<tr><td colspan="3" style="text-align:left">কোনো খরচ লেখা হয়নি</td></tr>');
+  const month=run,t2=tot("= এই মাসে বাকি (জমা)",month);
+  const h3=hd("ধাপ ৩ — আগের মাসের জের (যোগ হবে)")+row("আগের মাসের জের (জমা ছিল)",1,fi.open);
+  const fu=fuOf(k).filter(e=>p(e.a)>0);
+  const h4=fu.length?hd("ধাপ ৪ — জের থেকে যে কাজে খরচ হয়েছে (বাদ যাবে)")+fu.map(e=>row("📝 "+esc(e.n||"অন্যান্য"),-1,p(e.a))).join(""):"";
+  const t3=tot("🏦 মেস ফান্ড বাকি (পরের মাসে জের যাবে)",run);
+  return `<div class="box"><h2>🧮 এই মাসের পুরো হিসাব — ধাপে ধাপে</h2><p class="mute" style="margin:0 0 6px">সদস্যদের দেওয়া টাকা থেকে একে একে খরচ বাদ যাচ্ছে। যা থাকে তার সাথে আগের মাসের জের যোগ হয়ে মেস ফান্ড হয়।</p>
+  <table class="c" style="width:100%"><tr><th style="text-align:left">বিবরণ</th><th style="text-align:right">টাকা</th><th style="text-align:right">হাতে থাকে</th></tr>${h1}${h2}${t2}${h3}${h4}${t3}</table>
+  <p class="mute" style="margin:6px 0 0">বাজার ও মিলের টাকা মিল রেট অনুযায়ী সদস্যদের মধ্যেই মিটে যায়, তাই আলাদা ধরা হয়নি।${c.exn.length?" বিবিধ খরচ যাদের ওপর যায়নি: "+esc(c.exn.join(", "))+"।":""}${offn.length?" এই মাসের হিসাবে বাদ (নিষ্ক্রিয়): "+esc(offn.join(", "))+"।":""}</p></div>`}
 function reportHTML(k){
   const c=calc(k),m=S.months[k]||{n:""},fi=fundInfo(k),offn=S.members.filter(b=>isMem(b,k)&&!isAct(b,k)).map(b=>b.name);
   const rows=c.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.bazar)}</td><td>${f(r.meal)}</td><td>${f(r.mc)}</td><td class="${r.G>=0?"pos":"neg"}">${sg(r.G)}</td><td>${f(r.rent)}</td><td>${f(r.khala)}</td><td>${f(r.J)}</td><td>${f(r.deduct)}</td><td>${f(r.N)}</td><td>${f(r.extra)}</td><td><b>${f(r.P)}</b></td></tr>`).join("");
@@ -390,11 +408,7 @@ function reportHTML(k){
   <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট বাজার","৳"+f(c.tb))}${K("মোট মিল",f(c.tm))}${K("মিল রেট","৳"+f(c.rate),"pos")}${K("মোট খরচ","৳"+f(fi.spX))}${K("মেস আয় (বিবিধ বাদে)","৳"+f(fi.incX))}${K("এ মাসে জমা",sg(c.net),c.net>=0?"pos":"neg")}${K("🏦 ফান্ড বাকি","৳"+f(fi.close),fi.close>=0?"pos":"neg")}</div>
   <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>${rows}
   <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td><td>${f(sum(c.rows,"deduct"))}</td><td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${f(c.income)}</td></tr></table></div>
-  <div class="box"><h2>💸 মোট খরচ — আলাদা আলাদা হিসাব</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start"><table>${ln("🏠 বাড়িভাড়া",f(c.rentT))}${ln("🧹 খালার বিল",f(c.khalaT))}${c.xl.filter(e=>p(e.a)>0||e.n).map(e=>ln("✍ "+esc(e.n||"অন্যান্য"),f(p(e.a)))).join("")}${ln("উপরের মোট (বিবিধ বাদে)",f(fi.spX))}${SH.filter(x=>p(sv(k,x[0]))>0).map(x=>ln("🧾 "+x[1]+" <small>(বিবিধ)</small>",f(p(sv(k,x[0]))))).join("")}${ln("মেসের সব মিলিয়ে মোট খরচ (বাজার বাদে)",f(c.cost+c.exp),1)}</table>
-  <div><table>${ln("আগের মাসের জের",f(fi.open))}${fi.used>0?ln("জের থেকে খরচ (−)",f(fi.used))+ln("জের থেকে বাকি",f(fi.left)):""}${ln("এই মাসে মোট আয় (+) (বিবিধ বাদে)",f(fi.incX))}${ln("এই মাসে মোট খরচ (−)",f(fi.spX))}${ln("🏦 মেস ফান্ড বাকি (জমা)",f(fi.close),1)}</table>
-  <p class="mute" style="margin:8px 0 0">বিবিধ খরচ ${f(c.shared)} ÷ ${bd(c.div)} জন = জনপ্রতি ${f(c.share)} — এটা সদস্যদের "বিবিধ" ঘরে বিলের ভেতরেই ধরা (ফান্ড হিসাবে আয় ও খরচ দু'দিকেই সমান, তাই ফান্ডে প্রভাব নেই)${c.exn.length?" • যাদের ওপর যায়নি: "+esc(c.exn.join(", ")):""}</p>${offn.length?`<p class="mute" style="margin:4px 0 0">এই মাসের হিসাবে বাদ (নিষ্ক্রিয়): ${esc(offn.join(", "))}</p>`:""}</div></div></div>
-  ${fuOf(k).length?`<div class="box"><h2>📝 আগের মাসের জমা ফান্ড (জের ৳${f(fi.open)}) যে কাজে খরচ হয়েছে</h2><table class="c" style="max-width:560px">${fuOf(k).filter(e=>e.n||p(e.a)>0).map(e=>`<tr><td style="text-align:left">${esc(e.n||"অন্যান্য")}</td><td>${p(e.a)>0?f(p(e.a)):""}</td></tr>`).join("")}${sum(fuOf(k).map(e=>({v:p(e.a)})),"v")>0?`<tr class="tot"><td style="text-align:left">মোট</td><td>${f(sum(fuOf(k).map(e=>({v:p(e.a)})),"v"))}</td></tr>`:""}</table></div>`:""}
-  <div class="box"><h2>📖 হিসাব কীভাবে পড়বেন</h2><table class="c" style="text-align:left"><tr><td style="text-align:left"><b>মিল রেট</b></td><td style="text-align:left">মোট বাজার ÷ মোট মিল। প্রতি মিলের দাম।</td></tr><tr><td style="text-align:left"><b>মিল খরচ</b></td><td style="text-align:left">আপনার মিল × মিল রেট। আপনি যা খেয়েছেন তার দাম।</td></tr><tr><td style="text-align:left"><b>দিবে(−)/নিবে(+)</b></td><td style="text-align:left">আপনার বাজার − মিল খরচ। বেশি বাজার করলে মেস আপনাকে দেবে (+), কম করলে আপনি দেবেন (−)।</td></tr><tr><td style="text-align:left"><b>বিবিধ</b></td><td style="text-align:left">ওয়াইফাই, ময়লা, বিদ্যুৎ ইত্যাদির মোট খরচ সবার মধ্যে ভাগ। বিস্তারিত উপরের "মোট খরচ" তালিকায়।</td></tr><tr><td style="text-align:left"><b>মোট বিল</b></td><td style="text-align:left">ভাড়া + খালা বিল + বিবিধ − (বাজার − মিল খরচ) − ছাড়। মাস শেষে আপনার দেওয়ার হিসাব।</td></tr><tr><td style="text-align:left"><b>মোট প্রদান</b></td><td style="text-align:left">মোট বিল + অতিরিক্ত। এই টাকাই আপনাকে দিতে হবে।</td></tr><tr><td style="text-align:left"><b>ফান্ড বাকি</b></td><td style="text-align:left">মেসে জমা থাকা টাকা, যা পরের মাসে জের হিসেবে যাবে।</td></tr></table></div>
+  ${flowHTML(k,c,fi,offn)}
   ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
   <p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
 function vRep(){return `<div class="row">${msel()}${DL?'<button class="p fix" data-act="pdf">📄 PDF ডাউনলোড</button>':""}</div>
@@ -742,6 +756,7 @@ async function rekey(){
   VM=null;await lgSaveMC()}
 const lgSnap=()=>({K:Kraw,VA,VM,VW:Object.assign({},VW),MC:Object.assign({},MCODES),MCW,DROP:DROP.slice(),S:JSON.stringify({m:S.members,mc:S.mcode})});
 function lgRestore(s){Kraw=s.K;VA=s.VA;VM=s.VM;VW=s.VW;MCODES=s.MC;MCW=s.MCW;DROP=s.DROP;const o=JSON.parse(s.S);S.members=o.m;S.mcode=o.mc}
+function ask_shared(m){if(S.mcode&&confirm(m.name+" যদি সবার-কোড জেনে থাকেন (বা সেটা দিয়ে Google লিংক করে থাকেন), তাহলে সে এখনো ঢুকতে পারবে।\nসবার-কোডও এখনই বদলে ফেলবেন? (বদলালে নতুন সবার-কোড বাকিদের পাঠাতে হবে)")){S.mcode=genCode("MEM");SHOWC.__sh=true}}
 async function lgAct(k,id){
   if(!MGR||CO)return;const m=S.members.find(x=>x.id===id);
   if(k==="show"){SHOWC[id]=!SHOWC[id];render();return}
@@ -765,10 +780,10 @@ async function lgAct(k,id){
     else if(k==="new"){const had=!!MCODES[id];if(had&&!confirm(m.name+"-এর পুরোনো কোড বাতিল হয়ে নতুন কোড হবে।"+tail))return;
       MCODES[id]=genCode("MEM");SHOWC[id]=true;
       if(had)await rekey();else{m.lk=await lkOf(MCODES[id]);VW[m.lk]=await wrap(MCODES[id],Kraw);await lgSaveMC()}}
-    else if(k==="off"){if(!confirm(m.name+"-এর লগইন বন্ধ হবে; বাকিদের কোড একই থাকবে। চ্যাটের পুরোনো মেসেজ মুছে যাবে।"+tail))return;delete MCODES[id];delete SHOWC[id];await rekey()}
+    else if(k==="off"){if(!confirm(m.name+"-এর লগইন বন্ধ হবে (তার Google লগইনও কাজ করবে না); বাকিদের কোড একই থাকবে। চ্যাটের পুরোনো মেসেজ মুছে যাবে।"+tail))return;delete MCODES[id];delete SHOWC[id];ask_shared(m);await rekey()}
     else if(k==="left"){const t=prompt(m.name+" মেস ছেড়ে গেছেন। শেষ কোন মাস পর্যন্ত হিসাবে ধরা হবে? (YYYY-MM)\nলগইনও বন্ধ হবে।",nowK);if(t===null)return;
       if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(t)){alert("মাসের ফরম্যাট ঠিক নয় (যেমন 2026-10)");return}
-      m.till=t;delete MCODES[id];delete SHOWC[id];await rekey()}
+      m.till=t;delete MCODES[id];delete SHOWC[id];ask_shared(m);await rekey()}
     else return;
   }catch(e){lgRestore(snap);alert("কাজটি করা যায়নি: "+(e&&e.message||e));return}
   const ok=await publish();
@@ -788,7 +803,8 @@ function vLogins(){
   const ind=indiv?rows+'<p class="mute">🚫 বন্ধ করলে ওই কোড দিয়ে আর ঢোকা যাবে না, বাকিদের কোড একই থাকে (ডেটার চাবি নিজে নতুন হয়; বাকিদের অ্যাপ নিজে একবার রিলোড নেয়)। চ্যাটের পুরোনো মেসেজ মুছে যায়। "🚪 ছেড়ে গেছে" মানে লগইন বন্ধ + ওই মাসের পর থেকে ভাড়া/হিসাবে আর ধরা হবে না, আগের হিসাব থাকবে। নিজস্ব কোডে ঢুকলে নাম নিজে ঠিক হয়ে যায়। ⚠ নিজস্ব কোড গ্রুপে নয়, ব্যক্তিগত মেসেজে পাঠান।</p>'
     :'<p class="mute">প্রত্যেক সদস্যের আলাদা কোড — একজনকে বাদ দিলে বাকিদের কিছু বদলাতে হয় না। সবার-কোড আগের মতোই চলতে থাকবে।</p><button class="p" style="width:100%" data-lg="all:">সবার নিজস্ব কোড চালু করুন</button>';
   const cc=MCODES.__co,coBox=`<div class="box"><h2>🤝 সহ-ম্যানেজার</h2><p class="mute">সহ-ম্যানেজার আপনার মতোই হিসাব, বাজার, মিল, খরচ ও সক্রিয়/নিষ্ক্রিয় ঠিক করতে ও প্রকাশ করতে পারবেন। পারবেন না: সদস্য মোছা/যোগ, লগইন কোড বদলানো, সহ-ম্যানেজার বদলানো। ম্যানেজার লগইনের ঘরে এই কোড দিয়ে ঢুকবেন।</p>${cc?`<div class="mute">🔑 সহ-ম্যানেজারের কোড আছে</div>${SHOWC.__co?`<input class="code" readonly value="${esc(cc)}" aria-label="সহ-ম্যানেজার কোড">`:""}<div class="btns"><button data-lg="show:__co">${SHOWC.__co?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__co">📤 পাঠান</button><button data-lg="con:__co">🔄 নতুন কোড</button><button class="x" data-lg="coff:__co">🚫 সরান</button></div>`:`<button class="p" style="width:100%" data-lg="con:__co">➕ সহ-ম্যানেজার কোড তৈরি করুন</button>`}</div>`;
-  return `<div class="box"><h2>🔑 লগইন কোড</h2><h3 style="margin-top:0">👥 সবার জন্য এক কোড</h3>${shared}<h3>🙋 প্রত্যেকের নিজস্ব কোড</h3>${ind}</div>`}
+  const gnote='<div class="box"><h2>👋 কেউ মেস ছেড়ে গেলে কীভাবে সরাবেন</h2><p class="mute">কেউ Google অ্যাকাউন্ট লিংক করে ঢুকলেও আসলে সে একটা কোড দিয়েই ঢোকে। তাই কোড বন্ধ করলেই তার Google লগইনও কাজ করা বন্ধ হয়ে যায়।</p><ul class="mute" style="margin:6px 0 6px 18px;padding:0"><li>নিজস্ব কোড থাকলে: ওপরে তার নামের পাশে <b>🚫 বন্ধ</b> বা <b>🚪 ছেড়ে গেছে</b> চাপুন।</li><li>সবার-কোড দিয়ে ঢুকলে: <b>🚪 ছেড়ে গেছে</b> চাপার পর "সবার-কোড বদলাবেন?" প্রশ্নে হ্যাঁ বলুন, অথবা <b>🔄 নতুন কোড</b> চাপুন, তারপর নতুন কোড বাকিদের পাঠান।</li><li>বাদ দেওয়ার সাথে সাথে ডেটার চাবিও নতুন হয়, তাই পুরোনো কোড বা পুরোনো Google লিংক আর কিছু খুলতে পারে না।</li></ul></div>';
+  return coBox+gnote+`<div class="box"><h2>🔑 লগইন কোড</h2><h3 style="margin-top:0">👥 সবার জন্য এক কোড</h3>${shared}<h3>🙋 প্রত্যেকের নিজস্ব কোড</h3>${ind}</div>`}
 function kickOut(){if(kicked)return;kicked=true;try{localStorage.removeItem(SKEY)}catch(e){}alert("আপনার লগইন বন্ধ করা হয়েছে বা ম্যানেজার নতুন কোড দিয়েছেন। নতুন কোড দিয়ে আবার ঢুকুন।");location.reload()}
 
 /* ---------- UI: টোস্ট, শেয়ার শিট, ডেভেলপার কার্ড ---------- */
