@@ -77,6 +77,66 @@ async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
 function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
 const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
 
+/* ---------- Web Push (লাইব্রেরি ছাড়া: VAPID ES256 + RFC 8291 aes128gcm) ---------- */
+import * as NC from "node:crypto";
+const Bf = (x) => Buffer.from(x);
+const ub64 = (s) => Buffer.from(String(s).replace(/-/g, "+").replace(/_/g, "/"), "base64");
+const pb64 = (buf) => Buffer.from(buf).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+async function vapid() {
+  let v = await getJSON("vapid");
+  if (v && v.pub && v.prv) return v;
+  const e = NC.createECDH("prime256v1"); e.generateKeys();
+  v = { pub: pb64(e.getPublicKey()), prv: pb64(e.getPrivateKey()) };
+  if (!(await cmd("SET", "vapid", JSON.stringify(v), "NX"))) v = await getJSON("vapid");
+  return v;
+}
+function vapidJwt(aud, v) {
+  const h = pb64(Bf(JSON.stringify({ typ: "JWT", alg: "ES256" }))), p = pb64(Bf(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: "https://mymessbill.vercel.app" })));
+  const pub = ub64(v.pub), d = ub64(v.prv);
+  const key = NC.createPrivateKey({ key: { kty: "EC", crv: "P-256", d: pb64(d), x: pb64(pub.subarray(1, 33)), y: pb64(pub.subarray(33, 65)) }, format: "jwk" });
+  const sig = NC.createSign("SHA256").update(h + "." + p).sign({ key, dsaEncoding: "ieee-p1363" });
+  return h + "." + p + "." + pb64(sig);
+}
+const hkdf = (salt, ikm, info, len) => { const prk = NC.createHmac("sha256", salt).update(ikm).digest(); let t = Buffer.alloc(0), out = Buffer.alloc(0), i = 1; while (out.length < len) { t = NC.createHmac("sha256", prk).update(Buffer.concat([t, info, Buffer.from([i++])])).digest(); out = Buffer.concat([out, t]); } return out.subarray(0, len); };
+function encryptPush(payload, p256dh, auth) {
+  const ua = ub64(p256dh), as = ub64(auth), salt = NC.randomBytes(16), e = NC.createECDH("prime256v1"); e.generateKeys();
+  const secret = e.computeSecret(ua), asPub = e.getPublicKey();
+  const ikm = hkdf(as, secret, Buffer.concat([Bf("WebPush: info\0"), ua, asPub]), 32);
+  const cek = hkdf(salt, ikm, Bf("Content-Encoding: aes128gcm\0"), 16), nonce = hkdf(salt, ikm, Bf("Content-Encoding: nonce\0"), 12);
+  const c = NC.createCipheriv("aes-128-gcm", cek, nonce);
+  const ct = Buffer.concat([c.update(Buffer.concat([Bf(payload), Buffer.from([2])])), c.final(), c.getAuthTag()]);
+  const rs = Buffer.alloc(4); rs.writeUInt32BE(4096);
+  return Buffer.concat([salt, rs, Buffer.from([asPub.length]), asPub, ct]);
+}
+async function pushOne(sub, payload, v) {
+  const u = new URL(sub.e);
+  if (u.protocol !== "https:" && !(process.env.BP_MEMORY === "1" && u.hostname === "localhost")) return 0;
+  const body = encryptPush(payload, sub.p, sub.a);
+  const r = await fetch(sub.e, { method: "POST", headers: { "content-encoding": "aes128gcm", "content-type": "application/octet-stream", ttl: "86400", urgency: "high", authorization: "vapid t=" + vapidJwt(u.origin, v) + ", k=" + v.pub }, body, signal: AbortSignal.timeout(6000) });
+  return r.status;
+}
+/* মেসের সব সাবস্ক্রাইবকে (প্রেরক বাদে) পুশ পাঠায়। টেক্সট ক্লায়েন্টে এনক্রিপ্টেড; সার্ভার শুধু ct পাঠিয়ে দেয়। */
+async function notifyMess(id, name, nf, exEndpoint) {
+  try {
+    const kind = nf && /^[a-z]{1,8}$/.test(nf.k || "") ? nf.k : "u";
+    if (!(await cmd("SET", "pt_" + id + "_" + kind, "1", "NX", "PX", "4000"))) return;
+    const subs = (await getJSON("ps_" + id)) || [];
+    if (!subs.length) return;
+    const v = await vapid();
+    const pl = JSON.stringify({ id, n: String(name || "").slice(0, 40), k: kind, iv: nf && typeof nf.iv === "string" && nf.iv.length <= 24 ? nf.iv : "", ct: nf && typeof nf.ct === "string" && nf.ct.length <= 1500 ? nf.ct : "" });
+    const live = [], seen = {};
+    for (const s of subs) {
+      if (s.e === exEndpoint) { live.push(s); continue; }
+      if (seen[s.l] === undefined) seen[s.l] = (await cmd("GET", "lk_" + s.l)) === id;
+      if (!seen[s.l]) continue;
+      let st = 0; try { st = await pushOne(s, pl, v); } catch { st = 0; }
+      if (st === 404 || st === 410) continue;
+      live.push(s);
+    }
+    if (live.length !== subs.length) await setJSON("ps_" + id, live);
+  } catch (e) { console.error("push", e && e.message); }
+}
+
 const okLk = (x) => typeof x === "string" && /^[A-Za-z0-9_-]{20,64}$/.test(x);
 const okId = (x) => typeof x === "string" && /^[A-Za-z0-9+/=_-]{4,32}$/.test(x);
 const okWrapN = (w, max) => w && typeof w.s === "string" && typeof w.i === "string" && typeof w.w === "string" && w.w.length < max;
@@ -106,7 +166,7 @@ export const PUT = guard(async (req) => {
   if (raw.length > MAX) return J({ error: "big" }, 413);
   let b;
   try { b = JSON.parse(raw); } catch { return J({ error: "bad_json" }, 400); }
-  const { id, name, M, A, di, ct, base, token, lks, W, MC, alk, drop, co, C, cws } = b || {};
+  const { id, name, M, A, di, ct, base, token, lks, W, MC, alk, drop, co, C, cws, nf, ex } = b || {};
   if (!okId(id)) return J({ error: "bad_id" }, 400);
   if (typeof token !== "string" || token.length < 32 || token.length > 128) return J({ error: "bad_token" }, 400);
   if (typeof di !== "string" || typeof ct !== "string") return J({ error: "bad_data" }, 400);
@@ -122,6 +182,7 @@ export const PUT = guard(async (req) => {
       if (o.ver !== base) return J({ error: "conflict" }, 409);
       const ver = o.ver + 1;
       await setJSON("v_" + id, { ...o, di, ct, ver, uat: Date.now() });
+      if (nf && typeof nf === "object") await notifyMess(id, o.name, nf, typeof ex === "string" ? ex : "");
       return J({ ver });
     }
     if (!okWrap(A)) return J({ error: "bad_A" }, 400);
@@ -174,6 +235,7 @@ export const PUT = guard(async (req) => {
     for (const lk of lks) await cmd("SET", "lk_" + lk, id);
     const gone = new Set([...((old && old.lks) || []), ...(drop || [])].filter((x) => !lks.includes(x)));
     for (const lk of gone) { if ((await cmd("GET", "lk_" + lk)) === id) await cmd("DEL", "lk_" + lk); }
+    if (nf && typeof nf === "object") await notifyMess(id, rec.name, nf, typeof ex === "string" ? ex : "");
     return J({ ver });
   } finally { await cmd("DEL", lock).catch(() => {}); }
 });

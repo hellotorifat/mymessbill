@@ -278,7 +278,7 @@ function render(){
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
-  paint();paintBz();fit();gHook();sitePaint();if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
+  paint();paintBz();fit();gHook();sitePaint();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
   const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
@@ -335,7 +335,7 @@ function dailyMeals(){
 /* ---------- views ---------- */
 function vHome(){
   const LF=lastFund(),A=act(),tb=sum(A.map(x=>x.c),"tb"),tm=sum(A.map(x=>x.c),"tm"),inc=sum(A.map(x=>x.c),"income"),cst=sum(A.map(x=>x.c),"cost")+sum(MONTHS.map(k=>({v:calc(k).exp})),"v");
-  return `<div id="site"></div>`+vNotice()+vNext()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
+  return `<div id="site"></div>`+nfBanner()+vNotice()+vNext()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
   ${bars("📈 মাসভিত্তিক মিল রেট (৳)",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.rate,hl:x.k===nowK})),v=>f(v))}${bars("🍽 মাসভিত্তিক মোট মিল",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.tm,hl:x.k===nowK})),v=>f(v))}${dailyMeals()}
   <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
   ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
@@ -378,7 +378,8 @@ function vSet(){
   return `<div class="box"><h2>মেসের নাম</h2><input data-nm="1" value="${esc(S.name)}" maxlength="50"></div>
   <div class="box"><h2>সদস্য তালিকা ও ডিফল্ট ভাড়া</h2>${S.members.map(b=>`<div class="row"><input data-mn="${b.id}" value="${esc(b.name)}" aria-label="নাম"><input data-mr="${b.id}" inputmode="decimal" value="${b.rent}" aria-label="ভাড়া" style="max-width:100px"><button class="x fix" data-del="${b.id}">মুছুন</button></div>`).join("")}
   <div class="row"><input id="nn" placeholder="নতুন সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="p fix" data-act="add">যোগ</button></div></div>
-  <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div></div>
+  <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div>
+  <label style="display:block;margin-top:10px">🌙 মেম্বারের মিল অনুরোধ বন্ধ হবে (বাংলাদেশ সময়)</label><select data-df="mcut" style="max-width:260px">${[[20,"রাত ৮টা"],[21,"রাত ৯টা"],[22,"রাত ১০টা"],[23,"রাত ১১টা"],[24,"কখনো বন্ধ হবে না"]].map(x=>`<option value="${x[0]}"${MCUT()===x[0]?" selected":""}>${x[1]}</option>`).join("")}</select><p class="mute">এই সময়ের পর থেকে ভোর ৫টা পর্যন্ত মেম্বার আগামী দিনের (ভোর ১২টার পর চলতি দিনের) মিল বদলাতে পারবেন না। ম্যানেজার সব সময় বদলাতে পারবেন।</p></div>
   ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vPlan()}${vLogins()}${vBackup()}`}
 
 /* ---------- PDF report ---------- */
@@ -694,7 +695,7 @@ function chPaint(){
 async function chSend(){
   const inp=$("cin"),t=inp&&inp.value.trim();if(!t||!Kraw)return;if(!getMe()){alert("আগে ওপরের \"আমি\" থেকে নিজের নাম বেছে নিন");return}inp.value="";
   try{const o={n:getMe(),t:t.slice(0,1000),ts:Date.now()},iv=rnd(12),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify(o))));
-    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({lk:await lkOf(CODE),iv:b64(iv),ct})});
+    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({lk:await lkOf(CODE),iv:b64(iv),ct,nf:await nfOf("chat","💬 "+o.n,o.t),ex:NFEP})});
     if(!r.ok)throw new Error(r.status);chSnap=true;setTimeout(chPoll,250)}
   catch(e){inp.value=t;alert("মেসেজ পাঠানো যায়নি"+(String(e.message)==="404"?" — ম্যানেজার একবার প্রকাশ করলে চ্যাট চালু হবে।":"। ইন্টারনেট চেক করুন।"))}}
 function meSel(){
@@ -706,10 +707,55 @@ function vChat(){
   <div id="clist" class="clist"></div><div class="row" style="margin:8px 0 0"><input id="cin" placeholder="মেসেজ লিখুন…" maxlength="1000" autocomplete="off"><button class="p fix" data-act="csend">পাঠান</button></div>
   <p class="mute">🔒 মেসেজ মেসের কোডের চাবিতে এনক্রিপ্ট হয়ে জমা হয়; সার্ভারও পড়তে পারে না। শুধু শেষ ৩০০টি থাকে। নাম নিজে বেছে নিতে হয়, তাই বিশ্বস্ত মেম্বারদের মধ্যেই ব্যবহার করুন।</p></div>`}
 
+
+/* ---------- নোটিফিকেশন (Web Push): টেক্সট মেসের চাবিতে এনক্রিপ্টেড, সার্ভার পড়তে পারে না ---------- */
+let NFEP="",NFI="";
+const NFOK=()=>"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+const nfFlag=()=>{try{return localStorage.getItem("bpNf:"+CID)==="1"}catch(e){return false}};
+const nfSet=(v)=>{try{if(v)localStorage.setItem("bpNf:"+CID,"1");else localStorage.removeItem("bpNf:"+CID)}catch(e){}};
+const u8=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");return Uint8Array.from(atob(s+"=".repeat((4-s.length%4)%4)),c=>c.charCodeAt(0))};
+function nfDb(){return new Promise((res,rej)=>{const q=indexedDB.open("bpnf",1);q.onupgradeneeded=()=>q.result.createObjectStore("k");q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+async function nfKey(del){try{if(!CID)return;const d=await nfDb(),st=d.transaction("k","readwrite").objectStore("k");if(del)st.delete(CID);else if(Kraw)st.put(b64(Kraw),CID)}catch(e){}}
+async function nfOf(k,t,b){try{const iv=rnd(12),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify({t:String(t).slice(0,60),b:String(b).slice(0,140)}))));return{k,iv:b64(iv),ct}}catch(e){return{k}}}
+function nfEv(o){
+  const nm=id=>{const m=S.members.find(x=>x.id===id);return m?m.name:"সদস্য"},who=getMe()||(MGR?"ম্যানেজার":"কেউ");
+  if(o.y==="ml")return["meal","🍽 মিল আপডেট",nm(o.m)+" — "+fd(o.dt)+"-এর মিল বদলেছে"];
+  if(o.y==="mlr")return["meal","🍽 মিল আপডেট",nm(o.m)+" — "+fd(o.a)+" থেকে "+fd(o.z)+" মিল "+(o.v?"চালু":"বন্ধ")];
+  if(o.y==="bz"&&o.f==="d"){const it=BZw().items.find(x=>x.id===o.id);return["bazar","🛒 বাজার",(it?(it.n||it.name||"একটি আইটেম"):"একটি আইটেম")+(o.v?" কেনা হয়েছে":" আবার বাকি")+" ("+who+")"]}
+  if(o.y==="sub")return["duty","📅 রুটিন","পালায় বদলি হয়েছে ("+who+")"];
+  if(o.y==="sd")return["duty","📅 রুটিন","একটি কাজ "+(o.v?"সম্পন্ন":"আবার বাকি")+" ("+who+")"];
+  return null}
+async function nfSub(){
+  const reg=await navigator.serviceWorker.ready,kr=await fetch("/api/push?k=1").then(r=>r.json());if(!kr.pub)throw new Error("key");
+  let sub=await reg.pushManager.getSubscription();
+  if(sub){const cur=sub.options&&sub.options.applicationServerKey;if(cur&&b64u(new Uint8Array(cur))!==kr.pub){await sub.unsubscribe();sub=null}}
+  if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(kr.pub)});
+  const r=await fetch("/api/push",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"sub",lk:await lkOf(CODE),sub:sub.toJSON()})});
+  if(!r.ok)throw new Error("sub"+r.status);
+  NFEP=sub.endpoint;await nfKey();return true}
+async function nfOn(){
+  if(!NFOK()){alert("এই ব্রাউজারে নোটিফিকেশন চলে না। iPhone হলে আগে Safari-তে Share → \"Add to Home Screen\" করে হোম স্ক্রিনের আইকন থেকে অ্যাপ খুলুন।");return}
+  try{const p=await Notification.requestPermission();if(p!=="granted"){alert("অনুমতি দেওয়া হয়নি। ব্রাউজার/ফোনের সেটিংস থেকে এই সাইটের নোটিফিকেশন Allow করে আবার চেষ্টা করুন।");return}
+    await nfSub();nfSet(true);toast("🔔 নোটিফিকেশন চালু হয়েছে")}
+  catch(e){alert("নোটিফিকেশন চালু করা যায়নি ("+(e&&e.message||e)+")। পরে আবার চেষ্টা করুন।")}
+  if($("ov"))profileSheet();else render()}
+async function nfOff(q){
+  try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();
+    if(sub)await fetch("/api/push",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"unsub",lk:await lkOf(CODE),endpoint:sub.endpoint})})}catch(e){}
+  nfSet(false);NFEP="";await nfKey(true);if(q)return;toast("নোটিফিকেশন বন্ধ হয়েছে");if($("ov"))profileSheet();else render()}
+async function nfInit(){if(!NFOK()||!CODE)return;try{if(Notification.permission==="granted"&&nfFlag())await nfSub()}catch(e){}}
+function nfBox(){
+  if(!NFOK())return`<div class="srow"><span style="flex:1">🔔 নোটিফিকেশন</span><span class="mute">এই ব্রাউজারে সাপোর্ট নেই</span></div>`;
+  const on=nfFlag()&&Notification.permission==="granted";
+  return `<div class="box" style="margin:10px 0"><h3 style="margin:0 0 4px">🔔 নোটিফিকেশন</h3><p class="mute" style="margin:0 0 8px">${on?"চালু আছে। মেসের মিল, বাজার, রুটিন, চ্যাট ও ম্যানেজারের আপডেট এই ডিভাইসে আসবে।":"চালু করলে মেসে যা কিছু হবে (মিল, বাজার, রুটিন, চ্যাট, হিসাব আপডেট) সবাই এই ডিভাইসে জানতে পাবে।"}${Notification.permission==="denied"?" ⚠ ব্রাউজারে নোটিফিকেশন ব্লক করা আছে, সেটিংস থেকে Allow করুন।":""}</p>${on?'<button class="x" data-act="nfoff">🔕 বন্ধ করুন</button>':'<button class="p" style="width:100%" data-act="nfon">🔔 নোটিফিকেশন চালু করুন</button>'}</div>`}
+function nfBanner(){
+  if(!NFOK()||!ROLE||nfFlag()||Notification.permission!=="default")return"";let h="";try{h=localStorage.getItem("bpNfH:"+CID)}catch(e){}if(h)return"";
+  return `<div class="box" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="flex:1 1 200px"><b>🔔 নোটিফিকেশন চালু করুন</b><div class="mute">মেসে মিল, বাজার, রুটিন বা চ্যাটে কিছু হলে সাথে সাথে জানতে পারবেন।</div></div><button class="p" data-act="nfon">চালু করুন</button><button class="x" data-act="nfhide">পরে</button></div>`}
 /* ---------- লাইভ ইভেন্ট (মেম্বারও লিখতে পারে; এনক্রিপ্টেড; প্রকাশে vault-এ বসে যায়) ---------- */
 let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null,GID="",GL=[],PAYC=null,ENT={limit:0,free:15,until:0,mc:0,pays:[]},ENTL="",RSF=false,PS={plan:"",method:""};
-function evApply(e){
+function evApply(e,ts){
   try{
+    if(!e.r&&(e.y==="ml"||e.y==="mlr")){const t0=ts||e.ts||Date.now();if(e.y==="ml"){if(mlLocked(e.dt,t0))return}else{let a=e.a;while(a<=e.z&&mlLocked(a,t0))a=shiftD(a,1);if(a>e.z)return;e=Object.assign({},e,{a})}}
     if(e.y==="bz"){const it=BZw().items.find(x=>x.id===e.id);if(it){if(e.f==="d")it.d=e.v?1:0;else if(e.f==="aq"||e.f==="ap"||e.f==="hv")it[e.f]=String(e.v)}}
     else if(e.y==="ml"){S.ml=S.ml||{};const d=S.ml[e.dt]=S.ml[e.dt]||{},m=d[e.m]=d[e.m]||{};m[e.f]=e.v}
     else if(e.y==="sub"){const x=((S.sc||{})[e.k]||[]).find(z=>z.id===e.id);if(x&&x.who[e.j]!==undefined){x.who[e.j]=e.to;x.sb=1}}
@@ -718,10 +764,11 @@ function evApply(e){
   }catch(err){}}
 async function evSend(o){
   try{const iv=rnd(12),ct=b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await dkey(Kraw),enc.encode(JSON.stringify(o))));
-    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({lk:await lkOf(CODE),iv:b64(iv),ct,kind:"e"})});
+    const x=nfEv(o),bd_={lk:await lkOf(CODE),iv:b64(iv),ct,kind:"e"};if(x){bd_.nf=await nfOf(x[0],x[1],x[2]);bd_.ex=NFEP}
+    const r=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(bd_)});
     if(r.ok)return true;if(r.status===404||r.status===400||r.status===413)return"drop";return false}catch(e){return false}}
 async function evPost(o){
-  o.ts=Date.now();evApply(o);updBar();
+  o.ts=Date.now();o.r=MGR?1:0;evApply(o,o.ts);updBar();
   if(!CODE||!Kraw)return;const r=await evSend(o);
   if(r===false&&EVQ.length<200)EVQ.push(o);else if(r===true)setTimeout(evPoll,400)}
 async function evPoll(){
@@ -730,7 +777,7 @@ async function evPoll(){
     for(let i=0;i<6;i++){
       const r=await fetch("/api/chat?kind=e&lk="+await lkOf(CODE)+"&after="+EVLAST,{cache:"no-store"});if(r.status===404&&!MGR&&VAULT){kickOut();break}if(!r.ok)break;
       const j=await r.json(),key=await dkey(Kraw);
-      for(const m of j.msgs){EVLAST=m.k;try{evApply(JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(m.iv)},key,ub(m.ct)))));n++;okc++}catch(e){fail++}}
+      for(const m of j.msgs){EVLAST=m.k;try{evApply(JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub(m.iv)},key,ub(m.ct)))),+m.k.slice(0,13));n++;okc++}catch(e){fail++}}
       if(j.msgs.length<200)break}
   }catch(e){}
   evBusy=false;
@@ -919,6 +966,12 @@ function mlMonth(k){
   const T=todayK(),a=k.split("-").map(Number),dim=new Date(a[0],a[1],0).getDate(),last=k<T.slice(0,7)?dim:k===T.slice(0,7)?+T.slice(8):0;
   return S.members.filter(b=>isAct(b,k)).map(b=>{let tot=0;for(let d=1;d<=last;d++)tot+=mlVal(k+"-"+pad(d),b.id);return{id:b.id,name:b.name,tot:Math.round(tot*100)/100}})}
 const shiftD=(k,n)=>{const a=k.split("-").map(Number);return dk(new Date(a[0],a[1]-1,a[2]+n))};
+/* মিলের অনুরোধ বন্ধের সময় (বাংলাদেশ সময়): রাত MCUT-এর পর থেকে ভোর ৫টা পর্যন্ত মেম্বার আগামী (বা চলতি) দিনের মিল বদলাতে পারেন না */
+const dhk=ts=>{const d=new Date(ts+216e5),z=n=>String(n).padStart(2,"0");return{d:d.getUTCFullYear()+"-"+z(d.getUTCMonth()+1)+"-"+z(d.getUTCDate()),h:d.getUTCHours()}};
+const MCUT=()=>{const v=(S.def||{}).mcut;return v!==undefined&&v!==""&&+v>=0?+v:22};
+function mlLocked(dt,ts){const c=MCUT();if(c>=24)return false;const x=dhk(ts||Date.now());
+  if(x.h>=c)return dt<=shiftD(x.d,1);if(x.h<5)return dt<=x.d;return false}
+const mlCutTxt=()=>{const c=MCUT();return c>=24?"":"রাত "+bd(c>12?c-12:c)+"টা"}
 let mls="",mlm="";
 const WDS=["রবি","সোম","মঙ্গল","বুধ","বৃহ","শুক্র","শনি"];
 function mlTgt(){const mid=meId();if(MGR)return mlm&&S.members.some(x=>x.id===mlm)?mlm:(mid||(AM()[0]?AM()[0].id:""));return mid}
@@ -927,14 +980,15 @@ function mlText(dt){
   L=[["b","☀️ সকাল"],["l","🍛 দুপুর"],["n","🌙 রাত"]].map(q=>{const a=MA.filter(b=>mlGet(dt,b.id)[q[0]]).map(b=>b.name);return q[1]+" ("+bd(a.length)+" জন): "+(a.length===MA.length?"সবাই":a.join(", ")||"কেউ না")});
   return `🍽 ${S.name||"মেস"} — ${fd(dt)}\n`+L.join("\n")+(g?`\nঅতিথি: ${f(g)}`:"")+`\nমোট মিল: ${f(sum(MA.map(b=>({v:mlVal(dt,b.id)})),"v"))}`}
 function vMl(){
-  const w=wts(),k=mld.slice(0,7),mid=meId(),T=todayK(),MA=S.members.filter(b=>isAct(b,k)),tg=mlTgt(),tm=S.members.find(x=>x.id===tg),can=!!tg&&(MGR||tg===mid);
+  const w=wts(),k=mld.slice(0,7),mid=meId(),T=todayK(),MA=S.members.filter(b=>isAct(b,k)),tg=mlTgt(),tm=S.members.find(x=>x.id===tg),can=!!tg&&(MGR||(tg===mid&&!mlLocked(mld)));
   if(!mls)mls=T;if(mld<mls||mld>shiftD(mls,6))mls=mld;
   const e=tg?mlGet(mld,tg):{b:1,l:1,n:1,g:0};
   const strip=[...Array(7)].map((_,i)=>{const dt=shiftD(mls,i),a=dt.split("-").map(Number),x=tg?mlGet(dt,tg):{b:1,l:1,n:1};
     return `<button class="dy${dt===mld?" on":""}${dt===T?" td":""}" data-mlday="${dt}" aria-label="${fd(dt)}"><small>${dt===T?"আজ":WDS[new Date(a[0],a[1]-1,a[2]).getDay()]}</small><b>${bd(a[2])}</b><span class="dts"><i class="${x.b?"f":""}"></i><i class="${x.l?"f":""}"></i><i class="${x.n?"f":""}"></i></span></button>`}).join("");
   const bt=(fl,ic,l,i)=>`<button class="mtb${e[fl]?" on":""}" data-mlt="${tg}:${fl}"${can?"":" disabled"} aria-pressed="${e[fl]?"true":"false"}"><i>${ic}</i><b>${l}</b><small>${e[fl]?"✔ চালু":"বন্ধ"} • ${f(w[i])}</small></button>`;
   const who=MGR?`<div class="row"><span class="fix mute">কার মিল:</span><select data-mlm="1" aria-label="কার মিল">${AM().map(b=>`<option value="${b.id}"${b.id===tg?" selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`:meSel();
-  const warn=!MGR&&!mid?'<div class="warnb">⚠ আগে ওপর থেকে নিজের নাম বেছে নিন, তারপর মিল বদলাতে পারবেন।</div>':"";
+  const lockN=!MGR&&mlLocked(mld)?`<div class="warnb">🌙 ${mlCutTxt()}র পর থেকে ভোর ৫টা পর্যন্ত মিলের অনুরোধ বন্ধ থাকে, তাই এই দিনের মিল এখন আপনি বদলাতে পারবেন না। দরকার হলে ম্যানেজারকে জানান।</div>`:"";
+  const warn=lockN+(!MGR&&!mid?'<div class="warnb">⚠ আগে ওপর থেকে নিজের নাম বেছে নিন, তারপর মিল বদলাতে পারবেন।</div>':"");
   const rows=MA.map(b=>{const x=mlGet(mld,b.id);
     return `<div class="srow${b.id===tg?" cur":""}"${MGR?` data-mlpick="${b.id}"`:""}><b style="flex:1 1 70px;min-width:0">${esc(b.name)}${b.id===mid?" (আমি)":""}</b><span class="mini">${[["b","স"],["l","দু"],["n","রা"]].map(q=>`<em class="${x[q[0]]?"f":""}">${q[1]}</em>`).join("")}</span><span class="mute" style="min-width:52px">${x.g?"+"+f(x.g)+" অতিথি":""}</span><b style="min-width:38px;text-align:right">${f(mlVal(mld,b.id))}</b></div>`}).join("");
   const sl=[0,1,2].map(i=>sum(MA.map(b=>{const x=mlGet(mld,b.id);return{v:[x.b,x.l,x.n][i]*w[i]}}),"v")),gs=sum(MA.map(b=>({v:mlGet(mld,b.id).g})),"v"),day=sum(MA.map(b=>({v:mlVal(mld,b.id)})),"v"),ms=mlMonth(k),tot=sum(ms,"tot");
@@ -953,13 +1007,13 @@ function vMl(){
   ${MGR?`<button class="p" style="width:100%;margin-top:10px" data-act="mlapply">📒 ${lab(k)}-এর মাসিক হিসাবে "মিল" বসান</button>`:""}</div>`}
 document.addEventListener("change",e=>{const t=e.target,d=t.dataset;if(d.mlm!==undefined){mlm=t.value;render()}});
 document.addEventListener("click",e=>{const t=e.target;
-  const gs=t.closest("[data-mlgs]");if(gs){const q=gs.dataset.mlgs.split(":");if(!q[0])return;evPost({y:"ml",dt:mld,m:q[0],f:"g",v:Math.max(0,mlGet(mld,q[0]).g+(+q[1]))});render();return}
+  const gs=t.closest("[data-mlgs]");if(gs){const q=gs.dataset.mlgs.split(":");if(!q[0])return;if(!MGR&&mlLocked(mld)){toast("এখন মিল বদলানো বন্ধ");return}evPost({y:"ml",dt:mld,m:q[0],f:"g",v:Math.max(0,mlGet(mld,q[0]).g+(+q[1]))});render();return}
   const dy=t.closest("[data-mlday]");if(dy){mld=dy.dataset.mlday;render();return}
   const wk=t.closest("[data-mlw]");if(wk){const n=+wk.dataset.mlw;mls=shiftD(mls||todayK(),n);mld=shiftD(mld,n);render();return}
   const pk=t.closest("[data-mlpick]");if(pk&&MGR){mlm=pk.dataset.mlpick;render();scrollTo({top:0,behavior:"smooth"});return}
-  const qa=t.closest("[data-mlq]");if(qa){const tg=mlTgt();if(!tg)return;const v=+qa.dataset.mlq;evPost({y:"mlr",a:mld,z:mld,m:tg,v});toast("পুরো দিন "+(v?"চালু":"বন্ধ")+" ✔");render();return}
+  const qa=t.closest("[data-mlq]");if(qa){const tg=mlTgt();if(!tg)return;if(!MGR&&mlLocked(mld)){toast("এখন মিল বদলানো বন্ধ");return}const v=+qa.dataset.mlq;evPost({y:"mlr",a:mld,z:mld,m:tg,v});toast("পুরো দিন "+(v?"চালু":"বন্ধ")+" ✔");render();return}
   const rg=t.closest("[data-mlrg]");if(rg){let a=$("mra").value,z=$("mrz").value;if(!a||!z){toast("দুটি তারিখই দিন");return}if(z<a){const x=a;a=z;z=x}
-    const n=dayDiff(a,z)+1;if(n>93){toast("একবারে সর্বোচ্চ ৯৩ দিন");return}const tg=mlTgt();if(!tg)return;const v=+rg.dataset.mlrg;
+    if(!MGR){while(a<=z&&mlLocked(a))a=shiftD(a,1);if(a>z){toast("এই দিনগুলোর মিল এখন বদলানো যায় না");return}}const n=dayDiff(a,z)+1;if(n>93){toast("একবারে সর্বোচ্চ ৯৩ দিন");return}const tg=mlTgt();if(!tg)return;const v=+rg.dataset.mlrg;
     evPost({y:"mlr",a,z,m:tg,v});toast(bd(n)+" দিনের মিল "+(v?"চালু":"বন্ধ")+" হয়েছে ✔");render();return}});
 
 /* ---------- টাকা জমার ট্র্যাকার (মাসিক ট্যাবে) ---------- */
@@ -1137,6 +1191,7 @@ function profileSheet(){
   <label class="mute">আমি কে (বাছলে হোমে আপনার নিজের হিসাব দেখাবে)</label><div style="margin:4px 0 12px">${sel}</div>
   <div class="srow"><span style="flex:1">🏠 মেস</span><b>${esc(S.name||"—")}</b></div>
   <div id="gbox"></div>
+  ${nfBox()}
   <div class="srow"><span style="flex:1">👥 সদস্য</span><b>${bd(AM().length)} জন</b></div>
   ${r?`<div class="srow"><span style="flex:1">${lab(cur.k)} — মোট প্রদান</span><b>৳${f(r.P)}</b></div>`:""}
   <p class="mute">ছবি শুধু এই ডিভাইসে থাকে। Google দিয়ে ঢুকলে Google-এর ছবি নিজে বসে যায়।</p>
@@ -1178,7 +1233,7 @@ document.addEventListener("change",e=>{const t=e.target,d=t.dataset;
   if(d.bzdone){evPost({y:"bz",id:d.bzdone,f:"d",v:t.checked?1:0});paintBz()}
   else if(d.sub){if(!t.value)return;const q=d.sub.split(":");evPost({y:"sub",k:q[0],id:q[1],j:+q[2],to:t.value});render()}
   else if(d.scdone){evPost({y:"sd",k:d.k,id:d.scdone,v:t.checked?1:0});if(!MGR)render()}
-  else if(d.mlg!==undefined){evPost({y:"ml",dt:mld,m:d.mlg,f:"g",v:p(t.value)});render()}
+  else if(d.mlg!==undefined){if(!MGR&&mlLocked(mld)){render();return}evPost({y:"ml",dt:mld,m:d.mlg,f:"g",v:p(t.value)});render()}
   else if(d.mldate){mld=t.value||todayK();render()}
   else if(d.phs){bzph=t.value;render()}
   else if(d.impf&&MGR&&t.files[0]){impBackup(t.files[0]);t.value=""}
@@ -1186,7 +1241,7 @@ document.addEventListener("change",e=>{const t=e.target,d=t.dataset;
   else if(d.pic!==undefined&&t.files[0]){picSet(t.files[0])}
   else if(d.pfme!==undefined){try{localStorage.setItem("bpMe",t.value)}catch(x){}render();profileSheet()}});
 document.addEventListener("click",e=>{const t=e.target;
-  const c=t.closest("[data-mlt]");if(c){const q=c.dataset.mlt.split(":"),cur=mlGet(mld,q[0]);evPost({y:"ml",dt:mld,m:q[0],f:q[1],v:cur[q[1]]?0:1});render();return}
+  const c=t.closest("[data-mlt]");if(c){if(!MGR&&mlLocked(mld)){toast("এখন মিল বদলানো বন্ধ");return}const q=c.dataset.mlt.split(":"),cur=mlGet(mld,q[0]);evPost({y:"ml",dt:mld,m:q[0],f:q[1],v:cur[q[1]]?0:1});render();return}
   const n=t.closest("[data-mld]");if(n){mld=n.dataset.mld==="t"?todayK():shiftD(mld,+n.dataset.mld);render();return}
   const nd=t.closest("[data-ntdel]");if(nd&&MGR){S.nt=(S.nt||[]).filter(x=>x.id!==nd.dataset.ntdel);save();render()}});
 
@@ -1228,6 +1283,7 @@ async function publish(retry){
         if(MCODES.__co){const cl=await lkOf(MCODES.__co);lks.push(cl);body.C=[cl];body.cws=[await tokOf(MCODES.__co)]}
         body.lks=[...new Set(lks)];body.W=VW;body.alk=alk;if(MCW)body.MC=MCW}
       if(DROP.length)body.drop=DROP.slice(0,5)}
+    body.nf=await nfOf("pub","📋 "+(S.name||"মেস"),"ম্যানেজার হিসাব/তথ্য আপডেট করেছেন");body.ex=NFEP;
     const r=await fetch("/api/vault",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
     if(!r.ok){
@@ -1324,7 +1380,10 @@ document.addEventListener("click",async e=>{
   if(k==="csend"){chSend();return}
   if(k==="scgen"||k==="scadd"||k==="scone"){scAct(k);return}
   if(k.indexOf("bz")===0){bzAct(k);return}
-  if(k==="logout"){try{localStorage.removeItem(SKEY)}catch(x){}location.reload()}
+  if(k==="nfon"){nfOn();return}
+  if(k==="nfoff"){nfOff();return}
+  if(k==="nfhide"){try{localStorage.setItem("bpNfH:"+CID,"1")}catch(x){}render();return}
+  if(k==="logout"){nfOff(true).catch(()=>{}).finally(()=>{try{localStorage.removeItem(SKEY)}catch(x){}location.reload()});return}
   else if(k==="pub")publish();
   else if(k==="pdf")makePDF(reportHTML(mon),"mymessbill-"+mon+".pdf",a,900);
   else if(k==="mlogin")doLogin($("mc").value,false);
