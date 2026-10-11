@@ -1088,7 +1088,7 @@ async function paySend(){
   if(!VAULT){alert("আগে একবার \"প্রকাশ করুন\" চেপে মেস প্রকাশ করুন, তারপর পেমেন্ট করুন।");return}
   try{const r=await fetch("/api/pay",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"submit",id:CID,token:await tokOf(MCODE),plan:PS.plan,method:PS.method,sender:sn.trim(),trx:tx})}),j=await r.json().catch(()=>({}));
     if(r.ok){toast("পেমেন্ট জমা হয়েছে — যাচাইয়ের পর অনুমোদন হবে ✔");await entLoad();paySheet()}
-    else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||("জমা হয়নি ("+(j.error||r.status)+")"))
+    else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||(/^storage_/.test(j.error||"")?srvMsg(j.error)+(j.detail?" "+j.detail:""):"জমা হয়নি ("+(j.error||r.status)+")"))
   }catch(e){alert("ইন্টারনেট সংযোগ নেই")}}
 /* ---------- আমার হিসাব + প্রোফাইল ---------- */
 function vMine(){

@@ -36,17 +36,18 @@ function memCmd(c) {
 }
 
 async function cmds(list) {
+  if (!list.length) return [];
   if (process.env.BP_MEMORY === "1") return list.map(memCmd);
   if (!URL_ || !TOKEN) throw new StoreError("storage_not_configured");
   let r;
   try {
     r = await fetch(URL_.replace(/\/$/, "") + "/pipeline", {
-      method: "POST", headers: { authorization: "Bearer " + TOKEN, "content-type": "application/json" }, body: JSON.stringify(list),
+      method: "POST", headers: { authorization: "Bearer " + TOKEN, "content-type": "application/json" }, body: JSON.stringify(list.map((c) => c.map((x) => String(x)))),
     });
   } catch { throw new StoreError("storage_unreachable"); }
-  if (!r.ok) throw new StoreError("storage_error_" + r.status);
+  if (!r.ok) { let t = ""; try { t = (await r.text()).slice(0, 120); } catch {} console.error("upstash", r.status, t); const e = new StoreError("storage_error_" + r.status); e.detail = t; throw e; }
   const j = await r.json();
-  return j.map((x) => { if (x && x.error) throw new StoreError("storage_cmd"); return x.result; });
+  return j.map((x) => { if (x && x.error) { console.error("upstash cmd", x.error); const e = new StoreError("storage_cmd"); e.detail = String(x.error).slice(0, 120); throw e; } return x.result; });
 }
 const cmd = async (...c) => (await cmds([c]))[0];
 const getJSON = async (k) => { const v = await cmd("GET", k); if (v == null) return null; try { return JSON.parse(v); } catch { return null; } };
@@ -58,7 +59,7 @@ const J = (o, s = 200) =>
 const guard = (fn) => async (req) => {
   try { return await fn(req); }
   catch (e) {
-    if (e instanceof StoreError) return J({ error: e.code }, e.status);
+    if (e instanceof StoreError) return J({ error: e.code, detail: e.detail }, e.status);
     console.error(e); return J({ error: "server" }, 500);
   }
 };
