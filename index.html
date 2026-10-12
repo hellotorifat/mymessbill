@@ -88,7 +88,7 @@ button.p,.btn.p{background:linear-gradient(180deg,color-mix(in srgb,var(--pri) 8
 .mg6 button.on{background:var(--soft);border-color:var(--pri)}
 
 .chips{display:flex;flex-wrap:wrap;gap:6px}.mch{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:0;font-size:14px}.mch.on{background:var(--pri);color:#fff;border-color:var(--pri)}.mch:disabled{opacity:.5}
-.xrow{display:grid;grid-template-columns:1fr 110px 36px;gap:6px;margin-bottom:6px}
+.xrow{display:grid;grid-template-columns:1fr 110px 36px;gap:6px;margin-bottom:6px}.xrow.rb select{grid-column:1/-1}.xrow.rb{padding-bottom:8px;border-bottom:1px dashed var(--line)}
 table.fndt{width:100%}table.fndt td:first-child{position:static;white-space:normal}
 tr.tot td{font-weight:700;border-top:2px solid var(--pri)}tr.off td{color:var(--mute)}
 .pos{color:var(--good);font-weight:700}.neg{color:var(--bad);font-weight:700}
@@ -273,7 +273,7 @@ function render(){
   updBar();
   if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();gHook();sitePaint();return}
   if(tab==="set"&&(!MGR||CO))tab="home";
-  const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["chat","চ্যাট"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
+  const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
   const inMore=MORE.some(x=>x[0]===tab);
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
@@ -286,7 +286,7 @@ function render(){
 function vLogin(){
   return `<div id="site"></div><div class="box" style="text-align:center"><img class="lgl" src="logo.png" alt="mymessbill"></div><div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
   <h2 style="margin-top:14px">🔑 ম্যানেজার লগইন</h2><div class="row"><input id="ac" class="code" placeholder="MGR-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="alogin">লগইন</button></div>
-  <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল, বাজারের টিক ও চ্যাট করা যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
+  <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল ও বাজারের টিক দেওয়া যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
   <div class="box"><h2>🏠 নতুন মেস তৈরি করুন</h2><p class="mute">নিজের মেসের হিসাব রাখতে চান? নতুন মেস তৈরি করলে আপনি একটি ম্যানেজার কোড ও একটি মেম্বার কোড পাবেন। তৈরি করে আপনি <a href="/terms" target="_blank" rel="noopener">শর্তাবলি</a> ও <a href="/privacy" target="_blank" rel="noopener">গোপনীয়তা নীতি</a> মেনে নিচ্ছেন।</p><button class="p" data-act="newmess" style="width:100%">➕ মেস তৈরি করুন</button>
   </div>
   <div class="box"><h2>♻️ ব্যাকআপ থেকে ফেরান</h2><p class="mute">ডেটা হারিয়ে গেলে বা নতুন সার্ভারে গেলে: ব্যাকআপ ফাইল (.json) বেছে আগের ম্যানেজার কোড দিন। ম্যানেজার ও মেম্বার কোড আগের মতোই থাকবে এবং ডেটা নিজে থেকেই প্রকাশ হবে।</p>
@@ -354,6 +354,7 @@ function vMonth(){
   <div class="g2">${c.rows.map(r=>`<label style="display:flex;gap:7px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" data-ck="${r.id}"${c.exi.indexOf(r.id)<0?" checked":""}${MGR?"":" disabled"}> ${esc(r.name)}</label>`).join("")}</div>
   <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p></div>
   <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
+  ${vRb(c)}
   ${vXp(c)}
   ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`}
 function paint(){
@@ -410,6 +411,7 @@ function reportHTML(k){
   <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>${rows}
   <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td><td>${f(sum(c.rows,"deduct"))}</td><td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${f(c.income)}</td></tr></table></div>
   ${flowHTML(k,c,fi,offn)}
+  ${rbOf(k).length&&Object.keys(rbSum(k)).length?`<div class="box"><h2>↩ বিবিধ খরচে আগে যারা টাকা দিয়েছেন — ফেরত পাবেন</h2>${rbTable(k)}</div>`:""}
   ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
   <p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
 function vRep(){return `<div class="row">${msel()}${DL?'<button class="p fix" data-act="pdf">📄 PDF ডাউনলোড</button>':""}</div>
@@ -747,10 +749,10 @@ async function nfInit(){if(!NFOK()||!CODE)return;try{if(Notification.permission=
 function nfBox(){
   if(!NFOK())return`<div class="srow"><span style="flex:1">🔔 নোটিফিকেশন</span><span class="mute">এই ব্রাউজারে সাপোর্ট নেই</span></div>`;
   const on=nfFlag()&&Notification.permission==="granted";
-  return `<div class="box" style="margin:10px 0"><h3 style="margin:0 0 4px">🔔 নোটিফিকেশন</h3><p class="mute" style="margin:0 0 8px">${on?"চালু আছে। মেসের মিল, বাজার, রুটিন, চ্যাট ও ম্যানেজারের আপডেট এই ডিভাইসে আসবে।":"চালু করলে মেসে যা কিছু হবে (মিল, বাজার, রুটিন, চ্যাট, হিসাব আপডেট) সবাই এই ডিভাইসে জানতে পাবে।"}${Notification.permission==="denied"?" ⚠ ব্রাউজারে নোটিফিকেশন ব্লক করা আছে, সেটিংস থেকে Allow করুন।":""}</p>${on?'<button class="x" data-act="nfoff">🔕 বন্ধ করুন</button>':'<button class="p" style="width:100%" data-act="nfon">🔔 নোটিফিকেশন চালু করুন</button>'}</div>`}
+  return `<div class="box" style="margin:10px 0"><h3 style="margin:0 0 4px">🔔 নোটিফিকেশন</h3><p class="mute" style="margin:0 0 8px">${on?"চালু আছে। মেসের মিল, বাজার, রুটিন ও ম্যানেজারের আপডেট এই ডিভাইসে আসবে।":"চালু করলে মেসে যা কিছু হবে (মিল, বাজার, রুটিন, হিসাব আপডেট) সবাই এই ডিভাইসে জানতে পাবে।"}${Notification.permission==="denied"?" ⚠ ব্রাউজারে নোটিফিকেশন ব্লক করা আছে, সেটিংস থেকে Allow করুন।":""}</p>${on?'<button class="x" data-act="nfoff">🔕 বন্ধ করুন</button>':'<button class="p" style="width:100%" data-act="nfon">🔔 নোটিফিকেশন চালু করুন</button>'}</div>`}
 function nfBanner(){
   if(!NFOK()||!ROLE||nfFlag()||Notification.permission!=="default")return"";let h="";try{h=localStorage.getItem("bpNfH:"+CID)}catch(e){}if(h)return"";
-  return `<div class="box" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="flex:1 1 200px"><b>🔔 নোটিফিকেশন চালু করুন</b><div class="mute">মেসে মিল, বাজার, রুটিন বা চ্যাটে কিছু হলে সাথে সাথে জানতে পারবেন।</div></div><button class="p" data-act="nfon">চালু করুন</button><button class="x" data-act="nfhide">পরে</button></div>`}
+  return `<div class="box" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="flex:1 1 200px"><b>🔔 নোটিফিকেশন চালু করুন</b><div class="mute">মেসে মিল, বাজার বা রুটিনে কিছু হলে সাথে সাথে জানতে পারবেন।</div></div><button class="p" data-act="nfon">চালু করুন</button><button class="x" data-act="nfhide">পরে</button></div>`}
 /* ---------- লাইভ ইভেন্ট (মেম্বারও লিখতে পারে; এনক্রিপ্টেড; প্রকাশে vault-এ বসে যায়) ---------- */
 let EVLAST="",evTimer=null,evBusy=false,EVQ=[],OFFLINE=false,SRVERR="",RECF=null,GID="",GL=[],PAYC=null,ENT={limit:0,free:15,until:0,mc:0,pays:[]},ENTL="",RSF=false,PS={plan:"",method:""};
 function evApply(e,ts){
@@ -827,7 +829,7 @@ async function lgAct(k,id){
     else if(k==="new"){const had=!!MCODES[id];if(had&&!confirm(m.name+"-এর পুরোনো কোড বাতিল হয়ে নতুন কোড হবে।"+tail))return;
       MCODES[id]=genCode("MEM");SHOWC[id]=true;
       if(had)await rekey();else{m.lk=await lkOf(MCODES[id]);VW[m.lk]=await wrap(MCODES[id],Kraw);await lgSaveMC()}}
-    else if(k==="off"){if(!confirm(m.name+"-এর লগইন বন্ধ হবে (তার Google লগইনও কাজ করবে না); বাকিদের কোড একই থাকবে। চ্যাটের পুরোনো মেসেজ মুছে যাবে।"+tail))return;delete MCODES[id];delete SHOWC[id];ask_shared(m);await rekey()}
+    else if(k==="off"){if(!confirm(m.name+"-এর লগইন বন্ধ হবে (তার Google লগইনও কাজ করবে না); বাকিদের কোড একই থাকবে।"+tail))return;delete MCODES[id];delete SHOWC[id];ask_shared(m);await rekey()}
     else if(k==="left"){const t=prompt(m.name+" মেস ছেড়ে গেছেন। শেষ কোন মাস পর্যন্ত হিসাবে ধরা হবে? (YYYY-MM)\nলগইনও বন্ধ হবে।",nowK);if(t===null)return;
       if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(t)){alert("মাসের ফরম্যাট ঠিক নয় (যেমন 2026-10)");return}
       m.till=t;delete MCODES[id];delete SHOWC[id];ask_shared(m);await rekey()}
@@ -847,7 +849,7 @@ function vLogins(){
   const shared=sc?`<p class="mute">এই কোড যার কাছে থাকবে সে ঢুকতে পারবে; ঢুকে ওপর থেকে নিজের নাম বেছে নেবে। গ্রুপে পাঠানো সহজ, কিন্তু একজনকে বাদ দিতে নতুন কোড বানাতে হয়।</p>${SHOWC.__sh?`<input class="code" readonly value="${esc(sc)}" aria-label="সবার কোড">`:""}
     <div class="btns"><button data-lg="show:__sh">${SHOWC.__sh?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__sh">📤 শেয়ার</button><button data-lg="shnew:">🔄 নতুন কোড</button><button class="x" data-lg="shoff:">🚫 বন্ধ</button></div>`
     :`<p class="mute">এখন কোনো সবার-কোড নেই। চাইলে এক কোডেই সবাইকে ঢোকাতে পারেন।</p><button class="p" style="width:100%" data-lg="sh:">➕ সবার জন্য একটি কোড তৈরি করুন</button>`;
-  const ind=indiv?rows+'<p class="mute">🚫 বন্ধ করলে ওই কোড দিয়ে আর ঢোকা যাবে না, বাকিদের কোড একই থাকে (ডেটার চাবি নিজে নতুন হয়; বাকিদের অ্যাপ নিজে একবার রিলোড নেয়)। চ্যাটের পুরোনো মেসেজ মুছে যায়। "🚪 ছেড়ে গেছে" মানে লগইন বন্ধ + ওই মাসের পর থেকে ভাড়া/হিসাবে আর ধরা হবে না, আগের হিসাব থাকবে। নিজস্ব কোডে ঢুকলে নাম নিজে ঠিক হয়ে যায়। ⚠ নিজস্ব কোড গ্রুপে নয়, ব্যক্তিগত মেসেজে পাঠান।</p>'
+  const ind=indiv?rows+'<p class="mute">🚫 বন্ধ করলে ওই কোড দিয়ে আর ঢোকা যাবে না, বাকিদের কোড একই থাকে (ডেটার চাবি নিজে নতুন হয়; বাকিদের অ্যাপ নিজে একবার রিলোড নেয়)। "🚪 ছেড়ে গেছে" মানে লগইন বন্ধ + ওই মাসের পর থেকে ভাড়া/হিসাবে আর ধরা হবে না, আগের হিসাব থাকবে। নিজস্ব কোডে ঢুকলে নাম নিজে ঠিক হয়ে যায়। ⚠ নিজস্ব কোড গ্রুপে নয়, ব্যক্তিগত মেসেজে পাঠান।</p>'
     :'<p class="mute">প্রত্যেক সদস্যের আলাদা কোড — একজনকে বাদ দিলে বাকিদের কিছু বদলাতে হয় না। সবার-কোড আগের মতোই চলতে থাকবে।</p><button class="p" style="width:100%" data-lg="all:">সবার নিজস্ব কোড চালু করুন</button>';
   const cc=MCODES.__co,coBox=`<div class="box"><h2>🤝 সহ-ম্যানেজার</h2><p class="mute">সহ-ম্যানেজার আপনার মতোই হিসাব, বাজার, মিল, খরচ ও সক্রিয়/নিষ্ক্রিয় ঠিক করতে ও প্রকাশ করতে পারবেন। পারবেন না: সদস্য মোছা/যোগ, লগইন কোড বদলানো, সহ-ম্যানেজার বদলানো। ম্যানেজার লগইনের ঘরে এই কোড দিয়ে ঢুকবেন।</p>${cc?`<div class="mute">🔑 সহ-ম্যানেজারের কোড আছে</div>${SHOWC.__co?`<input class="code" readonly value="${esc(cc)}" aria-label="সহ-ম্যানেজার কোড">`:""}<div class="btns"><button data-lg="show:__co">${SHOWC.__co?"লুকান":"কোড দেখান"}</button><button class="p" data-lg="wa:__co">📤 পাঠান</button><button data-lg="con:__co">🔄 নতুন কোড</button><button class="x" data-lg="coff:__co">🚫 সরান</button></div>`:`<button class="p" style="width:100%" data-lg="con:__co">➕ সহ-ম্যানেজার কোড তৈরি করুন</button>`}</div>`;
   const gnote='<div class="box"><h2>👋 কেউ মেস ছেড়ে গেলে কীভাবে সরাবেন</h2><p class="mute">কেউ Google অ্যাকাউন্ট লিংক করে ঢুকলেও আসলে সে একটা কোড দিয়েই ঢোকে। তাই কোড বন্ধ করলেই তার Google লগইনও কাজ করা বন্ধ হয়ে যায়।</p><ul class="mute" style="margin:6px 0 6px 18px;padding:0"><li>নিজস্ব কোড থাকলে: ওপরে তার নামের পাশে <b>🚫 বন্ধ</b> বা <b>🚪 ছেড়ে গেছে</b> চাপুন।</li><li>সবার-কোড দিয়ে ঢুকলে: <b>🚪 ছেড়ে গেছে</b> চাপার পর "সবার-কোড বদলাবেন?" প্রশ্নে হ্যাঁ বলুন, অথবা <b>🔄 নতুন কোড</b> চাপুন, তারপর নতুন কোড বাকিদের পাঠান।</li><li>বাদ দেওয়ার সাথে সাথে ডেটার চাবিও নতুন হয়, তাই পুরোনো কোড বা পুরোনো Google লিংক আর কিছু খুলতে পারে না।</li></ul></div>';
@@ -890,7 +892,7 @@ document.addEventListener("click",async e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeOv()});
 document.addEventListener("error",e=>{if(e.target&&e.target.tagName==="IMG")e.target.style.display="none"},true);
-const vQuick=()=>`<div class="qk">${[["sc","📅","রুটিন","বাজার ও ওয়াশরুমের পালা"],["chat","💬","চ্যাট","মেসের সবার সাথে কথা"],["rep","📄","রিপোর্ট","মাসিক রিপোর্ট ও PDF"],["year","📈","বার্ষিক","মাসওয়ারি সারাংশ"]].map(q=>`<button data-t="${q[0]}"><i>${q[1]}</i><b>${q[2]}</b><small>${q[3]}</small></button>`).join("")}</div>`;
+const vQuick=()=>`<div class="qk">${[["sc","📅","রুটিন","বাজার ও ওয়াশরুমের পালা"],["mem","👥","সদস্য","সদস্যভিত্তিক সারাংশ"],["rep","📄","রিপোর্ট","মাসিক রিপোর্ট ও PDF"],["year","📈","বার্ষিক","মাসওয়ারি সারাংশ"]].map(q=>`<button data-t="${q[0]}"><i>${q[1]}</i><b>${q[2]}</b><small>${q[3]}</small></button>`).join("")}</div>`;
 
 /* ---------- সক্রিয়/নিষ্ক্রিয় সদস্য (মাসভিত্তিক) ---------- */
 function vAct(){
@@ -939,10 +941,35 @@ function vXp(c){
   ${fuOf(mon).length?'<table class="fndt"><tr><td>জের (আগের মাসের জমা)</td><td>'+f(fi.open)+'</td></tr><tr><td>এই কাজগুলোর মোট (−)</td><td data-o="fuT2"></td></tr><tr class="tot"><td>জের থেকে বাকি → এই মাসের ফান্ডে যোগ হবে</td><td data-o="fleft2"></td></tr></table>':""}
   <p class="mute">যেমন আগের মাস থেকে ৫০০ টাকা জের এল, তার থেকে বালতি কিনতে ৩০০ গেল — এখানে "বালতি ৩০০" লিখলেই বাকি ২০০ নিজে হিসাব হয়ে এই মাসের ফান্ডে জমার সাথে যোগ হয়ে যাবে। PDF-এও আসবে।</p>
   ${MGR?'<p class="mute">"আগের মাসের জের" ফাঁকা রাখলে আগের মাসের "ফান্ড বাকি" নিজে ধরা হয়; নিজে লিখলে সেটাই ধরা হবে।</p>':""}</div>`}
+
+/* ---------- বিবিধ খরচ আগে কে দিয়েছে → ফেরত ---------- */
+const rbOf=k=>(S.months[k]||{}).rb||[];
+const rbFind=id=>rbOf(mon).find(x=>x.id===id);
+function rbSum(k){const m={};rbOf(k).forEach(e=>{if(!e.m||!(p(e.a)>0))return;const o=m[e.m]=m[e.m]||{a:0,n:[]};o.a+=p(e.a);if(e.n)o.n.push(e.n)});return m}
+function rbTable(k){
+  const m=rbSum(k),ids=Object.keys(m),tot=ids.reduce((a,i)=>a+m[i].a,0),sh=calc(k).shared;
+  const nm=id=>{const b=S.members.find(x=>x.id===id);return b?b.name:"(মুছে ফেলা সদস্য)"};
+  if(!ids.length)return"";
+  return `<table class="fndt">${ids.map(i=>`<tr><td>${esc(nm(i))}${m[i].n.length?` <span class="mute">(${esc(m[i].n.join(", "))})</span>`:""}</td><td><b>৳${f(m[i].a)}</b> ফেরত পাবেন</td></tr>`).join("")}<tr class="tot"><td>মোট ফেরত</td><td>৳${f(tot)}</td></tr></table>
+  <p class="mute">এ মাসের মোট বিবিধ খরচ ৳${f(sh)}${Math.abs(sh-tot)<.5?" — পুরোটাই ফেরতের তালিকায় আছে।":tot<sh?" — বাকি ৳"+f(sh-tot)+" ফেরতের তালিকায় নেই (ম্যানেজার/মেসের হাত থেকে দেওয়া)।":" — ⚠ ফেরতের তালিকা মোটের চেয়ে ৳"+f(tot-sh)+" বেশি, আবার মিলিয়ে দেখুন।"}</p>`}
+function rbPaint(){const e=$("rbsum");if(e)e.innerHTML=rbTable(mon)}
+function vRb(c){
+  const rows=rbOf(mon).map(e=>MGR?`<div class="xrow rb"><select data-rbm="${e.id}" aria-label="কে দিয়েছেন"><option value="">— কে দিয়েছেন —</option>${S.members.map(b=>`<option value="${b.id}"${b.id===e.m?" selected":""}>${esc(b.name)}</option>`).join("")}</select><input data-rbn="${e.id}" list="rbn" value="${esc(e.n||"")}" placeholder="কীসের খরচ" aria-label="কীসের খরচ"><input data-rba="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-rbdel="${e.id}" aria-label="মুছুন">✕</button></div>`
+    :"").join("");
+  const dl=MGR?`<datalist id="rbn">${SH.map(x=>`<option value="${x[1]}">`).join("")}</datalist>`:"";
+  if(!MGR&&!rbOf(mon).length)return"";
+  return `<div class="box"><h2>↩ বিবিধ খরচ — যারা আগে দিয়েছেন তাদের ফেরত</h2>
+  <p class="mute">বিবিধ খরচ (ওয়াইফাই, বিদ্যুৎ, ময়লা ইত্যাদি) অনেক সময় হিসাবের আগেই কেউ নিজের পকেট থেকে দেন। কে কত দিয়েছেন লিখলে নিচে দেখাবে কে কত ফেরত পাবেন।</p>${rows}${dl}
+  ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-rbadd="1">➕ কে কত দিয়েছেন যোগ করুন</button></div>':""}
+  <div id="rbsum">${rbTable(mon)}</div>
+  <p class="mute">এই টাকা সদস্যদের দেওয়া বিবিধ ভাগ থেকেই ফেরত যাবে, তাই মেস ফান্ডের হিসাবে কোনো বদল হয় না। PDF-এও আসবে।</p></div>`}
 const xpFind=id=>((S.months[mon]||{}).xp||[]).find(x=>x.id===id);
 document.addEventListener("input",e=>{
   if(!MGR)return;const t=e.target,d=t.dataset;
   if(d.xn){const x=xpFind(d.xn);if(x){x.n=t.value;save()}}
+  else if(d.rbn){const x=rbFind(d.rbn);if(x){x.n=t.value;save();rbPaint()}}
+  else if(d.rba){const x=rbFind(d.rba);if(x){x.a=t.value;save();rbPaint()}}
+  else if(d.rbm){const x=rbFind(d.rbm);if(x){x.m=t.value;save();rbPaint()}}
   else if(d.xa){const x=xpFind(d.xa);if(x){x.a=t.value;save();paint()}}
   else if(d.fn){const x=fuFind(d.fn);if(x){x.n=t.value;save()}}
   else if(d.fa){const x=fuFind(d.fa);if(x){x.a=t.value;save();paint()}}
@@ -953,6 +980,8 @@ document.addEventListener("click",e=>{const t=e.target;
     setTimeout(()=>{const l=[...document.querySelectorAll("[data-xa]")].pop();if(l)l.focus()},60);return}
   const fa=t.closest("[data-fadd]");if(fa&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).concat([{id:"u"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-fn]")].pop();if(l)l.focus()},60);return}
   const fd2=t.closest("[data-fdel]");if(fd2&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).filter(x=>x.id!==fd2.dataset.fdel);save();render();return}
+  const ra=t.closest("[data-rbadd]");if(ra&&MGR){const mo=ens(mon);mo.rb=(mo.rb||[]).concat([{id:"b"+Math.random().toString(36).slice(2,7),m:"",n:"",a:""}]);save();render();return}
+  const rd=t.closest("[data-rbdel]");if(rd&&MGR){const mo=ens(mon);mo.rb=(mo.rb||[]).filter(x=>x.id!==rd.dataset.rbdel);save();render();return}
   const xd=t.closest("[data-xdel]");if(xd&&MGR){const mo=ens(mon);mo.xp=(mo.xp||[]).filter(x=>x.id!==xd.dataset.xdel);save();render();return}
 });
 
