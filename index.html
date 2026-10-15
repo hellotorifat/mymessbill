@@ -170,7 +170,7 @@ const mk2=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
 const MINM="2026-01",MAXM="2027-12";
 let MONTHS=[mk2(new Date())];
 const nextM=k=>{let y=+k.slice(0,4),m=+k.slice(5)+1;if(m>12){m=1;y++}return y+"-"+String(m).padStart(2,"0")};
-const monHas=m=>!!m&&(Object.values(m.r||{}).some(o=>Object.values(o||{}).some(v=>v!==""&&v!=null))||Object.values(m.s||{}).some(v=>v!==""&&v!=null)||(m.xp||[]).length>0||(m.fu||[]).length>0||!!m.n||(m.ob!==undefined&&String(m.ob).trim()!=="")||!!m.c||Object.keys(m.x||{}).length>0||Object.keys(m.st||{}).length>0);
+const monHas=m=>!!m&&(Object.values(m.r||{}).some(o=>Object.values(o||{}).some(v=>v!==""&&v!=null))||Object.values(m.s||{}).some(v=>v!==""&&v!=null)||(m.xp||[]).length>0||(m.sx||[]).length>0||(m.fu||[]).length>0||!!m.n||(m.ob!==undefined&&String(m.ob).trim()!=="")||!!m.c||Object.keys(m.x||{}).length>0||Object.keys(m.st||{}).length>0);
 /* মাসের তালিকা: প্রথম ডেটার মাস (বা বর্তমান মাস) থেকে বর্তমান মাস পর্যন্ত নিজে নিজে; মাস শেষ হলে পরের মাস নিজে যোগ হয়। ম্যানেজার চাইলে ২০২৭ পর্যন্ত আরও মাস যোগ করতে পারেন (S.xm) */
 function refreshMonths(){
   const now=mk2(new Date()),ks=Object.keys(S.months||{}).filter(k=>/^\d{4}-\d{2}$/.test(k)&&monHas(S.months[k])),set=new Set(ks.concat([now],(S.xm||[]).filter(k=>/^\d{4}-\d{2}$/.test(k))));
@@ -186,7 +186,7 @@ const nowK=(d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))(new D
 let ROLE=null,MGR=false,CO=false,busy=false,DL=null,tab="home",mon=MONTHS.includes(nowK)?nowK:MONTHS[0];
 const SKEY="bpSessV3",PKEY="bpPendV3";
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const p=s=>String(s==null?"":s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[,৳\s]/g,"").split("+").reduce((a,x)=>a+(parseFloat(x)||0),0);
+const p=s=>String(s==null?"":s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[,৳\s−–]/g,m=>/[−–]/.test(m)?"-":"").split("+").reduce((a,x)=>a+(String(x).match(/-?\d*\.?\d+/g)||[]).reduce((b,y)=>b+(parseFloat(y)||0),0),0);
 const f=n=>(Math.round(n*100)/100).toLocaleString("en-IN");
 const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
@@ -233,12 +233,12 @@ function sv(k,fl){const m=S.months[k],x=m&&m.s[fl];if(x!==undefined&&x!=="")retu
 function calc(k){
   const rows=S.members.filter(b=>isAct(b,k)).map(b=>{const g=x=>p(rv(k,b.id,x));return{id:b.id,name:b.name,bazar:g("b"),meal:g("m"),rent:g("r"),khala:g("k"),deduct:g("d"),extra:g("e")}});
   const tb=sum(rows,"bazar"),tm=sum(rows,"meal"),rate=tm?tb/tm:0;
-  const mo=S.months[k]||{},ex=mo.x||{},inc=rows.filter(r=>!ex[r.id]),cn=p(mo.c),div=cn>0?cn:inc.length,shared=SH.reduce((a,x)=>a+p(sv(k,x[0])),0),share=div?shared/div:0;
+  const mo=S.months[k]||{},ex=mo.x||{},inc=rows.filter(r=>!ex[r.id]),cn=p(mo.c),div=cn>0?cn:inc.length,sx=mo.sx||[],shared=SH.reduce((a,x)=>a+p(sv(k,x[0])),0)+sx.reduce((a,e)=>a+p(e.a),0),share=div?shared/div:0;
   rows.forEach(r=>{r.mc=r.meal*rate;r.G=r.bazar-r.mc;r.J=ex[r.id]?0:share;r.N=r.rent+r.khala+r.J-r.G-r.deduct;r.P=r.N+r.extra});
   const ov=sv(k,"rentOv"),rentT=ov!==""?p(ov):sum(rows,"rent"),income=sum(rows,"P");
   const cost=shared+rentT+sum(rows,"khala");
   const xl=mo.xp||[],exp=sum(xl.map(e=>({v:p(e.a)})),"v"),khalaT=sum(rows,"khala");
-  return{xl,exp,khalaT,rows,div,exn:rows.filter(r=>ex[r.id]).map(r=>r.name),exi:rows.filter(r=>ex[r.id]).map(r=>r.id),tb,tm,rate,shared,share,rentT,cost,income,fund:income-cost,net:income-cost-exp,active:tb>0||tm>0}}
+  return{xl,sx,exp,khalaT,rows,div,exn:rows.filter(r=>ex[r.id]).map(r=>r.name),exi:rows.filter(r=>ex[r.id]).map(r=>r.id),tb,tm,rate,shared,share,rentT,cost,income,fund:income-cost,net:income-cost-exp,active:tb>0||tm>0}}
 const act=()=>MONTHS.map(k=>({k,c:calc(k)})).filter(x=>x.c.active);
 
 const IC=(()=>{const g=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`,P=x=>`<path d="${x}"/>`;return{
@@ -349,10 +349,11 @@ function vMonth(){
   <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
+  ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <div style="margin-top:10px"><label class="mute" style="display:block">কত জনের মধ্যে ভাগ হবে? (ফাঁকা রাখলে নিচে টিক দেওয়া সদস্য সংখ্যাই ধরা হবে)</label><input${RO()} data-cnt="1" inputmode="numeric" value="${esc(m.c||"")}" placeholder="${bd(c.rows.length-c.exn.length)}" style="max-width:140px"></div>
   <div class="mute" style="margin:10px 0 4px">কার কার ওপর এই খরচ যাবে (টিক = ভাগ নেবে):</div>
   <div class="g2">${c.rows.map(r=>`<label style="display:flex;gap:7px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" data-ck="${r.id}"${c.exi.indexOf(r.id)<0?" checked":""}${MGR?"":" disabled"}> ${esc(r.name)}</label>`).join("")}</div>
-  <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p></div>
+  <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p><p class="warnb" id="shw" hidden></p></div>
   <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
   ${vRb(c)}
   ${vXp(c)}
@@ -362,7 +363,7 @@ function paint(){
   const c=calc(mon),o={},put=(k,t,n)=>o[k]=[t,n];
   c.rows.forEach(r=>{put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
   put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
-  put("tN",f(sum(c.rows,"N")));put("income",f(c.income));put("cost","৳"+f(c.cost-c.shared+c.exp));put("incx",f(c.income-c.shared));{const fi=fundInfo(mon);put("fund","৳"+f(fi.close),fi.close);put("fclose","৳"+f(fi.close),fi.close);put("finc",f(c.income-c.shared));put("xall","৳"+f(c.cost-c.shared+c.exp));put("xall2","−"+f(c.cost-c.shared+c.exp));put("fuT","−"+f(fi.used));put("fuT2","৳"+f(fi.used));put("fleft","৳"+f(fi.left));put("fleft2","৳"+f(fi.left));put("ax:rent",f(c.rentT));SH.forEach(x=>{put("sh:"+x[0],f(p(sv(mon,x[0]))));const tr=document.querySelector('[data-sr="'+x[0]+'"]');if(tr)tr.hidden=!(p(sv(mon,x[0]))>0)});put("shT","৳"+f(c.shared));put("shT2","৳"+f(c.shared));put("shP","৳"+f(c.share));put("xgrand","৳"+f(c.cost+c.exp));put("ax:khala",f(c.khalaT))}
+  put("tN",f(sum(c.rows,"N")));put("income",f(c.income));put("cost","৳"+f(c.cost-c.shared+c.exp));put("incx",f(c.income-c.shared));{const fi=fundInfo(mon);put("fund","৳"+f(fi.close),fi.close);put("fclose","৳"+f(fi.close),fi.close);put("finc",f(c.income-c.shared));put("xall","৳"+f(c.cost-c.shared+c.exp));put("xall2","−"+f(c.cost-c.shared+c.exp));put("fuT","−"+f(fi.used));put("fuT2","৳"+f(fi.used));put("fleft","৳"+f(fi.left));put("fleft2","৳"+f(fi.left));put("ax:rent",f(c.rentT));SH.forEach(x=>{put("sh:"+x[0],f(p(sv(mon,x[0]))));const tr=document.querySelector('[data-sr="'+x[0]+'"]');if(tr)tr.hidden=!(p(sv(mon,x[0]))>0)});c.sx.forEach(e=>{put("sxv:"+e.id,f(p(e.a)))});{const w=$("shw");if(w){const d=c.shared-sum(c.rows,"J");w.hidden=Math.abs(d)<.5;w.textContent=Math.abs(d)<.5?"":"⚠ সদস্যদের ভাগের যোগফল মোট বিবিধের চেয়ে ৳"+f(Math.abs(d))+(d>0?" কম":" বেশি")+" — \"কত জনের মধ্যে ভাগ\" ঘরের সংখ্যা টিক দেওয়া সদস্যের সংখ্যার সাথে মেলান।"}}put("shT","৳"+f(c.shared));put("shT2","৳"+f(c.shared));put("shP","৳"+f(c.share));put("xgrand","৳"+f(c.cost+c.exp));put("ax:khala",f(c.khalaT))}
   document.querySelectorAll("[data-o]").forEach(el=>{const v=o[el.dataset.o];if(!v)return;el.textContent=v[0];
     if(v[1]!==undefined&&/^(fund|fgen|fclose|G)/.test(el.dataset.o))el.className=v[1]>=0?"pos":"neg"})}
 function vMem(){
@@ -392,6 +393,7 @@ function flowHTML(k,c,fi,offn){
   const h1=hd("ধাপ ১ — সদস্যদের কাছ থেকে পাওয়া")+`<tr><td style="text-align:left">সদস্যরা মোট দিয়েছেন (সবার "মোট প্রদান" যোগফল)</td>${R("৳"+f(c.income))}${R(V(run))}</tr>`;
   const ex=[["🏠 বাড়িভাড়া (মালিককে)",c.rentT],["🧹 খালার বিল",c.khalaT]].filter(x=>x[1]>0).map(x=>row(x[0],-1,x[1])).join("")
    +SH.filter(x=>p(sv(k,x[0]))>0).map(x=>row("🧾 "+x[1]+" <small>(বিবিধ)</small>",-1,p(sv(k,x[0])))).join("")
+   +c.sx.filter(e=>p(e.a)>0).map(e=>row("🧾 "+esc(e.n||"অন্যান্য")+" <small>(বিবিধ)</small>",-1,p(e.a))).join("")
    +c.xl.filter(e=>p(e.a)>0).map(e=>row("✍ "+esc(e.n||"অন্যান্য"),-1,p(e.a))).join("");
   const h2=hd("ধাপ ২ — এই মাসের খরচ (বাদ যাবে)")+(ex||'<tr><td colspan="3" style="text-align:left">কোনো খরচ লেখা হয়নি</td></tr>');
   const month=run,t2=tot("= এই মাসে বাকি (জমা)",month);
@@ -931,7 +933,7 @@ function vXp(c){
   return `<div class="box"><h2>💸 এই মাসের সব খরচ — কোথায় কত গেল</h2>
   <table class="fndt">${ax.map(x=>`<tr data-ar="${x[0]}"><td>${x[1]}</td><td data-o="ax:${x[0]}"></td></tr>`).join("")}</table>
   <h3>🧾 বিবিধ খরচের বিবরণ <span class="mute">(সদস্যদের বিলে ভাগ হয়)</span></h3>
-  <table class="fndt">${SH.map(x=>`<tr data-sr="${x[0]}"><td>${x[1]}</td><td data-o="sh:${x[0]}"></td></tr>`).join("")}<tr class="tot"><td>মোট বিবিধ</td><td data-o="shT"></td></tr><tr><td>জনপ্রতি ভাগ (<span data-o="cn"></span> জন)</td><td data-o="shP"></td></tr></table>
+  <table class="fndt">${SH.map(x=>`<tr data-sr="${x[0]}"><td>${x[1]}</td><td data-o="sh:${x[0]}"></td></tr>`).join("")}${c.sx.map(e=>`<tr><td>${esc(e.n||"অন্যান্য")}</td><td data-o="sxv:${e.id}"></td></tr>`).join("")}<tr class="tot"><td>মোট বিবিধ</td><td data-o="shT"></td></tr><tr><td>জনপ্রতি ভাগ (<span data-o="cn"></span> জন)</td><td data-o="shP"></td></tr></table>
   <h3>✍ নিজে লেখা অন্যান্য খরচ</h3>${list}${add}
   <p class="mute">ভাড়া ও খালার বিল নিজে নিজে ধরা হয়। এর বাইরে গ্যাস, মেরামত ইত্যাদি যা খরচ হলো এখানে লিখুন। বিবিধ খরচ সদস্যদের বিলের ভেতরেই ধরা আছে, তাই এখানে আলাদা দেখানো হয়নি। এই সবই মেস ফান্ড থেকে বাদ যায় — সদস্যদের বিল বদলায় না।</p>
   <table class="fndt"><tr><td>বাড়িভাড়া + খালা + অন্যান্য (নিজে লেখা)</td><td data-o="xall"></td></tr><tr><td>+ বিবিধ খরচ (উপরের বিবরণ)</td><td data-o="shT2"></td></tr><tr class="tot"><td>মেসের সব মিলিয়ে মোট খরচ (বাজার বাদে)</td><td data-o="xgrand"></td></tr></table>
@@ -963,10 +965,13 @@ function vRb(c){
   ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-rbadd="1">➕ কে কত দিয়েছেন যোগ করুন</button></div>':""}
   <div id="rbsum">${rbTable(mon)}</div>
   <p class="mute">এই টাকা সদস্যদের দেওয়া বিবিধ ভাগ থেকেই ফেরত যাবে, তাই মেস ফান্ডের হিসাবে কোনো বদল হয় না। PDF-এও আসবে।</p></div>`}
+const sxFind=id=>((S.months[mon]||{}).sx||[]).find(x=>x.id===id);
 const xpFind=id=>((S.months[mon]||{}).xp||[]).find(x=>x.id===id);
 document.addEventListener("input",e=>{
   if(!MGR)return;const t=e.target,d=t.dataset;
-  if(d.xn){const x=xpFind(d.xn);if(x){x.n=t.value;save()}}
+  if(d.sxn){const x=sxFind(d.sxn);if(x){x.n=t.value;save()}}
+  else if(d.sxa){const x=sxFind(d.sxa);if(x){x.a=t.value;save();paint();rbPaint()}}
+  else if(d.xn){const x=xpFind(d.xn);if(x){x.n=t.value;save()}}
   else if(d.rbn){const x=rbFind(d.rbn);if(x){x.n=t.value;save();rbPaint()}}
   else if(d.rba){const x=rbFind(d.rba);if(x){x.a=t.value;save();rbPaint()}}
   else if(d.rbm){const x=rbFind(d.rbm);if(x){x.m=t.value;save();rbPaint()}}
@@ -976,6 +981,8 @@ document.addEventListener("input",e=>{
   else if(d.ob!==undefined){ens(mon).ob=t.value;save();paint()}});
 document.addEventListener("click",e=>{const t=e.target;
   const st=t.closest("[data-st]");if(st&&MGR){const b=S.members.find(x=>x.id===st.dataset.st);if(!b||(b.till&&mon>b.till))return;const mo=ens(mon);mo.st=mo.st||{};mo.st[b.id]=isAct(b,mon)?"0":"1";save();render();return}
+  const sxa=t.closest("[data-sxadd]");if(sxa&&MGR){const mo=ens(mon);mo.sx=(mo.sx||[]).concat([{id:"y"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-sxn]")].pop();if(l)l.focus()},60);return}
+  const sxd=t.closest("[data-sxdel]");if(sxd&&MGR){const mo=ens(mon);mo.sx=(mo.sx||[]).filter(x=>x.id!==sxd.dataset.sxdel);save();render();return}
   const xa=t.closest("[data-xadd]");if(xa&&MGR){const mo=ens(mon);mo.xp=(mo.xp||[]).concat([{id:"x"+Math.random().toString(36).slice(2,7),n:xa.dataset.xadd,a:""}]);save();render();
     setTimeout(()=>{const l=[...document.querySelectorAll("[data-xa]")].pop();if(l)l.focus()},60);return}
   const fa=t.closest("[data-fadd]");if(fa&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).concat([{id:"u"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-fn]")].pop();if(l)l.focus()},60);return}
