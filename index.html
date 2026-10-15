@@ -933,9 +933,10 @@ function vXp(c){
   return `<div class="box"><h2>💸 এই মাসের সব খরচ — কোথায় কত গেল</h2>
   <table class="fndt">${ax.map(x=>`<tr data-ar="${x[0]}"><td>${x[1]}</td><td data-o="ax:${x[0]}"></td></tr>`).join("")}</table>
   <h3>🧾 বিবিধ খরচের বিবরণ <span class="mute">(সদস্যদের বিলে ভাগ হয়)</span></h3>
-  <table class="fndt">${SH.map(x=>`<tr data-sr="${x[0]}"><td>${x[1]}</td><td data-o="sh:${x[0]}"></td></tr>`).join("")}${c.sx.map(e=>`<tr><td>${esc(e.n||"অন্যান্য")}</td><td data-o="sxv:${e.id}"></td></tr>`).join("")}<tr class="tot"><td>মোট বিবিধ</td><td data-o="shT"></td></tr><tr><td>জনপ্রতি ভাগ (<span data-o="cn"></span> জন)</td><td data-o="shP"></td></tr></table>
+  <table class="fndt">${SH.map(x=>`<tr data-sr="${x[0]}"><td>${x[1]}</td><td data-o="sh:${x[0]}"></td></tr>`).join("")}${c.sx.map(e=>MGR?`<tr><td><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম" aria-label="খরচের নাম"></td><td style="white-space:nowrap"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা" style="max-width:110px;text-align:right"> <button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></td></tr>`:`<tr><td>${esc(e.n||"অন্যান্য")}</td><td data-o="sxv:${e.id}"></td></tr>`).join("")}<tr class="tot"><td>মোট বিবিধ</td><td data-o="shT"></td></tr><tr><td>জনপ্রতি ভাগ (<span data-o="cn"></span> জন)</td><td data-o="shP"></td></tr></table>
+  ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন বিবিধ খরচ লিখে যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <h3>✍ নিজে লেখা অন্যান্য খরচ</h3>${list}${add}
-  <p class="mute">ভাড়া ও খালার বিল নিজে নিজে ধরা হয়। এর বাইরে গ্যাস, মেরামত ইত্যাদি যা খরচ হলো এখানে লিখুন। বিবিধ খরচ সদস্যদের বিলের ভেতরেই ধরা আছে, তাই এখানে আলাদা দেখানো হয়নি। এই সবই মেস ফান্ড থেকে বাদ যায় — সদস্যদের বিল বদলায় না।</p>
+  <p class="mute">ভাড়া ও খালার বিল নিজে নিজে ধরা হয়। এর বাইরে যে খরচ সদস্যদের বিলে ভাগ হবে না (শুধু ফান্ড থেকে যাবে) তা এখানে লিখুন। যা সবার মধ্যে ভাগ হবে তা ওপরের "বিবিধ খরচের বিবরণ"-এ লিখুন। এই সবই মেস ফান্ড থেকে বাদ যায় — সদস্যদের বিল বদলায় না।</p>
   <table class="fndt"><tr><td>বাড়িভাড়া + খালা + অন্যান্য (নিজে লেখা)</td><td data-o="xall"></td></tr><tr><td>+ বিবিধ খরচ (উপরের বিবরণ)</td><td data-o="shT2"></td></tr><tr class="tot"><td>মেসের সব মিলিয়ে মোট খরচ (বাজার বাদে)</td><td data-o="xgrand"></td></tr></table>
   <h3>🏦 মেস ফান্ড</h3>
   <table class="fndt"><tr><td>আগের মাসের জের</td><td>${ob}</td></tr>${fuOf(mon).length?`<tr><td>জের থেকে খরচ (−) <span class="mute">(নিচে লেখা কাজগুলো)</span></td><td data-o="fuT"></td></tr><tr><td>জের থেকে বাকি (এই মাসের ফান্ডে যোগ)</td><td data-o="fleft"></td></tr>`:""}<tr><td>এই মাসে মোট আয় (সদস্যদের প্রদান, বিবিধ বাদে)</td><td data-o="finc"></td></tr><tr><td>মোট খরচ (−)</td><td data-o="xall2"></td></tr><tr class="tot"><td>ফান্ড বাকি (সব খরচের পর জমা)</td><td data-o="fclose"></td></tr></table>
@@ -969,8 +970,8 @@ const sxFind=id=>((S.months[mon]||{}).sx||[]).find(x=>x.id===id);
 const xpFind=id=>((S.months[mon]||{}).xp||[]).find(x=>x.id===id);
 document.addEventListener("input",e=>{
   if(!MGR)return;const t=e.target,d=t.dataset;
-  if(d.sxn){const x=sxFind(d.sxn);if(x){x.n=t.value;save()}}
-  else if(d.sxa){const x=sxFind(d.sxa);if(x){x.a=t.value;save();paint();rbPaint()}}
+  if(d.sxn){const x=sxFind(d.sxn);if(x){x.n=t.value;save();document.querySelectorAll('[data-sxn="'+d.sxn+'"]').forEach(el=>{if(el!==t)el.value=t.value})}}
+  else if(d.sxa){const x=sxFind(d.sxa);if(x){x.a=t.value;save();document.querySelectorAll('[data-sxa="'+d.sxa+'"]').forEach(el=>{if(el!==t)el.value=t.value});paint();rbPaint()}}
   else if(d.xn){const x=xpFind(d.xn);if(x){x.n=t.value;save()}}
   else if(d.rbn){const x=rbFind(d.rbn);if(x){x.n=t.value;save();rbPaint()}}
   else if(d.rba){const x=rbFind(d.rba);if(x){x.a=t.value;save();rbPaint()}}
