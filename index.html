@@ -158,6 +158,19 @@ details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;pa
 .pcard{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0;cursor:pointer;background:var(--field)}.pcard.on{border-color:var(--pri);background:var(--soft)}
 .pcard img{width:150px;height:150px;object-fit:contain;background:#fff;border-radius:10px;display:block;margin-top:6px}
 .pst{font-size:12px;font-weight:700;border-radius:10px;padding:2px 8px}.pst.pending{background:var(--acc-soft);color:var(--acc-ink)}.pst.approved{background:var(--soft);color:var(--pri)}.pst.rejected{background:var(--rose-soft);color:var(--bad)}
+.mh{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 14px 0;text-align:center;box-shadow:var(--sh);margin:10px 0}
+.mh .g{color:var(--mute);font-size:14px}.mh h2{margin:2px 0 10px;font-size:clamp(24px,6vw,34px);color:var(--pri)}
+.mh .dt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.mh .ch{background:var(--soft);border-radius:99px;padding:6px 14px;font-size:14.5px;font-weight:600;color:var(--pri-d,var(--pri))}
+.mh .sc{height:64px;position:relative;margin:10px -14px 0;overflow:hidden}
+.mh .sc span{position:absolute;bottom:4px;font-size:26px}
+.mh .sun{right:18px;top:2px;bottom:auto;animation:mhspin 18s linear infinite}.mh .rk{left:0;animation:mhride 14s linear infinite}.mh .st{left:46%;animation:mhbob 2.4s ease-in-out infinite}
+.mh .rd{position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--line)}
+.fbar{margin:16px 0 4px;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 0;position:relative;box-shadow:var(--sh)}
+.fbar .tk{display:inline-flex;gap:26px;white-space:nowrap;animation:mhmq 26s linear infinite;font-size:24px;padding-left:26px}
+.fbar .tk i{font-style:normal;display:inline-block;animation:mhhop 2.2s ease-in-out infinite}.fbar .tk i:nth-child(3n){animation-delay:.5s}.fbar .tk i:nth-child(3n+1){animation-delay:1.1s}
+@keyframes mhmq{to{transform:translateX(-50%)}}@keyframes mhhop{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes mhspin{to{transform:rotate(360deg)}}@keyframes mhride{from{transform:translateX(-50px)}to{transform:translateX(110vw)}}@keyframes mhbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.mh *,.fbar *{animation:none!important}}
 </style>
 </head>
 <body><div id="shell"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script id="app">
@@ -273,7 +286,7 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(
   else if(a.dataset.act==="more"){e.stopPropagation();closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
     o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="আরও"><div class="shh"><h2>আরও মেনু</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><div class="mg6">${(window.__MORE||[]).map(x=>`<button data-t="${x[0]}" class="${tab===x[0]?"on":""}">${IC[x[0]]}<span>${x[1]}</span></button>`).join("")}</div></div>`;document.body.appendChild(o)}},true);
 /* ---------- shell / render ---------- */
-$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div><h1 class="sr">mymessbill</h1><div class="lgw"><img class="lgi" src="logo.png" alt="mymessbill" width="150" height="38"></div><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><nav class="tabs" id="tabs"></nav>';
+$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div><h1 class="sr">mymessbill</h1><div class="lgw"><img class="lgi" src="logo.png" alt="mymessbill" width="150" height="38"></div><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><div class="fbar" aria-hidden="true"><div class="tk" id="fk"></div></div><nav class="tabs" id="tabs"></nav>';
 paintTheme();
 function updBar(){const b=$("bar");if(OFFLINE&&ROLE&&!MGR){b.innerHTML='<div class="bar warn">📴 অফলাইন — সর্বশেষ সেভ করা ডেটা দেখাচ্ছে</div>';return}if(!MGR||!ROLE){b.innerHTML="";return}const pend=JSON.stringify(S)!==BASE;
   b.innerHTML=`<div class="bar${pend?" warn":""}"><span>${pend?(VAULT?"⚠ অপ্রকাশিত পরিবর্তন আছে — মেম্বাররা এখনো দেখছে না":"🆕 মেস তৈরি হয়েছে — প্রকাশ করুন চাপলে কোড দিয়ে মেম্বাররা ঢুকতে পারবে"):"✓ সব পরিবর্তন প্রকাশিত"}</span><button class="p" data-act="pub"${pend&&!busy?"":" disabled"}>${busy?"প্রকাশ হচ্ছে…":"প্রকাশ করুন"}</button></div>`}
@@ -291,7 +304,7 @@ function render(){
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
-  paint();paintBz();fit();gHook();sitePaint();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
+  paint();paintBz();fit();gHook();sitePaint();mhTime();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
   const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
@@ -346,9 +359,15 @@ function dailyMeals(){
   if(!tot)return"";
   return bars("📅 এই মাসের দৈনিক মিল — "+lab(k),rows,v=>f(v),`এখন পর্যন্ত মোট <b>${f(Math.round(tot*100)/100)}</b> মিল • গড় <b>${f(Math.round(tot/last*100)/100)}</b> / দিন`)}
 /* ---------- views ---------- */
+const FOODS=["🍚","🍛","🐟","🥚","🥬","🍅","🍌","🥘","🍲","🧅","🥔","🍗","🫓","🍋"];
+(()=>{const k=document.getElementById("fk");if(k){const h=FOODS.map(x=>"<i>"+x+"</i>").join("");k.innerHTML=h+h}})();
+function mhTime(){const d=new Date(),z="Asia/Dhaka",h=+d.toLocaleString("en-US",{hour:"numeric",hour12:false,timeZone:z})%24,g=h<5?"শুভ রাত্রি":h<12?"শুভ সকাল":h<16?"শুভ দুপুর":h<18?"শুভ বিকেল":h<20?"শুভ সন্ধ্যা":"শুভ রাত্রি",q=(i,v)=>{const e=document.getElementById(i);if(e&&e.textContent!==v)e.textContent=v};
+ q("mhg",g);q("mhd",d.toLocaleDateString("bn-BD",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:z}));q("mht",d.toLocaleTimeString("bn-BD",{hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true,timeZone:z}))}
+setInterval(mhTime,1000);
+function vMH(){return `<div class="mh"><div class="g" id="mhg"></div><h2>${esc(S.name||"আমাদের মেস")}</h2><div class="dt"><span class="ch">📅 <span id="mhd"></span></span><span class="ch">🕒 <span id="mht"></span></span></div><div class="sc"><span class="sun">☀️</span><span class="rk">🛺</span><span class="st">🍲</span><div class="rd"></div></div></div>`}
 function vHome(){
   const LF=lastFund(),A=act(),tb=sum(A.map(x=>x.c),"tb"),tm=sum(A.map(x=>x.c),"tm"),inc=sum(A.map(x=>x.c),"income"),cst=sum(A.map(x=>x.c),"cost")+sum(MONTHS.map(k=>({v:calc(k).exp})),"v");
-  return `<div id="site"></div>`+nfBanner()+vNotice()+vNext()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
+  return vMH()+vNext()+`<div id="site"></div>`+nfBanner()+vNotice()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
   ${bars("📈 মাসভিত্তিক মিল রেট (৳)",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.rate,hl:x.k===nowK})),v=>f(v))}${bars("🍽 মাসভিত্তিক মোট মিল",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.tm,hl:x.k===nowK})),v=>f(v))}${dailyMeals()}
   <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
   ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
