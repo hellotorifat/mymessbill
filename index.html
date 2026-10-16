@@ -190,7 +190,20 @@ const p=s=>String(s==null?"":s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬�
 const f=n=>(Math.round(n*100)/100).toLocaleString("en-IN");
 const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
-const RO=()=>MGR?"":" readonly";
+const LK=()=>!!(S.months[mon]||{}).lock;
+const RO=()=>MGR&&!LK()?"":" readonly";
+(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay]';
+const blk=e=>{if(tab==="month"&&LK()&&e.target.closest&&e.target.closest(G)){e.stopPropagation();e.preventDefault();if(e.type==="click")toast("🔒 মাস লক করা আছে");return true}};
+["input","change","click"].forEach(n=>document.addEventListener(n,blk,true));
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-lk],[data-due],[data-csv]");if(!t)return;
+ if(t.dataset.lk&&MGR){const mo=ens(mon);if(mo.lock){mo.lock=0}else if(confirm("মাস লক করলে এই মাসের হিসাব আর বদলানো যাবে না (আনলক না করা পর্যন্ত)। লক করবেন?"))mo.lock=1;save();render();return}
+ const c=calc(mon);
+ if(t.dataset.due){const L=c.rows.map(r=>({n:r.name,d:r.P-p(payOf(mon,r.id).a)})).filter(x=>x.d>0.5);if(!L.length){toast("কারও বাকি নেই ✔");return}
+  const tx="📢 "+mon+" মাসের বাকি হিসাব:\n"+L.map(x=>"• "+x.n+": ৳"+f(Math.round(x.d))).join("\n")+"\nদয়া করে দ্রুত পরিশোধ করুন। ধন্যবাদ।";window.open("https://wa.me/?text="+encodeURIComponent(tx),"_blank");return}
+ if(t.dataset.csv){const q=v=>'"'+String(v).replace(/"/g,'""')+'"',H=["নাম","বাজার","মিল","মিল খরচ","ভাড়া","খালা","বিবিধ ভাগ","অতিরিক্ত","কর্তন","মোট বিল","মোট প্রদান","জমা দিয়েছে","বাকি"];
+  const R=c.rows.map(r=>{const pd=p(payOf(mon,r.id).a);return[r.name,r.bazar,r.meal,r.mc,r.rent,r.khala,r.J,r.extra,r.deduct,r.N,r.P,pd,r.P-pd].map(v=>typeof v==="number"?Math.round(v*100)/100:v)});
+  const X=[[],["মোট বিবিধ খরচ",c.shared],["জনপ্রতি ভাগ",Math.round(c.share*100)/100],["মিল রেট",Math.round(c.rate*100)/100]];
+  const csv="\ufeff"+[H].concat(R,X).map(r=>r.map(q).join(",")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="mess-"+mon+".csv";document.body.appendChild(a);a.click();a.remove()}});})();
 const ens=k=>S.months[k]||(S.months[k]={r:{},s:{},n:""});
 const enc=new TextEncoder(),dec=new TextDecoder(),AL="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const b64=u=>{let t="";new Uint8Array(u).forEach(x=>t+=String.fromCharCode(x));return btoa(t)};
@@ -343,6 +356,7 @@ const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<op
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
   return `<div class="row">${msel()}${MGR?'<button class="fix" data-act="monsheet">➕ মাস</button>':""}</div>${vAct()}
+  <div class="chips" style="margin:8px 0">${MGR?`<button class="mch${LK()?" on":""}" data-lk="1">${LK()?"🔓 মাস আনলক করুন":"🔒 মাস লক করুন"}</button><button class="mch" data-due="1">📩 বাকির রিমাইন্ডার (WhatsApp)</button>`:(LK()?'<span class="mute">🔒 এই মাসের হিসাব চূড়ান্ত</span>':"")}<button class="mch" data-csv="1">⬇ Excel/CSV</button></div>
   <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
   <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
