@@ -209,6 +209,20 @@ details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;pa
 @keyframes mstw{0%,100%{opacity:.25}50%{opacity:1}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ms-stars{display:block}:root:not([data-theme="light"]) .mh .ms-rays{opacity:.25}:root:not([data-theme="light"]) .mh .ch{background:#1d4640}}
 :root[data-theme="dark"] .ms-stars{display:block}:root[data-theme="dark"] .mh .ms-rays{opacity:.25}:root[data-theme="dark"] .mh .ch{background:#1d4640}
+/* ---------- UI polish ---------- */
+button,.mch,[data-t]{-webkit-tap-highlight-color:transparent;transition:transform .12s ease,box-shadow .15s ease,background-color .15s ease}
+button:active:not(:disabled),.mch:active{transform:scale(.97)}
+.mch{min-height:40px;padding:8px 14px}
+#view.vin>*{animation:vin .22s ease both}
+@keyframes vin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.jump{position:sticky;top:0;z-index:6;display:flex;gap:8px;overflow-x:auto;padding:8px 2px;margin:6px -2px;background:linear-gradient(var(--bg) 75%,transparent);scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:var(--sh)}
+.jump a:active{transform:scale(.96)}
+[id^="sec-"]{scroll-margin-top:72px}
+.trendh{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:16px;padding:12px 14px;margin:10px 0;color:var(--mute);font-size:14px}
+.mh .sc{height:48px}
+@media (prefers-reduced-motion:reduce){#view.vin>*{animation:none!important}.jump a,button{transition:none!important}}
 .lgo{position:fixed;inset:0;background:#0008;z-index:99;display:flex;align-items:flex-end;justify-content:center}.lgb{background:var(--card);color:var(--ink);width:100%;max-width:640px;max-height:80vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}</style>
 </head>
 <body><div id="shell"></div><script id="app">
@@ -360,6 +374,7 @@ function render(){
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"${tab===t[0]?' aria-current="page"':""}><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"${inMore?' aria-current="page"':""}><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,stock:vStock,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
+  if(window.__lt!==tab){const v=$("view");v.classList.remove("vin");void v.offsetWidth;v.classList.add("vin");window.__lt=tab}
   paint();paintBz();fit();gHook();sitePaint();mhTime();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
@@ -484,21 +499,22 @@ function vMH(){return `<div class="mh"><div class="g" id="mhg"></div><h2>${esc(S
 function vHome(){
   const LF=lastFund(),A=act(),tb=sum(A.map(x=>x.c),"tb"),tm=sum(A.map(x=>x.c),"tm"),inc=sum(A.map(x=>x.c),"income"),cst=sum(A.map(x=>x.c),"cost")+sum(MONTHS.map(k=>({v:calc(k).exp})),"v");
   return vMH()+vNext()+`<div id="site"></div>`+nfBanner()+vNotice()+vQuick()+vMine()+`<div class="kpi"><div><small>মোট বাজার</small><b>৳${f(tb)}</b></div><div><small>মোট মিল</small><b>${f(tm)}</b></div><div><small>গড় মিল রেট</small><b>৳${f(tm?tb/tm:0)}</b></div><div><small>মোট আয়</small><b>৳${f(inc)}</b></div><div><small>মোট ব্যয়</small><b>৳${f(cst)}</b></div><div><small>🏦 মেস ফান্ড বাকি</small><b class="${(LF?LF.fi.close:0)>=0?"pos":"neg"}">৳${f(LF?LF.fi.close:0)}</b></div></div>
-  ${bars("📈 মাসভিত্তিক মিল রেট (৳)",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.rate,hl:x.k===nowK})),v=>f(v))}${bars("🍽 মাসভিত্তিক মোট মিল",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.tm,hl:x.k===nowK})),v=>f(v))}${dailyMeals()}
+  ${A.length>=2?bars("📈 মাসভিত্তিক মিল রেট (৳)",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.rate,hl:x.k===nowK})),v=>f(v))+bars("🍽 মাসভিত্তিক মোট মিল",A.map(x=>({k:x.k,l:SM[+x.k.slice(5)-1],v:x.c.tm,hl:x.k===nowK})),v=>f(v)):`<div class="trendh">📈 <span>দুই মাসের হিসাব জমলে মিল রেট ও মোট মিলের ট্রেন্ড চার্ট এখানে আসবে।</span></div>`}${dailyMeals()}
   <div class="box scroll"><h2>মাসিক পারফরম্যান্স</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>ব্যয়</th><th>আয়</th><th>ফান্ড</th></tr>
   ${A.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.c.tb)}</td><td>${f(x.c.tm)}</td><td>${f(x.c.rate)}</td><td>${f(x.c.cost+x.c.exp)}</td><td>${f(x.c.income)}</td><td class="${x.c.net>=0?"pos":"neg"}">${sg(x.c.net)}</td></tr>`).join("")||'<tr><td colspan="7">এখনো কোনো হিসাব প্রকাশ হয়নি</td></tr>'}</table></div>`}
 const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
   return `<div class="row">${msel()}${MGR?'<button class="fix" data-act="monsheet">➕ মাস</button>':""}</div>${vAct()}
+  <nav class="jump" aria-label="এই পাতার অংশ"><a href="#sec-tbl" data-jump="sec-tbl">👥 সদস্যভিত্তিক</a><a href="#sec-el" data-jump="sec-el">⚡ বিদ্যুৎ</a><a href="#sec-cost" data-jump="sec-cost">🧾 মেস কস্ট</a><a href="#sec-tot" data-jump="sec-tot">📊 মোট হিসাব</a><a href="#sec-fund" data-jump="sec-fund">🏦 ফান্ড</a></nav>
   <div class="chips" style="margin:8px 0">${MGR?`<button class="mch${LK()?" on":""}" data-lk="1">${LK()?"🔓 মাস আনলক করুন":"🔒 মাস লক করুন"}</button><button class="mch" data-due="1">📩 বাকির রিমাইন্ডার (WhatsApp)</button><button class="mch" data-log="1">🕑 পরিবর্তনের ইতিহাস</button><button class="mch" data-bk="1">💾 ব্যাকআপ</button><button class="mch" data-rs="1">♻ রিস্টোর</button>`:(LK()?'<span class="mute">🔒 এই মাসের হিসাব চূড়ান্ত</span>':"")}<button class="mch" data-csv="1">⬇ Excel/CSV</button></div>
   <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
-  <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
+  <div class="box scroll" id="sec-tbl"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
   <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
   ${elBox()}
-  <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
+  <div class="box" id="sec-cost"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
   ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <div style="margin-top:10px"><label class="mute" style="display:block">🧹 খালার মোট বিল (ফাঁকা = সদস্যভেদে আলাদা; দিলে সবার মধ্যে সমান ভাগ)</label><input${RO()} data-s="kt" inputmode="decimal" value="${esc(sv(mon,"kt"))}" placeholder="যেমন: ৪০০০" style="max-width:160px"></div>
   ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch" data-cpprev="1">📋 আগের মাসের বিবিধ খরচ কপি করুন</button></div>':""}
@@ -506,14 +522,14 @@ function vMonth(){
   <div class="mute" style="margin:10px 0 4px">কার কার ওপর এই খরচ যাবে (টিক = ভাগ নেবে):</div>
   <div class="g2">${c.rows.map(r=>`<label style="display:flex;gap:7px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" data-ck="${r.id}"${c.exi.indexOf(r.id)<0?" checked":""}${MGR?"":" disabled"}> ${esc(r.name)}</label>`).join("")}</div>
   <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p><p class="warnb" id="shw" hidden></p></div>
-  <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
+  <div class="box" id="sec-tot"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
   ${vRb(c)}
   ${vXp(c)}
   ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`}
 const elPrev=k=>{const i=MONTHS.indexOf(k);for(let j=i-1;j>=0;j--){const e=(S.months[MONTHS[j]]||{}).el;if(e&&p(e.c)>0)return e.c}return""};
 const elCalc=k=>{const e=(S.months[k]||{}).el||{},pr=e.p!==undefined&&e.p!==""?p(e.p):p(elPrev(k)),cu=p(e.c),u=Math.max(0,cu-pr);return{pr,cu,rate:p(e.r),u,amt:cu>0?Math.round(u*p(e.r)*100)/100:0}};
 function elBox(){if(!MGR&&!((S.months[mon]||{}).el))return"";const e=(S.months[mon]||{}).el||{},pv=e.p!==undefined&&e.p!==""?e.p:elPrev(mon);
-  return `<div class="box"><h2>⚡ বিদ্যুৎ মিটার রিডিং</h2><div class="g2"><div><label>আগের রিডিং</label><input${RO()} data-el="p" inputmode="decimal" value="${esc(pv)}"></div><div><label>এখনকার রিডিং</label><input${RO()} data-el="c" inputmode="decimal" value="${esc(e.c||"")}"></div><div><label>প্রতি ইউনিট (৳)</label><input${RO()} data-el="r" inputmode="decimal" value="${esc(e.r||"")}" placeholder="যেমন: ৮.৫"></div><div><label>ইউনিট • বিল</label><b id="elo" class="pos"></b></div></div>
+  return `<div class="box" id="sec-el"><h2>⚡ বিদ্যুৎ মিটার রিডিং</h2><div class="g2"><div><label>আগের রিডিং</label><input${RO()} data-el="p" inputmode="decimal" value="${esc(pv)}"></div><div><label>এখনকার রিডিং</label><input${RO()} data-el="c" inputmode="decimal" value="${esc(e.c||"")}"></div><div><label>প্রতি ইউনিট (৳)</label><input${RO()} data-el="r" inputmode="decimal" value="${esc(e.r||"")}" placeholder="যেমন: ৮.৫"></div><div><label>ইউনিট • বিল</label><b id="elo" class="pos"></b></div></div>
   ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-elset="1">✔ এই বিল "বিদ্যুৎ"-এ বসান</button></div>':""}<p class="mute">আগের মাসের এখনকার রিডিং নিজে থেকে আগের রিডিং হিসেবে আসে।</p></div>`}
 function elPaint(){const o=document.getElementById("elo");if(!o)return;const c=elCalc(mon);o.textContent=c.cu>0?bd(f(c.u))+" ইউনিট • ৳"+f(c.amt):"—"}
 function paint(){
@@ -1200,6 +1216,7 @@ document.addEventListener("input",e=>{
   else if(d.fa){const x=fuFind(d.fa);if(x){x.a=t.value;save();paint()}}
   else if(d.el){const mo=ens(mon);mo.el=mo.el||{};mo.el[d.el]=t.value;save();elPaint()}
   else if(d.ob!==undefined){ens(mon).ob=t.value;save();paint()}});
+document.addEventListener("click",e=>{const j=e.target.closest&&e.target.closest("[data-jump]");if(!j)return;e.preventDefault();const el=document.getElementById(j.dataset.jump);if(el)el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-elset]");if(!b||!MGR)return;const c=elCalc(mon);if(!(c.cu>0)||!(c.rate>0)){toast("আগে এখনকার রিডিং ও ইউনিট রেট দিন");return}if(c.cu<c.pr){toast("এখনকার রিডিং আগের চেয়ে কম হতে পারে না");return}const mo=ens(mon);mo.s=mo.s||{};const o=mo.s.bidyut;mo.s.bidyut=String(c.amt);{const L=S.log=S.log||[];L.push({t:Date.now(),k:mon,w:CO?"সহ-ম্যানেজার":"ম্যানেজার",a:"বিদ্যুৎ বিল (মিটার থেকে)",o:o||"",n:String(c.amt)});if(L.length>300)L.splice(0,L.length-300)}save();render();toast("বিদ্যুৎ বিল ৳"+f(c.amt)+" বসানো হয়েছে ✔")});
 document.addEventListener("click",e=>{const t=e.target;
   const st=t.closest("[data-st]");if(st&&MGR){const b=S.members.find(x=>x.id===st.dataset.st);if(!b||(b.till&&mon>b.till))return;const mo=ens(mon);mo.st=mo.st||{};mo.st[b.id]=isAct(b,mon)?"0":"1";save();render();return}
