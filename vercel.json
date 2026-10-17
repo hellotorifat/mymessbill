@@ -67,5 +67,11 @@
       ]
     }
   ],
-  "cleanUrls": true
+  "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 1 * * *"
+    }
+  ]
 }

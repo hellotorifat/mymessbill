@@ -12,7 +12,7 @@ const PORT = +process.env.PORT || 3000;
 const cfg = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8"));
 const secHeaders = Object.fromEntries(((cfg.headers || []).find((h) => h.source === "/(.*)") || { headers: [] }).headers.map((h) => [h.key, h.value]));
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json", ".webmanifest": "application/manifest+json", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml", ".css": "text/css" };
-const API = new Set(["vault", "chat", "admin", "pay", "push", "auth", "cron"]);
+const API = new Set(["vault", "chat", "admin", "pay", "push", "auth", "cron", "remind"]);
 
 http.createServer(async (rq, rs) => {
   try {

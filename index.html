@@ -266,7 +266,7 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
  if(t.dataset.lk&&MGR){const mo=ens(mon);if(mo.lock){mo.lock=0;logAdd("মাস আনলক করা হয়েছে","","")}else if(confirm("মাস লক করলে এই মাসের হিসাব আর বদলানো যাবে না (আনলক না করা পর্যন্ত)। লক করবেন?")){mo.lock=1;logAdd("মাস লক করা হয়েছে","","")}save();render();return}
  const c=calc(mon);
  if(t.dataset.due){const L=c.rows.map(r=>({n:r.name,d:r.P-p(payOf(mon,r.id).a)})).filter(x=>x.d>0.5);if(!L.length){toast("কারও বাকি নেই ✔");return}
-  const tx="📢 "+mon+" মাসের বাকি হিসাব:\n"+L.map(x=>"• "+x.n+": ৳"+f(Math.round(x.d))).join("\n")+"\nদয়া করে দ্রুত পরিশোধ করুন। ধন্যবাদ।";window.open("https://wa.me/?text="+encodeURIComponent(tx),"_blank");return}
+  const tx="📢 "+mon+" মাসের বাকি হিসাব:\n"+L.map(x=>"• "+x.n+": ৳"+f(Math.round(x.d))).join("\n")+(PM().length?"\n💳 "+PM().map(a=>a.n+": "+a.v).join(" • "):"")+"\nদয়া করে দ্রুত পরিশোধ করুন। ধন্যবাদ।";window.open("https://wa.me/?text="+encodeURIComponent(tx),"_blank");return}
  if(t.dataset.csv){const q=v=>'"'+String(v).replace(/"/g,'""')+'"',H=["নাম","বাজার","মিল","মিল খরচ","ভাড়া","খালা","বিবিধ ভাগ","অতিরিক্ত","কর্তন","মোট বিল","মোট প্রদান","জমা দিয়েছে","বাকি"];
   const R=c.rows.map(r=>{const pd=p(payOf(mon,r.id).a);return[r.name,r.bazar,r.meal,r.mc,r.rent,r.khala,r.J,r.extra,r.deduct,r.N,r.P,pd,r.P-pd].map(v=>typeof v==="number"?Math.round(v*100)/100:v)});
   const X=[[],["মোট বিবিধ খরচ",c.shared],["জনপ্রতি ভাগ",Math.round(c.share*100)/100],["মিল রেট",Math.round(c.rate*100)/100]];
@@ -525,12 +525,54 @@ function vYear(){
   const yr=y=>{const A=MONTHS.filter(k=>k.startsWith(y)).map(k=>calc(k)).filter(c=>c.active),t=g=>sum(A,g);return`<tr class="tot"><td>${bd(y)} সর্বমোট</td><td>${f(t("tb"))}</td><td>${f(t("tm"))}</td><td>${f(t("tm")?t("tb")/t("tm"):0)}</td><td>${f(t("cost")+t("exp"))}</td><td>${f(t("income"))}</td><td>${sg(t("net"))}</td><td>${f(t("exp"))}</td><td></td></tr>`};
   return `<div class="box scroll"><h2>বার্ষিক সারাংশ</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
   ${MONTHS.map(k=>{const c=calc(k),a=c.active,d=v=>a?v:"—";return`<tr class="${a?"":"off"}"><td><a href="#" data-open="${k}">${lab(k)}</a></td><td>${d(f(c.tb))}</td><td>${d(f(c.tm))}</td><td>${d(f(c.rate))}</td><td>${d(f(c.cost+c.exp))}</td><td>${d(f(c.income))}</td><td class="${c.net>=0?"pos":"neg"}">${d(sg(c.net))}</td><td>${a||c.exp?f(c.exp):"—"}</td><td>${a||c.exp?f(fundInfo(k).close):"—"}</td></tr>`}).join("")}${[...new Set(MONTHS.map(k=>k.slice(0,4)))].map(yr).join("")}</table></div>`}
+/* ---------- টাকা পাঠানোর নম্বর (বিকাশ/নগদ…) ---------- */
+const PM=()=>S.pm||[];
+function pmBox(){return `<div class="box"><h2>💳 টাকা পাঠানোর নম্বর</h2><p class="mute">সদস্যরা "আমার হিসাব"-এ এই নম্বর দেখে বিল পাঠাবে। বাকির WhatsApp মেসেজেও যোগ হবে।</p>
+  ${PM().map(a=>`<div class="row"><input data-pmn="${a.id}" value="${esc(a.n)}" aria-label="পদ্ধতি" maxlength="20" style="max-width:104px"><input data-pmv="${a.id}" inputmode="tel" value="${esc(a.v)}" aria-label="নম্বর" maxlength="40"><button class="x fix" data-pmdel="${a.id}" aria-label="মুছুন">✕</button></div>`).join("")}
+  ${PM().length<6?`<div class="row"><select id="pmq" aria-label="পদ্ধতি">${["বিকাশ","নগদ","রকেট","উপায়","ব্যাংক","অন্য"].map(x=>`<option>${x}</option>`).join("")}</select><input id="pmnum" inputmode="tel" placeholder="নম্বর / অ্যাকাউন্ট" maxlength="40" aria-label="নম্বর"><button class="p fix" data-act="pmadd">যোগ</button></div>`:""}</div>`}
+
+/* ---------- অটো রিমাইন্ডার (পুশ নোটিফিকেশন, প্রতিদিন সকাল ~৭টায় সার্ভার থেকে) ---------- */
+const WDL=["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
+let RMCRON=null;
+const rmRule=x=>x.k==="m"?"প্রতি মাসের "+bd(x.d)+" তারিখ":x.k==="w"?"প্রতি "+WDL[x.d]:fd(x.d);
+function rmCheck(){fetch("/api/remind?s=1",{cache:"no-store"}).then(r=>r.json()).then(j=>{RMCRON=!!j.cron;const w=$("rmcron");if(w)w.hidden=RMCRON}).catch(()=>{})}
+function rmBox(){const L=S.rmd||[];if(RMCRON===null){RMCRON=undefined;setTimeout(rmCheck,0)}
+  return `<div class="box"><h2>⏰ অটো রিমাইন্ডার</h2><p class="mute">নির্দিষ্ট দিনে সবার ফোনে নোটিফিকেশন যাবে (প্রতিদিন সকাল ~৭টা, বাংলাদেশ সময়)। শুধু যারা "নোটিফিকেশন" চালু করেছেন তারাই পাবেন। লেখাটা এনক্রিপ্টেড — সার্ভার পড়তে পারে না।</p>
+  <p class="warnb" id="rmcron"${RMCRON===true?" hidden":""}>⚠ সার্ভারে CRON_SECRET সেট করা নেই (বা এখনো যাচাই হয়নি), তাই রিমাইন্ডার পাঠানো হবে না। Vercel → Settings → Environment Variables-এ কমপক্ষে ১৬ অক্ষরের এলোমেলো CRON_SECRET দিয়ে Redeploy করুন।</p>
+  ${L.map(x=>`<div class="srow"><span style="flex:1"><b>${esc(x.t)}</b><br><small class="mute">${rmRule(x)}</small></span><button class="x" data-rmdel="${x.id}" aria-label="মুছুন">✕</button></div>`).join("")||'<p class="mute">এখনো কোনো রিমাইন্ডার নেই।</p>'}
+  ${L.length<10?`<input id="rmt" placeholder="যেমন: আজ বিল দেওয়ার শেষ দিন" maxlength="100" aria-label="রিমাইন্ডারের লেখা" style="margin-top:8px">
+  <div class="row" style="margin-top:8px"><select id="rmk" aria-label="কবে"><option value="m">প্রতি মাসের তারিখে</option><option value="w">প্রতি সপ্তাহের বারে</option><option value="o">একবার (নির্দিষ্ট দিনে)</option></select>
+  <select id="rmd1" aria-label="তারিখ">${Array.from({length:28},(_,i)=>`<option value="${i+1}">${bd(i+1)} তারিখ</option>`).join("")}</select>
+  <select id="rmd2" aria-label="বার" hidden>${WDL.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select>
+  <input id="rmd3" type="date" aria-label="দিন" hidden><button class="p fix" data-act="rmadd">যোগ</button></div>`:'<p class="mute">সর্বোচ্চ ১০টি রিমাইন্ডার রাখা যায়।</p>'}</div>`}
+async function rmSync(silent){
+  try{const list=[];for(const x of (S.rmd||[]).slice(0,10)){const n=await nfOf("rem","⏰ "+(S.name||"মেস"),x.t);if(!n.ct)throw new Error("enc");list.push({id:x.id,k:x.k,d:x.d,iv:n.iv,ct:n.ct})}
+    const r=await fetch("/api/remind",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:CID,token:await tokOf(MCODE),a:"set",list})});
+    if(r.ok){if(!silent)toast(list.length?"রিমাইন্ডার চালু হয়েছে ✔":"রিমাইন্ডার বন্ধ করা হয়েছে")}
+    else{const j=await r.json().catch(()=>({}));if(!silent||j.error!=="not_published")toast(j.error==="not_published"?"আগে মেস \"প্রকাশ\" করুন, তারপর রিমাইন্ডার চালু হবে":"রিমাইন্ডার সার্ভারে সেভ হয়নি")}}
+  catch(e){if(!silent)toast("রিমাইন্ডার সার্ভারে সেভ হয়নি")}}
+document.addEventListener("change",e=>{if(e.target.id==="rmk"){const k=e.target.value;$("rmd1").hidden=k!=="m";$("rmd2").hidden=k!=="w";$("rmd3").hidden=k!=="o"}});
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-pmdel],[data-pmcp],[data-rmdel]");if(!t)return;const d=t.dataset;
+  if(d.pmdel&&MGR){S.pm=PM().filter(x=>x.id!==d.pmdel);save();render()}
+  else if(d.pmcp)copyText(d.pmcp).then(ok=>toast(ok?"নম্বর কপি হয়েছে ✔":"কপি করা যায়নি"));
+  else if(d.rmdel&&MGR){S.rmd=(S.rmd||[]).filter(x=>x.id!==d.rmdel);save();render();rmSync()}});
+
+/* ---------- আমার ব্যক্তিগত হিসাব: শেয়ার ও PDF ---------- */
+function mineData(){const me=getMe(),m=S.members.find(x=>x.name===me);if(!m)return null;const A=act(),cur=A.find(x=>x.k===nowK)||A[A.length-1];if(!cur)return null;const r=cur.c.rows.find(z=>z.id===m.id);if(!r)return null;const pd=p(payOf(cur.k,m.id).a);return{m,k:cur.k,r,pd,bal:r.P-pd}}
+function mineLines(d){const r=d.r;return[["বাজার (আমি করেছি)","৳"+f(r.bazar)],["আমার মিল",f(r.meal)],["মিল খরচ","৳"+f(r.mc)],["ভাড়া","৳"+f(r.rent)],["খালা বিল","৳"+f(r.khala)],["বিবিধ ভাগ","৳"+f(r.J)],["মোট প্রদান (দেয়)","৳"+f(r.P),1],["জমা দিয়েছি","৳"+f(d.pd)],["বাকি","৳"+f(Math.max(0,d.bal)),1]]}
+function mineText(){const d=mineData();if(!d)return"";return "📋 "+(S.name||"মেস")+" — "+d.m.name+"\n"+lab(d.k)+"\n"+mineLines(d).map(x=>"• "+x[0]+": "+x[1]).join("\n")+(PM().length?"\n💳 "+PM().map(a=>a.n+": "+a.v).join(" • "):"")}
+function mineHTML(){const d=mineData();if(!d)return"";return `<div class="rp"><div class="rh"><div><div class="rt">🏠 ${esc(S.name||"mymessbill")}</div><div class="rs">mymessbill • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">ব্যক্তিগত হিসাব</div><div class="rt" style="font-size:22px">${lab(d.k)}</div></div></div>
+  <div class="box"><h2>${esc(d.m.name)}</h2><table>${mineLines(d).map(x=>`<tr${x[2]?' class="tot"':""}><td>${x[0]}</td><td style="text-align:right">${x[1]}</td></tr>`).join("")}</table></div>
+  ${PM().length?`<div class="box"><h2>💳 টাকা পাঠানোর নম্বর</h2><table>${PM().map(a=>`<tr><td>${esc(a.n)}</td><td style="text-align:right">${esc(a.v)}</td></tr>`).join("")}</table></div>`:""}
+  <p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
+
 function vSet(){
   return `<div class="box"><h2>মেসের নাম</h2><input data-nm="1" value="${esc(S.name)}" maxlength="50"></div>
   <div class="box"><h2>সদস্য তালিকা ও ডিফল্ট ভাড়া</h2>${S.members.map(b=>`<div class="row"><input data-mn="${b.id}" value="${esc(b.name)}" aria-label="নাম"><input data-mr="${b.id}" inputmode="decimal" value="${b.rent}" aria-label="ভাড়া" style="max-width:100px"><button class="x fix" data-del="${b.id}">মুছুন</button></div>`).join("")}
   <div class="row"><input id="nn" placeholder="নতুন সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="p fix" data-act="add">যোগ</button></div></div>
   <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div>
   <label style="display:block;margin-top:10px">🌙 মেম্বারের মিল অনুরোধ বন্ধ হবে (বাংলাদেশ সময়)</label><select data-df="mcut" style="max-width:260px">${[[20,"রাত ৮টা"],[21,"রাত ৯টা"],[22,"রাত ১০টা"],[23,"রাত ১১টা"],[24,"কখনো বন্ধ হবে না"]].map(x=>`<option value="${x[0]}"${MCUT()===x[0]?" selected":""}>${x[1]}</option>`).join("")}</select><p class="mute">এই সময়ের পর থেকে ভোর ৫টা পর্যন্ত মেম্বার আগামী দিনের (ভোর ১২টার পর চলতি দিনের) মিল বদলাতে পারবেন না। ম্যানেজার সব সময় বদলাতে পারবেন।</p></div>
+  ${MGR?pmBox()+rmBox():""}
   ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vPlan()}${vLogins()}${vBackup()}`}
 
 /* ---------- PDF report ---------- */
@@ -1360,13 +1402,15 @@ async function paySend(){
     else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",busy:"আগের অনুরোধ চলছে, কয়েক সেকেন্ড পরে আবার চাপুন",rate_limited:"অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পরে আবার করুন",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||(/^storage_/.test(j.error||"")?srvMsg(j.error)+(j.detail?" "+j.detail:""):"জমা হয়নি ("+(j.error||r.status)+")"))
   }catch(e){alert("ইন্টারনেট সংযোগ নেই")}}
 /* ---------- আমার হিসাব + প্রোফাইল ---------- */
-function vMine(){
+function vMine(){const b=vMine0();if(!b)return"";const d=mineData();
+  return b+(PM().length?`<div class="box"><h2>📲 টাকা পাঠানোর নম্বর</h2>${PM().map(a=>`<div class="srow"><span style="flex:1"><b>${esc(a.n)}</b> • <span dir="ltr">${esc(a.v)}</span></span><button class="fix" data-pmcp="${esc(a.v)}">📋 কপি</button></div>`).join("")}<p class="mute">বিল পাঠিয়ে ম্যানেজারকে জানিয়ে দিন।</p></div>`:"")+(d?`<div class="row" style="margin:8px 0"><button class="fix" data-act="minesh">📤 আমার হিসাব শেয়ার</button>${DL?'<button class="p fix" data-act="minepdf">📄 PDF</button>':""}</div>`:"")}
+function vMine0(){
   const me=getMe(),m=S.members.find(x=>x.name===me);if(!m)return"";
   const A=act();if(!A.length)return `<div class="box"><h2>👤 আমার হিসাব — ${esc(m.name)}</h2><p class="mute">এখনো হিসাব যোগ হয়নি।</p></div>`;
-  const cur=A.find(x=>x.k===nowK)||A[A.length-1],r=cur.c.rows.find(z=>z.id===m.id);
+  const cur=A.find(x=>x.k===nowK)||A[A.length-1],r=cur.c.rows.find(z=>z.id===m.id),pd=r?p(payOf(cur.k,m.id).a):0;
   let tb=0,tm=0,N=0,P=0;const mr=A.map(x=>{const q=x.c.rows.find(z=>z.id===m.id);if(q){tb+=q.bazar;tm+=q.meal;N+=q.N;P+=q.P}return{k:x.k,q}}).filter(x=>x.q);
   const kp=(t,v,c)=>`<div><small>${t}</small><b class="${c||""}">${v}</b></div>`;
-  return `<div class="box"><h2>👤 আমার হিসাব — ${esc(m.name)}</h2>${r?`<p class="mute">${lab(cur.k)}</p><div class="kpi">${kp("আমার বাজার","৳"+f(r.bazar))}${kp("আমার মিল",f(r.meal))}${kp("মিল খরচ","৳"+f(r.mc))}${kp("দিবে(−)/নিবে(+)",sg(r.G),r.G>=0?"pos":"neg")}${kp("ভাড়া","৳"+f(r.rent))}${kp("খালা বিল","৳"+f(r.khala))}${kp("বিবিধ","৳"+f(r.J))}${kp("মোট প্রদান","৳"+f(r.P))}</div>`:`<p class="mute">${lab(cur.k)} মাসে আপনি হিসাবে নেই।</p>`}
+  return `<div class="box"><h2>👤 আমার হিসাব — ${esc(m.name)}</h2>${r?`<p class="mute">${lab(cur.k)}</p><div class="kpi">${kp("আমার বাজার","৳"+f(r.bazar))}${kp("আমার মিল",f(r.meal))}${kp("মিল খরচ","৳"+f(r.mc))}${kp("দিবে(−)/নিবে(+)",sg(r.G),r.G>=0?"pos":"neg")}${kp("ভাড়া","৳"+f(r.rent))}${kp("খালা বিল","৳"+f(r.khala))}${kp("বিবিধ","৳"+f(r.J))}${kp("মোট প্রদান","৳"+f(r.P))}${kp("জমা দিয়েছি","৳"+f(pd))}${kp("বাকি","৳"+f(Math.max(0,r.P-pd)),r.P-pd>.5?"neg":"pos")}</div>`:`<p class="mute">${lab(cur.k)} মাসে আপনি হিসাবে নেই।</p>`}
   <h3>সব মাস মিলিয়ে</h3><div class="kpi">${kp("মোট বাজার","৳"+f(tb))}${kp("মোট মিল",f(tm))}${kp("মোট বিল","৳"+f(N))}${kp("মোট প্রদান","৳"+f(P))}</div>
   ${mr.length?`<div class="scroll"><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>মোট প্রদান</th></tr>${mr.map(x=>`<tr><td><a href="#" data-open="${x.k}">${lab(x.k)}</a></td><td>${f(x.q.bazar)}</td><td>${f(x.q.meal)}</td><td>${f(x.q.P)}</td></tr>`).join("")}</table></div>`:""}</div>`}
 const getPic=()=>{try{return localStorage.getItem("bpPic")||""}catch(e){return""}};
@@ -1493,7 +1537,7 @@ async function publish(retry){
       else if(r.status===404||r.status===405)alert(srvMsg("no_api"));
       else alert("প্রকাশ করা যায়নি ("+r.status+(j&&j.error?" • "+j.error:"")+")। ইন্টারনেট চেক করে আবার চেষ্টা করুন।");
     }else{
-      VER=j.ver;VAULT={id:CID,M:VM,A:VA,di,ct};BASE=JSON.stringify(S);clrPend(CID);if(!CO)DROP=[];okp=true}
+      VER=j.ver;VAULT={id:CID,M:VM,A:VA,di,ct};BASE=JSON.stringify(S);clrPend(CID);if(!CO)DROP=[];okp=true;if((S.rmd||[]).length)rmSync(true)}
   }catch(e){alert("প্রকাশ করা যায়নি। ইন্টারনেট সংযোগ চেক করুন।")}
   busy=false;updBar();if(okp&&retry)render();return okp}
 /* ---------- Google লগইন / লিংক ---------- */
@@ -1544,6 +1588,8 @@ document.addEventListener("input",e=>{
   else if(d.nm)S.name=t.value;
   else if(d.mn)S.members.find(x=>x.id===d.mn).name=t.value;
   else if(d.mr)S.members.find(x=>x.id===d.mr).rent=p(t.value);
+  else if(d.pmn){const a=PM().find(x=>x.id===d.pmn);if(a)a.n=t.value}
+  else if(d.pmv){const a=PM().find(x=>x.id===d.pmv);if(a)a.v=t.value}
   else if(d.df)S.def[d.df]=p(t.value);
   else return;
   save();paint()});
@@ -1594,6 +1640,10 @@ document.addEventListener("click",async e=>{
     setMsg("তৈরি হচ্ছে…");Kraw=rnd(32);CID=b64u(rnd(8));MCODE=NEW.a;CODE=NEW.a;VER=0;VAULT=null;VM=await wrap(NEW.m,Kraw);VA=await wrap(NEW.a,Kraw);
     S=Object.assign(blank(),{name,members:NEWMEM,mcode:NEW.m});BASE="";ROLE="manager";MGR=true;stage="login";
     try{localStorage.setItem(SKEY,JSON.stringify({r:"manager",c:NEW.a}))}catch(x){}save();tab="home";render()}
+  else if(k==="pmadd"&&MGR){const v=$("pmnum").value.trim();if(!v){toast("নম্বর লিখুন");return}S.pm=S.pm||[];if(S.pm.length>=6)return;S.pm.push({id:"p"+Math.random().toString(36).slice(2,7),n:$("pmq").value,v:v.slice(0,40)});save();render()}
+  else if(k==="rmadd"&&MGR){const t=$("rmt").value.trim(),kk=$("rmk").value,d=kk==="m"?+$("rmd1").value:kk==="w"?+$("rmd2").value:$("rmd3").value;if(!t){toast("রিমাইন্ডারের লেখা দিন");return}if(kk==="o"&&!d){toast("তারিখ বেছে নিন");return}if((S.rmd||[]).length>=10)return;(S.rmd=S.rmd||[]).push({id:"r"+Math.random().toString(36).slice(2,8),t:t.slice(0,100),k:kk,d});save();render();rmSync()}
+  else if(k==="minesh"){const tx=mineText();if(tx)shareSheet(tx,"আমার হিসাব")}
+  else if(k==="minepdf"){const d=mineData();if(d)makePDF(mineHTML(),"mymessbill-"+d.m.name+"-"+d.k+".pdf",a,700)}
   else if(k==="add"&&MGR){const n=$("nn").value.trim();if(!n)return;if(AM().length>=LIMIT()){paySheet(true);entLoad();return}S.members.push(mk(n,p($("nr").value)));save();render()}
 });
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));

@@ -165,3 +165,72 @@ test("guard: স্টোরেজ এররের ভেতরের টেক�
   const r = await jr(await h(req("GET", "/x")));
   assert.equal(r.status, 503); assert.equal(r.error, "storage_error_401"); assert.equal(r.detail, undefined);
 });
+
+/* ---------- অটো রিমাইন্ডার + cron ---------- */
+import http from "node:http";
+import { createECDH, randomBytes } from "node:crypto";
+process.env.CRON_SECRET = "cron-secret-for-tests-1234";
+const remind = await import("../api/remind.js");
+const cron = await import("../api/cron.js");
+const b64u = (b) => Buffer.from(b).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+
+test("রিমাইন্ডার: ম্যানেজার ছাড়া সেট করা যায় না, ভুল ফরম্যাট বাতিল", async () => {
+  const m = newMess();
+  await vault.PUT(req("PUT", "/api/vault", m.body));
+  const ok = { id: "r1", k: "w", d: 2, iv: "aXY=", ct: "Y3Q=" };
+  const post = (b) => jr(remind.POST(req("POST", "/api/remind", { id: m.id, token: m.token, a: "set", ...b })));
+  assert.equal((await jr(remind.POST(req("POST", "/api/remind", { id: m.id, token: rnd(40), a: "set", list: [ok] })))).status, 403);
+  assert.equal((await post({ list: [ok] })).status, 200);
+  assert.equal((await post({ list: [{ ...ok, k: "m", d: 31 }] })).status, 400, "মাসের তারিখ ২৮-এর বেশি নয়");
+  assert.equal((await post({ list: [{ ...ok, k: "x" }] })).status, 400);
+  assert.equal((await post({ list: [{ ...ok, ct: "<script>" }] })).status, 400);
+  assert.equal((await post({ list: Array.from({ length: 11 }, (_, i) => ({ ...ok, id: "r" + i })) })).status, 200, "১০টির বেশি হলে বাড়তিগুলো ছাঁটা হয়");
+  assert.equal((await jr(remind.POST(req("POST", "/api/remind", { id: "nonexist1", token: rnd(40), a: "set", list: [] })))).status, 404);
+  const s = await jr(remind.GET(req("GET", "/api/remind?s=1")));
+  assert.equal(s.cron, true);
+});
+
+test("cron: Authorization ছাড়া 401; সঠিক হলে আজকের রিমাইন্ডার একবারই যায়", async () => {
+  const hits = [];
+  const srv = http.createServer((q, r) => { let n = 0; q.on("data", (c) => (n += c.length)); q.on("end", () => { hits.push({ url: q.url, bytes: n, enc: q.headers["content-encoding"] }); r.writeHead(201); r.end(); }); });
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  const port = srv.address().port;
+  try {
+    const m = newMess();
+    await vault.PUT(req("PUT", "/api/vault", m.body));
+    const ecdh = createECDH("prime256v1"); ecdh.generateKeys();
+    const sub = { endpoint: `http://localhost:${port}/push/abc`, keys: { p256dh: b64u(ecdh.getPublicKey()), auth: b64u(randomBytes(16)) } };
+    assert.equal((await jr(push.POST(req("POST", "/api/push", { a: "sub", lk: m.lk, sub })))).status, 200);
+    const dhaka = new Date(Date.now() + 6 * 3600 * 1000), today = dhaka.toISOString().slice(0, 10), wd = dhaka.getUTCDay();
+    const list = [
+      { id: "w1", k: "w", d: wd, iv: "aXZpdml2aXZpdml2", ct: "Y3RjdGN0" },            // আজকের বার → যাবে
+      { id: "w2", k: "w", d: (wd + 3) % 7, iv: "aXZpdmw=", ct: "Y3Q=" },              // অন্য বার → যাবে না
+      { id: "o1", k: "o", d: today, iv: "aXZpdmw=", ct: "Y3Q=" },                     // আজকের এককালীন → যাবে
+      { id: "o2", k: "o", d: "2020-01-01", iv: "aXZpdmw=", ct: "Y3Q=" },              // মেয়াদ পেরিয়েছে → বাদ
+    ];
+    assert.equal((await jr(remind.POST(req("POST", "/api/remind", { id: m.id, token: m.token, a: "set", list })))).status, 200);
+
+    assert.equal((await jr(cron.GET(req("GET", "/api/cron")))).status, 401);
+    assert.equal((await jr(cron.GET(req("GET", "/api/cron", undefined, { authorization: "Bearer wrong-wrong-wrong-wrong" })))).status, 401);
+    const auth = { authorization: "Bearer " + process.env.CRON_SECRET };
+    const r1 = await jr(cron.GET(req("GET", "/api/cron", undefined, auth)));
+    assert.equal(r1.status, 200);
+    const mine = hits.length;
+    assert.equal(mine >= 2, true, "আজকের দুটো রিমাইন্ডারের পুশ গেছে (" + mine + ")");
+    assert.equal(hits.every((h) => h.enc === "aes128gcm" && h.bytes > 100), true);
+    const before = hits.length;
+    const r2 = await jr(cron.GET(req("GET", "/api/cron", undefined, auth)));
+    assert.equal(r2.status, 200);
+    assert.equal(hits.length, before, "একই দিনে দ্বিতীয়বার cron চললে ডুপ্লিকেট যায় না");
+    // মেয়াদ পেরোনো এককালীন রিমাইন্ডার মুছে গেছে
+    const stored = await lib.getJSON("rm_" + m.id);
+    assert.equal(stored.find((x) => x.id === "o2"), undefined);
+    assert.equal(stored.length, 3);
+  } finally { srv.close(); }
+});
+
+test("cron: CRON_SECRET না থাকলে 503 (চুপচাপ ব্যর্থ নয়)", async () => {
+  const keep = process.env.CRON_SECRET; process.env.CRON_SECRET = "short";
+  try { const r = await jr(cron.GET(req("GET", "/api/cron", undefined, { authorization: "Bearer short" }))); assert.equal(r.status, 503); assert.equal(r.error, "cron_not_configured"); }
+  finally { process.env.CRON_SECRET = keep; }
+});
