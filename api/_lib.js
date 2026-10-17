@@ -39,7 +39,10 @@ export const guard = (fn) => async (req) => {
   try { return await fn(req); }
   catch (e) {
     if (e instanceof StoreError) return J({ error: e.code }, e.status);
-    console.error(e); return J({ error: "server" }, 500);
+    // Vercel → Logs-এ খুঁজে পাওয়ার জন্য এক লাইনের JSON (ব্যবহারকারীর ডেটা বা টোকেন নয়)
+    let path = ""; try { path = new URL(req.url).pathname; } catch {}
+    console.error(JSON.stringify({ lvl: "error", app: "mymessbill", path, method: req.method, msg: String((e && e.message) || e).slice(0, 300), at: new Date().toISOString() }));
+    return J({ error: "server" }, 500);
   }
 };
 

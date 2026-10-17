@@ -40,12 +40,22 @@ export const GET = guard(async (req) => {
   const lim = Math.max(1, Math.min(100, parseInt(u.searchParams.get("limit")) || 30));
   const off = Math.max(0, parseInt(u.searchParams.get("offset")) || 0);
   const q = (u.searchParams.get("q") || "").trim().toLowerCase().slice(0, 50);
+  const fl = ["paid", "active7", "stale30", "big"].includes(u.searchParams.get("f")) ? u.searchParams.get("f") : "";
   await idxEnsure();
   const cfg0 = await getCfg();
   const ids = (await cmd("ZREVRANGE", "vidx", 0, -1)) || [];
   let page, total;
-  if (q) {
-    const all = (await metasOf(ids)).filter((m) => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q));
+  if (q || fl) {
+    let all = await metasOf(ids.slice(0, 1000));
+    if (q) all = all.filter((m) => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q));
+    const now = Date.now();
+    if (fl === "active7") all = all.filter((m) => now - (m.uat || 0) < 7 * 864e5);
+    else if (fl === "stale30") all = all.filter((m) => now - (m.uat || 0) > 30 * 864e5);
+    else if (fl === "big") all = all.filter((m) => (m.size || 0) > 700000);
+    else if (fl === "paid") {
+      const ents = all.length ? await cmds(all.map((m) => ["GET", "ent_" + m.id])) : [];
+      all = all.filter((m, i) => { let en = null; try { en = JSON.parse(ents[i]); } catch {} return limFrom(en, cfg0) > cfg0.free; });
+    }
     total = all.length; page = all.slice(off, off + lim);
   } else {
     total = ids.length; page = await metasOf(ids.slice(off, off + lim));
@@ -68,7 +78,13 @@ export const GET = guard(async (req) => {
       if (l > cfg0.free) paid++;
       if (en && en.until) exp.push({ id: m.id, name: m.name, lim: l, until: en.until });
     });
-    sum = { members, paid, exp, capped: ids.length > 1000 };
+    // ব্যবহারের চার্ট: গত ১২ মাসে নতুন মেস, আর সক্রিয় (সর্বশেষ আপডেট) মেসের সংখ্যা
+    const ym = (t) => { const d = new Date(t + 6 * 3600e3); return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0"); };
+    const growth = {}; const nowT = Date.now();
+    for (let i = 11; i >= 0; i--) { const d = new Date(nowT + 6 * 3600e3); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() - i); growth[d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0")] = 0; }
+    all.forEach((m) => { if (m.cat) { const k = ym(m.cat); if (k in growth) growth[k]++; } });
+    const act = { d7: all.filter((m) => nowT - (m.uat || 0) < 7 * 864e5).length, d30: all.filter((m) => nowT - (m.uat || 0) < 30 * 864e5).length };
+    sum = { members, paid, exp, growth, act, capped: ids.length > 1000 };
   }
   return J({ total, offset: off, limit: lim, list: rows, sum });
 });

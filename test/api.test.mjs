@@ -234,3 +234,24 @@ test("cron: CRON_SECRET না থাকলে 503 (চুপচাপ ব্য
   try { const r = await jr(cron.GET(req("GET", "/api/cron", undefined, { authorization: "Bearer short" }))); assert.equal(r.status, 503); assert.equal(r.error, "cron_not_configured"); }
   finally { process.env.CRON_SECRET = keep; }
 });
+
+test("অ্যাডমিন: ফিল্টার (পেইড/সক্রিয়) ও ব্যবহারের চার্টের ডেটা", async () => {
+  const hdr = { "x-admin-key": process.env.ADMIN_KEY, ip: "5.5.5.5" };
+  const list = (q) => jr(admin.GET(req("GET", "/api/admin" + q, undefined, hdr)));
+  const a = newMess({ name: "ফিল্টার-এ" }), b = newMess({ name: "ফিল্টার-বি", ct: "x".repeat(710000) });
+  for (const m of [a, b]) assert.equal((await jr(await vault.PUT(req("PUT", "/api/vault", m.body)))).status, 200);
+  const act = await list("?f=active7&q=" + encodeURIComponent("ফিল্টার"));
+  assert.equal(act.total, 2);
+  const big = await list("?f=big&q=" + encodeURIComponent("ফিল্টার"));
+  assert.equal(big.total, 1); assert.equal(big.list[0].name, "ফিল্টার-বি");
+  const stale = await list("?f=stale30&q=" + encodeURIComponent("ফিল্টার"));
+  assert.equal(stale.total, 0);
+  const paid = await list("?f=paid&q=" + encodeURIComponent("ফিল্টার"));
+  assert.equal(paid.total, 0);
+  const s = await list("?sum=1&limit=1");
+  assert.equal(Object.keys(s.sum.growth).length, 12);
+  assert.ok(Object.values(s.sum.growth).reduce((x, y) => x + y, 0) >= 2);
+  assert.ok(s.sum.act.d7 >= 2 && s.sum.act.d30 >= s.sum.act.d7);
+  const bad = await list("?f=hack");
+  assert.equal(bad.status, 200);
+});
