@@ -55,7 +55,22 @@ export const GET = guard(async (req) => {
     let en = null; try { en = JSON.parse(res[j * 3 + 2]); } catch {}
     return { id: m.id, name: m.name, ver: m.ver, cat: m.cat, uat: m.uat, codes: m.codes, chat: res[j * 3] || 0, ev: res[j * 3 + 1] || 0, mc: m.mc, lim: limFrom(en, cfg0), until: (en && en.until) || 0, size: m.size };
   });
-  return J({ total, offset: off, limit: lim, list: rows });
+  // sum=1: ওভারভিউয়ের মোট হিসাব (সব মেস মিলিয়ে) — শুধু প্রথম লোড/রিফ্রেশে চাওয়া হয়
+  let sum;
+  if (u.searchParams.get("sum") === "1") {
+    const all = await metasOf(ids.slice(0, 1000));
+    const ents = all.length ? await cmds(all.map((m) => ["GET", "ent_" + m.id])) : [];
+    let members = 0, paid = 0; const exp = [];
+    all.forEach((m, i) => {
+      let en = null; try { en = JSON.parse(ents[i]); } catch {}
+      members += m.mc || 0;
+      const l = limFrom(en, cfg0);
+      if (l > cfg0.free) paid++;
+      if (en && en.until) exp.push({ id: m.id, name: m.name, lim: l, until: en.until });
+    });
+    sum = { members, paid, exp, capped: ids.length > 1000 };
+  }
+  return J({ total, offset: off, limit: lim, list: rows, sum });
 });
 
 export const DELETE = guard(async (req) => {

@@ -1,2 +1,44 @@
-{"name":"mymessbill — Mess Expense & Bill Manager","short_name":"mymessbill","lang":"bn","start_url":"/","scope":"/","display":"standalone","background_color":"#ffffff","theme_color":"#1d6a49",
-"icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "id": "/",
+  "name": "mymessbill — Mess Expense & Bill Manager",
+  "short_name": "mymessbill",
+  "description": "মেসের মিল, বাজার, বিল ও হিসাব এক জায়গায় — বাংলায়",
+  "lang": "bn",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "categories": [
+    "finance",
+    "productivity"
+  ],
+  "background_color": "#ffffff",
+  "theme_color": "#1d6a49",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

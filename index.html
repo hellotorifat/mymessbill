@@ -210,7 +210,7 @@ details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;pa
 :root[data-theme="dark"] .ms-stars{display:block}:root[data-theme="dark"] .mh .ms-rays{opacity:.25}:root[data-theme="dark"] .mh .ch{background:#1d4640}
 .lgo{position:fixed;inset:0;background:#0008;z-index:99;display:flex;align-items:flex-end;justify-content:center}.lgb{background:var(--card);color:var(--ink);width:100%;max-width:640px;max-height:80vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}</style>
 </head>
-<body><div id="shell"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script id="app">
+<body><div id="shell"></div><script id="app">
 const E="</scr"+"ipt>",DKEY="bpDraftV2",RKEY="bpRoleV2";
 const $=id=>document.getElementById(id);
 const BN=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
@@ -340,7 +340,7 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(
   else if(a.dataset.act==="more"){e.stopPropagation();closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
     o.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-label="আরও"><div class="shh"><h2>আরও মেনু</h2><button class="x" data-sh="close" aria-label="বন্ধ করুন">✕</button></div><div class="mg6">${(window.__MORE||[]).map(x=>`<button data-t="${x[0]}" class="${tab===x[0]?"on":""}">${IC[x[0]]}<span>${x[1]}</span></button>`).join("")}</div></div>`;document.body.appendChild(o)}},true);
 /* ---------- shell / render ---------- */
-$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div><h1 class="sr">mymessbill</h1><div class="lgw"><img class="lgi" src="logo.png" alt="mymessbill" width="150" height="38"></div><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.jpg" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><div class="fbar" aria-hidden="true"><div class="tk" id="fk"></div></div><nav class="tabs" id="tabs"></nav>';
+$("shell").innerHTML='<header class="hero"><div class="hh"><div class="hl"><div><h1 class="sr">mymessbill</h1><div class="lgw"><img class="lgi" src="logo.webp" alt="mymessbill" width="150" height="38"></div><div class="dev"><a class="dl" href="https://www.facebook.com/hellotorifat" target="_blank" rel="noopener">Developed by</a><button class="dn" data-act="devcard" aria-label="ডেভেলপার সম্পর্কে জানুন"><img class="av" src="rifat.webp" alt="" width="22" height="22">Rifat</button></div></div></div><div class="hact"><button id="thm" class="hb" data-act="theme" aria-label="ডার্ক / লাইট মোড" title="ডার্ক / লাইট মোড">🌙</button><button id="inst" class="hb" data-act="install" hidden>📲 ইনস্টল</button><button id="out" class="hb pf" data-act="profile" aria-label="প্রোফাইল" hidden></button></div></div><div class="sub" id="sub"></div></header><div id="bar"></div><div id="view"></div><div class="fbar" aria-hidden="true"><div class="tk" id="fk"></div></div><nav class="tabs" id="tabs" aria-label="প্রধান মেনু"></nav>';
 paintTheme();
 function updBar(){const b=$("bar");if(OFFLINE&&ROLE&&!MGR){b.innerHTML='<div class="bar warn">📴 অফলাইন — সর্বশেষ সেভ করা ডেটা দেখাচ্ছে</div>';return}if(!MGR||!ROLE){b.innerHTML="";return}const pend=JSON.stringify(S)!==BASE;
   b.innerHTML=`<div class="bar${pend?" warn":""}"><span>${pend?(VAULT?"⚠ অপ্রকাশিত পরিবর্তন আছে — মেম্বাররা এখনো দেখছে না":"🆕 মেস তৈরি হয়েছে — প্রকাশ করুন চাপলে কোড দিয়ে মেম্বাররা ঢুকতে পারবে"):"✓ সব পরিবর্তন প্রকাশিত"}</span><button class="p" data-act="pub"${pend&&!busy?"":" disabled"}>${busy?"প্রকাশ হচ্ছে…":"প্রকাশ করুন"}</button></div>`}
@@ -355,7 +355,7 @@ function render(){
   if(tab==="set"&&(!MGR||CO))tab="home";
   const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
   const inMore=MORE.some(x=>x[0]===tab);
-  $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
+  $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"${tab===t[0]?' aria-current="page"':""}><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"${inMore?' aria-current="page"':""}><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
   $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
   paint();paintBz();fit();gHook();sitePaint();mhTime();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
@@ -364,7 +364,7 @@ function render(){
   const on=$('tabs').querySelector('.on');if(on)$('tabs').scrollLeft=on.offsetLeft-80;
 }
 function vLogin(){
-  return `<div id="site"></div><div class="box" style="text-align:center"><img class="lgl" src="logo.png" alt="mymessbill"></div><div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
+  return `<div id="site"></div><div class="box" style="text-align:center"><img class="lgl" src="logo.webp" alt="mymessbill"></div><div id="gbox"></div><div class="box"><h2>👤 মেম্বার লগইন</h2><div class="row"><input id="mc" class="code" placeholder="MEM-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="mlogin">দেখুন</button></div>
   <h2 style="margin-top:14px">🔑 ম্যানেজার লগইন</h2><div class="row"><input id="ac" class="code" placeholder="MGR-XXXX-XXXX-XXXX" autocomplete="off"><button class="p fix" data-act="alogin">লগইন</button></div>
   <p class="mute">ম্যানেজার কোড দিলে আগের সব ডেটা ফেরত আসবে। মেম্বার কোডে মিল ও বাজারের টিক দেওয়া যায়; হিসাব বদলানো যায় না।</p><p class="mute" id="lmsg"></p></div>
   <div class="box"><h2>🏠 নতুন মেস তৈরি করুন</h2><p class="mute">নিজের মেসের হিসাব রাখতে চান? নতুন মেস তৈরি করলে আপনি একটি ম্যানেজার কোড ও একটি মেম্বার কোড পাবেন। তৈরি করে আপনি <a href="/terms" target="_blank" rel="noopener">শর্তাবলি</a> ও <a href="/privacy" target="_blank" rel="noopener">গোপনীয়তা নীতি</a> মেনে নিচ্ছেন।</p><button class="p" data-act="newmess" style="width:100%">➕ মেস তৈরি করুন</button>
@@ -801,11 +801,15 @@ function bzReportHTML(){
   <div class="box"><h2>🍽 ${bd(z.days)} দিনের মেনু</h2><table class="c"><tr><th ${L()}>দিন</th><th ${L()}>সকাল</th><th ${L()}>দুপুর</th><th ${L()}>রাত</th><th ${L()}>নোট</th></tr>${menu}</table></div></div>
   <div class="rp pg"><div class="box"><h2>🛒 কেনাকাটা তালিকা</h2><table class="c"><tr><th ${L()}>পণ্য</th><th>প্ল্যান পরিমাণ</th><th>একক</th><th>ঘরে আছে</th><th>দাম/একক</th><th>আনুমানিক ৳</th><th>কেনা পরিমাণ</th><th>আসল দাম</th><th>খরচ ৳</th><th>অবস্থা</th></tr>${cat}
   <tr class="tot"><td ${L()}>মোট</td><td></td><td></td><td></td><td></td><td>${f(c.est)}</td><td></td><td></td><td>${f(c.cur)}</td><td></td></tr></table>${opt.length?`<p class="mute" style="margin:6px 0 0">ঐচ্ছিক (পরিমাণ ০): ${opt.join(", ")}</p>`:""}</div>${hist}${rptFoot()}</div>`}
+/* PDF লাইব্রেরি শুধু PDF বানানোর সময় লোড হয় (পেজ লোড দ্রুত)। আগে নিজের /vendor ফোল্ডার, না থাকলে CDN। */
+function loadScript(srcs){return new Promise((res,rej)=>{let i=0;const next=()=>{if(i>=srcs.length)return rej(new Error("lib"));const s=document.createElement("script");s.src=srcs[i++];s.async=true;s.referrerPolicy="no-referrer";s.onload=()=>res();s.onerror=()=>{s.remove();next()};document.head.appendChild(s)};next()})}
+async function loadPdfLibs(){if(window.html2canvas&&window.jspdf)return;const C="https://cdnjs.cloudflare.com/ajax/libs/";
+  await Promise.all([window.html2canvas?0:loadScript(["/vendor/html2canvas.min.js",C+"html2canvas/1.4.1/html2canvas.min.js"]),window.jspdf?0:loadScript(["/vendor/jspdf.umd.min.js",C+"jspdf/2.5.1/jspdf.umd.min.js"])])}
 async function makePDF(html,fn,btn,W){
   W=W||1123;
   const old=btn?btn.textContent:"";if(btn){btn.disabled=true;btn.textContent="PDF তৈরি হচ্ছে…"}
   try{
-    if(!window.html2canvas||!window.jspdf)throw new Error("lib");
+    await loadPdfLibs();if(!window.html2canvas||!window.jspdf)throw new Error("lib");
     const el=document.createElement("div");el.style.cssText="position:absolute;left:-10000px;top:0;width:"+W+"px";
     const setW=w=>{el.style.width=w+"px";el.querySelectorAll(".rp").forEach(x=>{x.style.width=w+"px"})};
     el.innerHTML=html;setW(W);document.body.appendChild(el);
@@ -1025,7 +1029,7 @@ function shareSheet(text,title){
   document.body.appendChild(o)}
 function devCard(){
   closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
-  o.innerHTML=`<div class="sh dv" role="dialog" aria-modal="true" aria-label="ডেভেলপার পরিচিতি"><button class="x dvx" data-sh="close" aria-label="বন্ধ করুন">✕</button><img class="dvp" src="rifat.jpg" alt="${DEV.name}-এর ছবি"><h2 class="dvn">${DEV.name}</h2><div class="dvr">${DEV.role}</div><p class="dvb">${esc(DEV.bio)}</p><a class="btn p" href="${DEV.fb}" target="_blank" rel="noopener">Facebook প্রোফাইল দেখুন</a></div>`;
+  o.innerHTML=`<div class="sh dv" role="dialog" aria-modal="true" aria-label="ডেভেলপার পরিচিতি"><button class="x dvx" data-sh="close" aria-label="বন্ধ করুন">✕</button><img class="dvp" src="rifat.webp" alt="${DEV.name}-এর ছবি"><h2 class="dvn">${DEV.name}</h2><div class="dvr">${DEV.role}</div><p class="dvb">${esc(DEV.bio)}</p><a class="btn p" href="${DEV.fb}" target="_blank" rel="noopener">Facebook প্রোফাইল দেখুন</a></div>`;
   document.body.appendChild(o)}
 document.addEventListener("click",async e=>{
   const ov=$("ov");if(!ov)return;
@@ -1322,10 +1326,13 @@ async function entLoad(){
 function vPlan(){
   if(!MGR||CO)return"";
   const n=AM().length,lim=LIMIT(),full=n>=lim,pend=(ENT.pays||[]).filter(x=>x.st==="pending").length;
-  return `<div class="box"><h2>💳 সদস্য সীমা ও প্ল্যান</h2><p class="mute">ফ্রিতে ${bd(FREEL())} জন পর্যন্ত সদস্য রাখা যায়। এর বেশি লাগলে টাকা পাঠিয়ে প্ল্যান নিতে হয়।</p>
+  return `<div class="box"><h2>📦 ডেটার আকার</h2>${sizeMeter()}</div><div class="box"><h2>💳 সদস্য সীমা ও প্ল্যান</h2><p class="mute">ফ্রিতে ${bd(FREEL())} জন পর্যন্ত সদস্য রাখা যায়। এর বেশি লাগলে টাকা পাঠিয়ে প্ল্যান নিতে হয়।</p>
   <div class="srow"><span style="flex:1">সদস্য</span><b>${bd(n)} / ${bd(lim)}</b></div><div class="plb${full?" full":""}"><i style="width:${Math.min(100,n/lim*100)}%"></i></div>
   ${ENT.until?`<p class="mute">প্ল্যান চলবে: ${fd(dk(new Date(ENT.until)))} পর্যন্ত</p>`:""}${pend?`<p class="mute">⏳ ${bd(pend)}টি পেমেন্ট যাচাইয়ের অপেক্ষায় আছে</p>`:""}
   <button class="p" style="width:100%" data-act="paysheet">⬆ সদস্য সীমা বাড়ান / পেমেন্ট করুন</button></div>`}
+/* সার্ভারে একটা মেসের ডেটা সর্বোচ্চ ~৯০০ KB; কাছাকাছি গেলে আগেই সতর্ক করা হয় */
+function sizeMeter(){const n=((PUB||(VAULT&&VAULT.ct)||"")+"").length,mx=900000,pc=Math.min(100,Math.round(n/mx*100)),col=pc>=90?"var(--bad)":pc>=70?"var(--acc)":"var(--pri)";
+  return `<div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}" aria-label="ডেটার আকার" style="height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0"><div style="height:100%;width:${Math.max(2,pc)}%;background:${col}"></div></div><p class="mute">${bd(Math.round(n/1024))} KB / ${bd(Math.round(mx/1024))} KB (${bd(pc)}%)${pc>=70?" — সীমার কাছাকাছি! \"💾 ব্যাকআপ\" নিয়ে রাখুন ও পুরোনো মাসের তথ্য কমান।":" — যথেষ্ট জায়গা আছে।"}</p>`}
 function paySheet(forced){
   closeOv();const o=document.createElement("div");o.className="ov";o.id="ov";
   const C=PAYC||{free:15,plans:[],methods:[],support:""},plans=C.plans||[],ms=C.methods||[];
@@ -1350,7 +1357,7 @@ async function paySend(){
   if(!VAULT){alert("আগে একবার \"প্রকাশ করুন\" চেপে মেস প্রকাশ করুন, তারপর পেমেন্ট করুন।");return}
   try{const r=await fetch("/api/pay",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({a:"submit",id:CID,token:await tokOf(MCODE),plan:PS.plan,method:PS.method,sender:sn.trim(),trx:tx})}),j=await r.json().catch(()=>({}));
     if(r.ok){toast("পেমেন্ট জমা হয়েছে — যাচাইয়ের পর অনুমোদন হবে ✔");await entLoad();paySheet()}
-    else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||(/^storage_/.test(j.error||"")?srvMsg(j.error)+(j.detail?" "+j.detail:""):"জমা হয়নি ("+(j.error||r.status)+")"))
+    else alert({trx_used:"এই TrxID আগেই ব্যবহার হয়েছে",busy:"আগের অনুরোধ চলছে, কয়েক সেকেন্ড পরে আবার চাপুন",rate_limited:"অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পরে আবার করুন",too_many_pending:"আগের ৩টি পেমেন্ট যাচাই বাকি আছে, একটু অপেক্ষা করুন",bad_plan:"প্ল্যান বা পদ্ধতি এখন চালু নেই, আবার বেছে নিন",bad_sender:"নম্বরটি ঠিক নয়",bad_trx:"TrxID ঠিক নয়",forbidden:"ম্যানেজার হিসেবে যাচাই হয়নি"}[j.error]||(/^storage_/.test(j.error||"")?srvMsg(j.error)+(j.detail?" "+j.detail:""):"জমা হয়নি ("+(j.error||r.status)+")"))
   }catch(e){alert("ইন্টারনেট সংযোগ নেই")}}
 /* ---------- আমার হিসাব + প্রোফাইল ---------- */
 function vMine(){
@@ -1479,6 +1486,8 @@ async function publish(retry){
       else if(r.status===409&&!retry&&VAULT){busy=false;if(await resolveConflict())return publish(true);busy=true;
         alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।")}
       else if(r.status===409)alert("প্রকাশ হয়নি: অন্য ডিভাইস/ট্যাব থেকে নতুন ডেটা প্রকাশ হয়ে গেছে। পেজ রিলোড করে আবার কোড দিয়ে ঢুকুন।");
+      else if(r.status===413)alert("প্রকাশ হয়নি: মেসের ডেটা সার্ভারের সীমা ("+bd(Math.round((j&&j.max||900000)/1024))+" KB) ছাড়িয়ে গেছে। প্রথমে \"💾 ব্যাকআপ\" নিয়ে রাখুন, তারপর পুরোনো মাসের তথ্য/ছবি কমিয়ে আবার প্রকাশ করুন।");
+      else if(r.status===429)alert("অল্প সময়ে অনেক বেশি অনুরোধ হয়েছে। এক মিনিট পরে আবার চেষ্টা করুন।");
       else if(r.status===403)alert(CO?"প্রকাশ হয়নি: আপনার সহ-ম্যানেজার অনুমতি বাতিল হয়েছে বা কোড বদলেছে।":"প্রকাশ হয়নি: ম্যানেজার কোড মেলেনি।");
       else if(j&&j.error&&/^storage_/.test(j.error))alert(srvMsg(j.error));
       else if(r.status===404||r.status===405)alert(srvMsg("no_api"));

@@ -1,6 +1,7 @@
 // অ্যাপ শেল ক্যাশ: নেটওয়ার্ক আগে, না পেলে ক্যাশ। /api/* কখনো ক্যাশ হয় না।
-const C="bp-v19",SHELL=["/","/index.html","/manifest.webmanifest","/icon-192.png","/rifat.jpg","/logo.png"];
-self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
+const C="bp-v20",SHELL=["/","/index.html","/manifest.webmanifest","/icon-192.png","/rifat.webp","/logo.webp"],LATER=["/vendor/html2canvas.min.js","/vendor/jspdf.umd.min.js"];
+// অ্যাপ শেল ইনস্টলের সময়; PDF লাইব্রেরি (থাকলে) পিছনে ক্যাশ হয় — না থাকলে ইনস্টল আটকায় না। তাই অফলাইনেও PDF চলে।
+self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(SHELL).then(()=>Promise.allSettled(LATER.map(u=>c.add(u))))).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
   const u=new URL(e.request.url);
