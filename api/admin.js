@@ -1,177 +1,61 @@
-import { createHash } from "node:crypto";
 import { timingSafeEqual } from "node:crypto";
-// Redis (Upstash REST) স্টোরেজ। Vercel-এ Storage → Upstash Redis যুক্ত করলে এই env ভেরিয়েবলগুলো নিজে থেকেই বসে যায়।
-// BP_MEMORY=1 শুধু লোকাল টেস্টের জন্য (মেমরিতে রাখে, রিস্টার্টে হারায়) — প্রোডাকশনে ব্যবহার করবেন না।
-const URL_ = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || "";
-const TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "";
-
-class StoreError extends Error {
-  constructor(code, status = 503) { super(code); this.code = code; this.status = status; }
-}
-
-/* ---------- মেমরি ব্যাকএন্ড (শুধু টেস্ট) ---------- */
-const G = (globalThis.__bpmem ??= { mem: new Map(), zs: new Map(), exp: new Map() }); const { mem, zs, exp } = G;
-function alive(k) { const e = exp.get(k); if (e && e < Date.now()) { mem.delete(k); exp.delete(k); return false; } return true; }
-function memCmd(c) {
-  const [op, k, ...a] = c; const O = String(op).toUpperCase();
-  const Z = () => { if (!zs.has(k)) zs.set(k, []); return zs.get(k); };
-  switch (O) {
-    case "GET": return alive(k) && mem.has(k) ? mem.get(k) : null;
-    case "SET": {
-      const nx = a.includes("NX"); if (nx && alive(k) && mem.has(k)) return null;
-      mem.set(k, a[0]); const i = a.indexOf("PX"); if (i >= 0) exp.set(k, Date.now() + +a[i + 1]); else exp.delete(k); return "OK";
-    }
-    case "DEL": { const d = mem.delete(k) | zs.delete(k); return d ? 1 : 0; }
-    case "SCAN": { const m = String(a[1] === "MATCH" ? a[2] : "*").replace(/\*$/, ""); return ["0", [...mem.keys()].filter((x) => x.startsWith(m) && alive(x))]; }
-    case "ZADD": { const z = Z(); if (!z.includes(a[1])) z.push(a[1]); z.sort(); return 1; }
-    case "ZCARD": return (zs.get(k) || []).length;
-    case "ZRANGE": { const z = zs.get(k) || []; let s = +a[0], e = +a[1]; if (s < 0) s = Math.max(0, z.length + s); if (e < 0) e = z.length + e; return z.slice(s, e + 1); }
-    case "ZRANGEBYLEX": {
-      const z = zs.get(k) || []; const mn = a[0], mx = a[1]; let r = z.filter((m) => (mn === "-" ? true : mn[0] === "(" ? m > mn.slice(1) : m >= mn.slice(1)) && (mx === "+" ? true : mx[0] === "(" ? m < mx.slice(1) : m <= mx.slice(1)));
-      const li = a.indexOf("LIMIT"); if (li >= 0) r = r.slice(+a[li + 1], +a[li + 1] + +a[li + 2]); return r;
-    }
-    case "ZREMRANGEBYRANK": { const z = zs.get(k) || []; let s = +a[0], e = +a[1]; if (s < 0) s = Math.max(0, z.length + s); if (e < 0) e = z.length + e; z.splice(s, Math.max(0, e - s + 1)); return 1; }
-    default: throw new StoreError("store_cmd");
-  }
-}
-
-async function cmds(list) {
-  if (!list.length) return [];
-  if (process.env.BP_MEMORY === "1") return list.map(memCmd);
-  if (!URL_ || !TOKEN) throw new StoreError("storage_not_configured");
-  let r;
-  try {
-    r = await fetch(URL_.replace(/\/$/, "") + "/pipeline", {
-      method: "POST", headers: { authorization: "Bearer " + TOKEN, "content-type": "application/json" }, body: JSON.stringify(list.map((c) => c.map((x) => String(x)))),
-    });
-  } catch { throw new StoreError("storage_unreachable"); }
-  if (!r.ok) { let t = ""; try { t = (await r.text()).slice(0, 120); } catch {} console.error("upstash", r.status, t); const e = new StoreError("storage_error_" + r.status); e.detail = t; throw e; }
-  const j = await r.json();
-  return j.map((x) => { if (x && x.error) { console.error("upstash cmd", x.error); const e = new StoreError("storage_cmd"); e.detail = String(x.error).slice(0, 120); throw e; } return x.result; });
-}
-const cmd = async (...c) => (await cmds([c]))[0];
-const getJSON = async (k) => { const v = await cmd("GET", k); if (v == null) return null; try { return JSON.parse(v); } catch { return null; } };
-const setJSON = (k, o) => cmd("SET", k, JSON.stringify(o));
-
-const sha = (s) => createHash("sha256").update(s).digest("hex");
-const J = (o, s = 200) =>
-  new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
-const guard = (fn) => async (req) => {
-  try { return await fn(req); }
-  catch (e) {
-    if (e instanceof StoreError) return J({ error: e.code, detail: e.detail }, e.status);
-    console.error(e); return J({ error: "server" }, 500);
-  }
-};
-
-
-/* ---------- সেটিং, প্ল্যান ও মেম্বার সীমা ---------- */
-const DEF_PLANS = [
-  { id: "p25", name: "২৫ জন পর্যন্ত", limit: 25, price: 100, days: 0 },
-  { id: "p50", name: "৫০ জন পর্যন্ত", limit: 50, price: 200, days: 0 },
-];
-async function getCfg() {
-  const c = (await getJSON("cfg")) || {};
-  return { free: c.free || 15, plans: Array.isArray(c.plans) && c.plans.length ? c.plans : DEF_PLANS, methods: Array.isArray(c.methods) ? c.methods : [], support: c.support || "", notice: c.notice || "" };
-}
-async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
-function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
-const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
-
-/* ---------- Web Push (লাইব্রেরি ছাড়া: VAPID ES256 + RFC 8291 aes128gcm) ---------- */
-import * as NC from "node:crypto";
-const Bf = (x) => Buffer.from(x);
-const ub64 = (s) => Buffer.from(String(s).replace(/-/g, "+").replace(/_/g, "/"), "base64");
-const pb64 = (buf) => Buffer.from(buf).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-async function vapid() {
-  let v = await getJSON("vapid");
-  if (v && v.pub && v.prv) return v;
-  const e = NC.createECDH("prime256v1"); e.generateKeys();
-  v = { pub: pb64(e.getPublicKey()), prv: pb64(e.getPrivateKey()) };
-  if (!(await cmd("SET", "vapid", JSON.stringify(v), "NX"))) v = await getJSON("vapid");
-  return v;
-}
-function vapidJwt(aud, v) {
-  const h = pb64(Bf(JSON.stringify({ typ: "JWT", alg: "ES256" }))), p = pb64(Bf(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: "https://mymessbill.vercel.app" })));
-  const pub = ub64(v.pub), d = ub64(v.prv);
-  const key = NC.createPrivateKey({ key: { kty: "EC", crv: "P-256", d: pb64(d), x: pb64(pub.subarray(1, 33)), y: pb64(pub.subarray(33, 65)) }, format: "jwk" });
-  const sig = NC.createSign("SHA256").update(h + "." + p).sign({ key, dsaEncoding: "ieee-p1363" });
-  return h + "." + p + "." + pb64(sig);
-}
-const hkdf = (salt, ikm, info, len) => { const prk = NC.createHmac("sha256", salt).update(ikm).digest(); let t = Buffer.alloc(0), out = Buffer.alloc(0), i = 1; while (out.length < len) { t = NC.createHmac("sha256", prk).update(Buffer.concat([t, info, Buffer.from([i++])])).digest(); out = Buffer.concat([out, t]); } return out.subarray(0, len); };
-function encryptPush(payload, p256dh, auth) {
-  const ua = ub64(p256dh), as = ub64(auth), salt = NC.randomBytes(16), e = NC.createECDH("prime256v1"); e.generateKeys();
-  const secret = e.computeSecret(ua), asPub = e.getPublicKey();
-  const ikm = hkdf(as, secret, Buffer.concat([Bf("WebPush: info\0"), ua, asPub]), 32);
-  const cek = hkdf(salt, ikm, Bf("Content-Encoding: aes128gcm\0"), 16), nonce = hkdf(salt, ikm, Bf("Content-Encoding: nonce\0"), 12);
-  const c = NC.createCipheriv("aes-128-gcm", cek, nonce);
-  const ct = Buffer.concat([c.update(Buffer.concat([Bf(payload), Buffer.from([2])])), c.final(), c.getAuthTag()]);
-  const rs = Buffer.alloc(4); rs.writeUInt32BE(4096);
-  return Buffer.concat([salt, rs, Buffer.from([asPub.length]), asPub, ct]);
-}
-async function pushOne(sub, payload, v) {
-  const u = new URL(sub.e);
-  if (u.protocol !== "https:" && !(process.env.BP_MEMORY === "1" && u.hostname === "localhost")) return 0;
-  const body = encryptPush(payload, sub.p, sub.a);
-  const r = await fetch(sub.e, { method: "POST", headers: { "content-encoding": "aes128gcm", "content-type": "application/octet-stream", ttl: "86400", urgency: "high", authorization: "vapid t=" + vapidJwt(u.origin, v) + ", k=" + v.pub }, body, signal: AbortSignal.timeout(6000) });
-  return r.status;
-}
-/* মেসের সব সাবস্ক্রাইবকে (প্রেরক বাদে) পুশ পাঠায়। টেক্সট ক্লায়েন্টে এনক্রিপ্টেড; সার্ভার শুধু ct পাঠিয়ে দেয়। */
-async function notifyMess(id, name, nf, exEndpoint) {
-  try {
-    const kind = nf && /^[a-z]{1,8}$/.test(nf.k || "") ? nf.k : "u";
-    if (!(await cmd("SET", "pt_" + id + "_" + kind, "1", "NX", "PX", "4000"))) return;
-    const subs = (await getJSON("ps_" + id)) || [];
-    if (!subs.length) return;
-    const v = await vapid();
-    const pl = JSON.stringify({ id, n: String(name || "").slice(0, 40), k: kind, iv: nf && typeof nf.iv === "string" && nf.iv.length <= 24 ? nf.iv : "", ct: nf && typeof nf.ct === "string" && nf.ct.length <= 1500 ? nf.ct : "" });
-    const live = [], seen = {};
-    for (const s of subs) {
-      if (s.e === exEndpoint) { live.push(s); continue; }
-      if (seen[s.l] === undefined) seen[s.l] = (await cmd("GET", "lk_" + s.l)) === id;
-      if (!seen[s.l]) continue;
-      let st = 0; try { st = await pushOne(s, pl, v); } catch { st = 0; }
-      if (st === 404 || st === 410) continue;
-      live.push(s);
-    }
-    if (live.length !== subs.length) await setJSON("ps_" + id, live);
-  } catch (e) { console.error("push", e && e.message); }
-}
-
+import { cmd, cmds, getJSON, setJSON, sha, J, guard, StoreError, okId, getCfg, entOf, limFrom, DEF_PLANS, metaOf, idxEnsure, idxDel, payStats, payBump, ipOf } from "./_lib.js";
 
 // সুপার অ্যাডমিন (শুধু মালিকের জন্য): ADMIN_KEY env-এর সাথে মিললে তবেই উত্তর দেয়।
 // দেখা যায়: মেসের নাম, তৈরি/সর্বশেষ আপডেটের সময়, সংস্করণ, লগইন কোডের সংখ্যা, মেসেজ সংখ্যা। সদস্য/হিসাব/চ্যাট এনক্রিপ্টেড, তাই পড়া যায় না।
-const okId = (x) => typeof x === "string" && /^[A-Za-z0-9+/=_-]{4,32}$/.test(x);
+const FAIL_MAX = 8, FAIL_WINDOW_MS = 15 * 60 * 1000;
 async function authed(req) {
   const K = process.env.ADMIN_KEY || "";
   if (K.length < 8) throw new StoreError("admin_not_configured");
+  // ব্রুট-ফোর্স ঠেকাতে: একই IP থেকে ১৫ মিনিটে ৮ বার ভুল হলে ১৫ মিনিট আটকে দেওয়া হয়।
+  const fk = "adm_fail_" + sha(ipOf(req)).slice(0, 16);
+  const fails = +(await cmd("GET", fk)) || 0;
+  if (fails >= FAIL_MAX) throw new StoreError("locked", 429);
   const a = Buffer.from(sha(req.headers.get("x-admin-key") || ""), "hex"), b = Buffer.from(sha(K), "hex");
-  if (timingSafeEqual(a, b)) return true;
+  if (timingSafeEqual(a, b)) { if (fails) await cmd("DEL", fk); return true; }
+  const n = await cmd("INCR", fk);
+  if (n === 1) await cmd("PEXPIRE", fk, FAIL_WINDOW_MS);
   await new Promise((r) => setTimeout(r, 800));
   return false;
 }
 const zk = (k, id) => (k === "e" ? "e_" : "m_") + sha(id).slice(0, 24);
 
+async function metasOf(ids) {
+  const out = [];
+  for (let i = 0; i < ids.length; i += 300) {
+    const part = ids.slice(i, i + 300);
+    const res = await cmds(part.map((id) => ["GET", "vm_" + id]));
+    for (let j = 0; j < part.length; j++) {
+      let m = null; try { m = JSON.parse(res[j]); } catch {}
+      if (!m) { const v = await getJSON("v_" + part[j]); if (v) m = metaOf({ ...v, id: part[j] }); }
+      if (m) out.push({ id: part[j], ...m });
+    }
+  }
+  return out;
+}
+
 export const GET = guard(async (req) => {
   if (!(await authed(req))) return J({ error: "forbidden" }, 403);
+  const u = new URL(req.url);
+  const lim = Math.max(1, Math.min(100, parseInt(u.searchParams.get("limit")) || 30));
+  const off = Math.max(0, parseInt(u.searchParams.get("offset")) || 0);
+  const q = (u.searchParams.get("q") || "").trim().toLowerCase().slice(0, 50);
+  await idxEnsure();
   const cfg0 = await getCfg();
-  let cur = "0", ids = [];
-  do {
-    const [nx, ks] = await cmd("SCAN", cur, "MATCH", "v_*", "COUNT", 500);
-    cur = String(nx); ids.push(...ks.map((k) => k.slice(2)));
-  } while (cur !== "0" && ids.length < 5000);
-  const rows = [];
-  for (let i = 0; i < ids.length; i += 40) {
-    const part = ids.slice(i, i + 40);
-    const res = await cmds(part.flatMap((id) => [["GET", "v_" + id], ["ZCARD", zk("c", id)], ["ZCARD", zk("e", id)], ["GET", "ent_" + id]]));
-    part.forEach((id, j) => {
-      let v = null, en = null; try { v = JSON.parse(res[j * 4]); } catch {} try { en = JSON.parse(res[j * 4 + 3]); } catch {}
-      if (!v) return;
-      rows.push({ id, name: v.name || "", ver: v.ver || 0, cat: v.cat || 0, uat: v.uat || 0, codes: (v.lks || []).length, chat: res[j * 4 + 1] || 0, ev: res[j * 4 + 2] || 0, mc: v.mc === undefined ? null : v.mc, lim: limFrom(en, cfg0), until: (en && en.until) || 0, size: (v.ct || "").length });
-    });
+  const ids = (await cmd("ZREVRANGE", "vidx", 0, -1)) || [];
+  let page, total;
+  if (q) {
+    const all = (await metasOf(ids)).filter((m) => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q));
+    total = all.length; page = all.slice(off, off + lim);
+  } else {
+    total = ids.length; page = await metasOf(ids.slice(off, off + lim));
   }
-  rows.sort((a, b) => (b.uat || 0) - (a.uat || 0));
-  return J({ total: rows.length, list: rows });
+  const res = page.length ? await cmds(page.flatMap((m) => [["ZCARD", zk("c", m.id)], ["ZCARD", zk("e", m.id)], ["GET", "ent_" + m.id]])) : [];
+  const rows = page.map((m, j) => {
+    let en = null; try { en = JSON.parse(res[j * 3 + 2]); } catch {}
+    return { id: m.id, name: m.name, ver: m.ver, cat: m.cat, uat: m.uat, codes: m.codes, chat: res[j * 3] || 0, ev: res[j * 3 + 1] || 0, mc: m.mc, lim: limFrom(en, cfg0), until: (en && en.until) || 0, size: m.size };
+  });
+  return J({ total, offset: off, limit: lim, list: rows });
 });
 
 export const DELETE = guard(async (req) => {
@@ -183,6 +67,7 @@ export const DELETE = guard(async (req) => {
   const dels = ["v_" + id, zk("c", id), zk("e", id), "ent_" + id];
   for (const lk of v.lks || []) { if ((await cmd("GET", "lk_" + lk)) === id) dels.push("lk_" + lk); }
   await cmds(dels.map((k) => ["DEL", k]));
+  await idxDel(id);
   return J({ ok: 1, deleted: v.name || id });
 });
 
@@ -203,9 +88,9 @@ export const POST = guard(async (req) => {
   const cfg = await getCfg();
 
   if (b.a === "cfgget") {
-    const pays = await loadPays(300);
-    const ok = pays.filter((p) => p.st === "approved");
-    return J({ cfg, stats: { pending: pays.filter((p) => p.st === "pending").length, approved: ok.length, revenue: ok.reduce((s, p) => s + (+p.amount || 0), 0) } });
+    // warn: অ্যাডমিন প্যানেলে সতর্কতা দেখানোর জন্য (দুর্বল ADMIN_KEY / SERVER_SECRET না থাকা)
+    const K = process.env.ADMIN_KEY || "";
+    return J({ cfg, stats: await payStats(), warn: { weakKey: K.length < 12, noSecret: !process.env.SERVER_SECRET } });
   }
   if (b.a === "cfg") {
     const free = Math.max(1, Math.min(500, parseInt(b.free) || 15));
@@ -239,20 +124,30 @@ export const POST = guard(async (req) => {
   if (b.a === "payact") {
     const key = "pay_" + String(b.id || "");
     if (!/^pay_\d{13}-[a-z0-9]{6}$/.test(key)) return J({ error: "bad" }, 400);
-    const p = await getJSON(key);
-    if (!p) return J({ error: "none" }, 404);
-    if (p.st !== "pending") return J({ error: "done" }, 409);
-    if (b.act === "approve") {
-      const e = (await entOf(p.mid)) || { limit: 0, until: 0 };
-      const days = p.plan.days || 0, now = Date.now();
-      const until = days ? Math.max(now, e.until || 0) + days * 86400000 : 0;
-      await setJSON("ent_" + p.mid, { limit: Math.max(e.limit || 0, p.plan.limit), until: days ? until : 0, by: p.id, at: now });
-      p.st = "approved";
-    } else if (b.act === "reject") p.st = "rejected";
-    else return J({ error: "bad" }, 400);
-    p.note = cleanStr(b.note, 200); p.at2 = Date.now();
-    await setJSON(key, p);
-    return J({ ok: 1 });
+    if (b.act !== "approve" && b.act !== "reject") return J({ error: "bad" }, 400);
+    // একই পেমেন্টে দুইবার চাপ/দুই ট্যাব থেকে ডাবল অনুমোদন ঠেকাতে ছোট লক
+    const lock = "paylk_" + b.id;
+    if (!(await cmd("SET", lock, "1", "NX", "PX", 5000))) return J({ error: "busy" }, 429);
+    try {
+      const p = await getJSON(key);
+      if (!p) return J({ error: "none" }, 404);
+      if (p.st !== "pending") return J({ error: "done" }, 409);
+      if (b.act === "approve") {
+        const e = (await entOf(p.mid)) || { limit: 0, until: 0 };
+        const days = p.plan.days || 0, now = Date.now();
+        const until = days ? Math.max(now, e.until || 0) + days * 86400000 : 0;
+        await setJSON("ent_" + p.mid, { limit: Math.max(e.limit || 0, p.plan.limit), until: days ? until : 0, by: p.id, at: now });
+        p.st = "approved";
+      } else {
+        p.st = "rejected";
+        // বাতিল হলে TrxID মুক্ত করা হয়, যাতে ভুলে বাতিল হওয়া পেমেন্ট ঠিক করে আবার জমা দেওয়া যায়
+        if (p.method && p.method.id && p.trx) await cmd("DEL", "trx_" + p.method.id + "_" + p.trx);
+      }
+      p.note = cleanStr(b.note, 200); p.at2 = Date.now();
+      await setJSON(key, p);
+      await payBump(-1, p.st === "approved" ? 1 : 0, p.st === "approved" ? +p.amount || 0 : 0);
+      return J({ ok: 1 });
+    } finally { await cmd("DEL", lock).catch(() => {}); }
   }
   if (b.a === "ent") {
     if (!okId(b.id)) return J({ error: "bad" }, 400);

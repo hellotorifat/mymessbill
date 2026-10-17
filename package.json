@@ -1,7 +1,11 @@
 {
   "name": "mymessbill",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": "22.x" }
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "dev": "node scripts/dev-server.mjs"
+  }
 }
