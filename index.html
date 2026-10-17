@@ -143,6 +143,7 @@ details.mr{margin-top:12px;border:1.5px dashed var(--line);border-radius:14px;pa
 .dvp{width:128px;height:128px;border-radius:50%;object-fit:cover;border:4px solid var(--acc);box-shadow:0 10px 24px -10px rgba(0,0,0,.5);margin:6px auto 8px;display:block;background:var(--soft)}
 .dv h2{font-size:24px;margin:0}.dvr{display:inline-block;background:var(--soft);color:var(--pri);font-weight:700;font-size:12.5px;border-radius:14px;padding:3px 12px;margin:4px 0 8px}
 .dvb{text-align:left;margin:6px 0 14px;line-height:1.7}.dv .btn{width:100%}
+.skr{display:grid;grid-template-columns:minmax(0,1fr) 64px 58px 60px 40px;gap:6px;align-items:center;margin:6px 0}.skr input{min-width:0;width:100%;padding:10px 8px}.skr .x{height:40px;padding:0}.skh{font-size:11px;color:var(--mute);margin-bottom:0}
 .toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:60;max-width:90vw;box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
 .rp{--bg:#eef3f1;--card:#ffffff;--field:#f4f8f6;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--pri-d:#08463d;--onpri:#ffffff;--soft:#e0f1ec;--acc:#f4a300;--acc-soft:#fff2d2;--acc-ink:#6b4600;--bad:#d23f2c;--good:#0b6b5c;--info:#2a6fdb;--rose:#e0685a;width:1123px;padding:24px 28px;background:var(--bg);color:var(--ink);font:15px/1.55 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
 .rh{display:flex;justify-content:space-between;align-items:center;background:var(--pri-d);color:#fff;border-radius:16px;padding:16px 22px;margin-bottom:12px;border-bottom:5px solid var(--acc)}
@@ -242,7 +243,7 @@ const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
 const LK=()=>!!(S.months[mon]||{}).lock;
 const RO=()=>MGR&&!LK()?"":" readonly";
-(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay]';
+(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay],[data-el],[data-elset]';
 const blk=e=>{if(tab==="month"&&LK()&&e.target.closest&&e.target.closest(G)){e.stopPropagation();e.preventDefault();if(e.type==="click")toast("🔒 মাস লক করা আছে");return true}};
 ["input","change","click"].forEach(n=>document.addEventListener(n,blk,true));
 /* পরিবর্তনের ইতিহাস (audit log) */
@@ -251,7 +252,7 @@ const logAdd=(a,o,n)=>{if(!MGR)return;const L=S.log=S.log||[];L.push({t:Date.now
 const lbl=t=>{const d=t.dataset,mn=id=>{const m=S.members.find(x=>x.id===id);return m?m.name:""};
  if(d.f)return mn(d.id)+" — "+(FL[d.f]||d.f);if(d.s){const h=SH.find(x=>x[0]===d.s);return h?h[1]:d.s==="rentOv"?"বাড়িভাড়া (মালিক)":d.s==="kt"?"খালার মোট বিল":d.s==="c"?"কত জনের ভাগ":d.s}
  if(d.sxa||d.sxn){const e=sxFind(d.sxa||d.sxn);return "বিবিধ: "+((e&&e.n)||"নতুন")+(d.sxn?" (নাম)":"")}if(d.xa||d.xn){const e=xpFind(d.xa||d.xn);return "নিজে লেখা খরচ: "+((e&&e.n)||"নতুন")+(d.xn?" (নাম)":"")}
- if(d.pay)return mn(d.pay)+" — প্রদান";return""};
+ if(d.pay)return mn(d.pay)+" — প্রদান";if(d.el)return"বিদ্যুৎ মিটার — "+({p:"আগের রিডিং",c:"এখনকার রিডিং",r:"ইউনিট রেট"}[d.el]||d.el);return""};
 document.addEventListener("focusin",e=>{if(e.target.tagName==="INPUT")OV.set(e.target,e.target.value)},true);
 document.addEventListener("change",e=>{const t=e.target;if(!MGR||LK()||!t.dataset||t.type==="checkbox")return;const l=lbl(t);if(!l)return;const o=OV.get(t)||"";if(o===t.value)return;OV.set(t,t.value);logAdd(l,o,t.value)},true);
 const lgHTML=()=>{const L=(S.log||[]).slice().reverse().slice(0,80),dt=t=>new Date(t).toLocaleString("bn-BD",{timeZone:"Asia/Dhaka",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
@@ -329,6 +330,7 @@ chat:g(P("M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.5A8 8 0 1 1 21 12z")),
 month:g(P("M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11M9 8h6")),
 more:g(P("M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z")),
 sc:g(P("M4 6h16v14H4zM4 10h16M8 3v4M16 3v4")),
+stock:g(P("M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8")),
 mem:g(P("M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14a6.5 6.5 0 0 1 3.5 6")),
 year:g(P("M3 17l6-6 4 4 8-8M15 7h6v6")),
 rep:g(P("M7 3h8l5 5v13H7zM14 3v6h6M10 14h7M10 18h7")),
@@ -353,11 +355,11 @@ function render(){
   updBar();
   if(L){$("view").innerHTML=stage==="codes"?vCodes():stage==="setup"?vSetup():vLogin();gHook();sitePaint();return}
   if(tab==="set"&&(!MGR||CO))tab="home";
-  const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
+  const T=[["home","হোম"],["bz","বাজার"],["ml","মিল"],["month","মাসিক"]],MORE=[["sc","রুটিন"],["stock","মজুদ"],["mem","সদস্য"],["year","বার্ষিক"],["rep","রিপোর্ট"]].concat(MGR&&!CO?[["set","সেটিং"]]:[]);
   const inMore=MORE.some(x=>x[0]===tab);
   $("tabs").innerHTML=T.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}" aria-label="${t[1]}"${tab===t[0]?' aria-current="page"':""}><i>${IC[t[0]]}</i><span>${t[1]}</span></button>`).join("")+`<button data-act="more" class="${inMore?"on":""}" aria-label="আরও"${inMore?' aria-current="page"':""}><i>${IC.more}</i><span>${inMore?(MORE.find(x=>x[0]===tab)||[0,"আরও"])[1]:"আরও"}</span></button>`;
   window.__MORE=MORE;
-  $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
+  $("view").innerHTML={home:vHome,bz:vBz,ml:vMl,stock:vStock,sc:vSc,chat:vChat,month:vMonth,mem:vMem,year:vYear,rep:vRep,set:vSet}[tab]();
   paint();paintBz();fit();gHook();sitePaint();mhTime();if(ROLE&&NFI!==CID){NFI=CID;nfInit()}if(MGR&&VAULT&&!CO&&ENTL!==CID){ENTL=CID;entLoad()}
   if(tab==='chat'&&ROLE){chSnap=true;chatStart();chPaint()}else chatStop();
   if(ROLE)evStart();
@@ -495,6 +497,7 @@ function vMonth(){
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
   <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
+  ${elBox()}
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
   ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <div style="margin-top:10px"><label class="mute" style="display:block">🧹 খালার মোট বিল (ফাঁকা = সদস্যভেদে আলাদা; দিলে সবার মধ্যে সমান ভাগ)</label><input${RO()} data-s="kt" inputmode="decimal" value="${esc(sv(mon,"kt"))}" placeholder="যেমন: ৪০০০" style="max-width:160px"></div>
@@ -507,14 +510,33 @@ function vMonth(){
   ${vRb(c)}
   ${vXp(c)}
   ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`}
+const elPrev=k=>{const i=MONTHS.indexOf(k);for(let j=i-1;j>=0;j--){const e=(S.months[MONTHS[j]]||{}).el;if(e&&p(e.c)>0)return e.c}return""};
+const elCalc=k=>{const e=(S.months[k]||{}).el||{},pr=e.p!==undefined&&e.p!==""?p(e.p):p(elPrev(k)),cu=p(e.c),u=Math.max(0,cu-pr);return{pr,cu,rate:p(e.r),u,amt:cu>0?Math.round(u*p(e.r)*100)/100:0}};
+function elBox(){if(!MGR&&!((S.months[mon]||{}).el))return"";const e=(S.months[mon]||{}).el||{},pv=e.p!==undefined&&e.p!==""?e.p:elPrev(mon);
+  return `<div class="box"><h2>⚡ বিদ্যুৎ মিটার রিডিং</h2><div class="g2"><div><label>আগের রিডিং</label><input${RO()} data-el="p" inputmode="decimal" value="${esc(pv)}"></div><div><label>এখনকার রিডিং</label><input${RO()} data-el="c" inputmode="decimal" value="${esc(e.c||"")}"></div><div><label>প্রতি ইউনিট (৳)</label><input${RO()} data-el="r" inputmode="decimal" value="${esc(e.r||"")}" placeholder="যেমন: ৮.৫"></div><div><label>ইউনিট • বিল</label><b id="elo" class="pos"></b></div></div>
+  ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-elset="1">✔ এই বিল "বিদ্যুৎ"-এ বসান</button></div>':""}<p class="mute">আগের মাসের এখনকার রিডিং নিজে থেকে আগের রিডিং হিসেবে আসে।</p></div>`}
+function elPaint(){const o=document.getElementById("elo");if(!o)return;const c=elCalc(mon);o.textContent=c.cu>0?bd(f(c.u))+" ইউনিট • ৳"+f(c.amt):"—"}
 function paint(){
-  if(tab!=="month")return;
+  if(tab!=="month")return;elPaint();
   const c=calc(mon),o={},put=(k,t,n)=>o[k]=[t,n];
   c.rows.forEach(r=>{put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
   put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
   put("tN",f(sum(c.rows,"N")));put("income",f(c.income));put("cost","৳"+f(c.cost-c.shared+c.exp));put("incx",f(c.income-c.shared));{const fi=fundInfo(mon);put("fund","৳"+f(fi.close),fi.close);put("fclose","৳"+f(fi.close),fi.close);put("finc",f(c.income-c.shared));put("xall","৳"+f(c.cost-c.shared+c.exp));put("xall2","−"+f(c.cost-c.shared+c.exp));put("fuT","−"+f(fi.used));put("fuT2","৳"+f(fi.used));put("fleft","৳"+f(fi.left));put("fleft2","৳"+f(fi.left));put("ax:rent",f(c.rentT));SH.forEach(x=>{put("sh:"+x[0],f(p(sv(mon,x[0]))));const tr=document.querySelector('[data-sr="'+x[0]+'"]');if(tr)tr.hidden=!MGR&&!(p(sv(mon,x[0]))>0)});c.sx.forEach(e=>{put("sxv:"+e.id,f(p(e.a)))});{const w=$("shw");if(w){const d=c.shared-sum(c.rows,"J");w.hidden=Math.abs(d)<.5;w.innerHTML=Math.abs(d)<.5?"":"⚠ সদস্যদের ভাগের যোগফল মোট বিবিধের চেয়ে ৳"+f(Math.abs(d))+(d>0?" কম":" বেশি")+" — \"কত জনের মধ্যে ভাগ\" ঘরের সংখ্যা টিক দেওয়া সদস্যের সংখ্যার সাথে মেলান।"+(MGR&&!LK()?' <button class="mch on" data-fixcn="1">অটো ঠিক করুন</button>':"")}}put("shT","৳"+f(c.shared));put("shT2","৳"+f(c.shared));put("shP","৳"+f(c.share));put("xgrand","৳"+f(c.cost+c.exp));put("ax:khala",f(c.khalaT))}
   document.querySelectorAll("[data-o]").forEach(el=>{const v=o[el.dataset.o];if(!v)return;el.textContent=v[0];
     if(v[1]!==undefined&&/^(fund|fgen|fclose|G)/.test(el.dataset.o))el.className=v[1]>=0?"pos":"neg"})}
+/* ---------- মজুদ (চাল, তেল, ডাল কী আছে) ---------- */
+const SK=()=>S.stock||[];
+const skLow=x=>p(x.l)>0&&p(x.q)<=p(x.l);
+function vStock(){const L=SK(),low=L.filter(skLow);
+  return `<div class="box"><h2>📦 মেসের মজুদ</h2><p class="mute">চাল, তেল, ডাল, মসলা ইত্যাদি কতটুকু আছে। "সতর্ক সীমা"র নিচে নামলে লাল হয়, যাতে বাজারে কেনা মনে থাকে।</p>
+  <p class="warnb" id="skw"${low.length?"":" hidden"}>⚠ কম আছে: ${low.map(x=>esc(x.n||"নামহীন")).join(", ")}</p>
+  ${L.length&&MGR?'<div class="skr skh"><span>জিনিস</span><span>আছে</span><span>একক</span><span>সতর্ক</span><span></span></div>':""}
+  ${L.length?L.map(x=>MGR?`<div class="skr" data-skrow="${x.id}"><input data-skn="${x.id}" value="${esc(x.n||"")}" placeholder="জিনিস (যেমন: চাল)" aria-label="জিনিসের নাম"><input data-skq="${x.id}" inputmode="decimal" value="${esc(x.q||"")}" placeholder="পরিমাণ" aria-label="পরিমাণ" ><input data-sku="${x.id}" value="${esc(x.u||"")}" placeholder="একক" aria-label="একক"><input data-skl="${x.id}" inputmode="decimal" value="${esc(x.l||"")}" placeholder="সতর্ক" aria-label="সতর্ক সীমা"><button class="x" data-skdel="${x.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1"><b>${esc(x.n||"")}</b></span><span class="${skLow(x)?"neg":"pos"}">${bd(esc(x.q||"০"))} ${esc(x.u||"")}${skLow(x)?" ⚠ কম":""}</span></div>`).join(""):`<p class="mute">এখনো কিছু যোগ করা হয়নি।</p>`}
+  ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-skadd="1">➕ নতুন জিনিস যোগ করুন</button></div>':""}</div>`}
+document.addEventListener("input",e=>{const t=e.target,d=t.dataset;if(!MGR||!d)return;const k=["skn","skq","sku","skl"].find(z=>d[z]!==undefined);if(!k)return;const x=SK().find(z=>z.id===d[k]);if(!x)return;x[{skn:"n",skq:"q",sku:"u",skl:"l"}[k]]=t.value;save();skWarn()});
+function skWarn(){const w=document.getElementById("skw");if(!w)return;const low=SK().filter(skLow);w.hidden=!low.length;w.textContent="⚠ কম আছে: "+low.map(x=>x.n||"নামহীন").join(", ")}
+document.addEventListener("click",e=>{const t=e.target;if(!MGR)return;const a=t.closest("[data-skadd]");if(a){S.stock=SK().concat([{id:"k"+Math.random().toString(36).slice(2,7),n:"",q:"",u:"",l:""}]).slice(0,60);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-skn]")].pop();if(l)l.focus()},30);return}
+  const d=t.closest("[data-skdel]");if(d){const snap=JSON.stringify(S);S.stock=SK().filter(x=>x.id!==d.dataset.skdel);save();render();toastUndo("মুছে গেছে",undoTo(snap))}});
 function vMem(){
   const A=act();
   const rows=S.members.map(b=>{let tb=0,tm=0,mc=0,N=0,P=0,n=0;A.forEach(x=>{const r=x.c.rows.find(z=>z.id===b.id);if(!r)return;tb+=r.bazar;tm+=r.meal;mc+=r.mc;N+=r.N;P+=r.P;if(r.meal>0)n++});return{name:b.name,tb,tm,mc,N,P,n,net:P-N,rate:tm?tb/tm:0}});
@@ -1056,6 +1078,8 @@ function kickOut(){if(kicked)return;kicked=true;try{localStorage.removeItem(SKEY
 /* ---------- UI: টোস্ট, শেয়ার শিট, ডেভেলপার কার্ড ---------- */
 const DEV={fb:"https://www.facebook.com/hellotorifat",name:"রিফাত",role:"Developer • mymessbill",
  bio:"আমি রিফাত। মেসের বাজার, মিল আর হিসাব নিয়ে রোজকার ঝামেলা কমাতে mymessbill বানিয়েছি — যেন সবকিছু এক জায়গায়, সহজ বাংলায় থাকে আর হিসাব সবার সামনে স্বচ্ছ থাকে। সাইটে কিছু ভালো না লাগলে বা নতুন আইডিয়া থাকলে Facebook-এ জানাতে পারেন।"};
+function toastUndo(msg,fn){const o=document.querySelector(".toast");if(o)o.remove();const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.append(msg+" ");const b=document.createElement("button");b.type="button";b.textContent="↩ পূর্বাবস্থায়";b.style.cssText="margin-left:8px;border:0;border-radius:10px;padding:4px 10px;font-weight:700;background:var(--bg);color:var(--ink);cursor:pointer";b.addEventListener("click",ev=>{ev.stopPropagation();t.remove();fn()});t.appendChild(b);document.body.appendChild(t);setTimeout(()=>t.remove(),9000)}
+const undoTo=snap=>()=>{S=Object.assign(blank(),JSON.parse(snap));save();render();toast("ফিরিয়ে আনা হয়েছে ✔")};
 function toast(msg){const o=document.querySelector(".toast");if(o)o.remove();const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 async function copyText(txt){
   try{await navigator.clipboard.writeText(txt);return true}
@@ -1174,12 +1198,14 @@ document.addEventListener("input",e=>{
   else if(d.xa){const x=xpFind(d.xa);if(x){x.a=t.value;save();paint()}}
   else if(d.fn){const x=fuFind(d.fn);if(x){x.n=t.value;save()}}
   else if(d.fa){const x=fuFind(d.fa);if(x){x.a=t.value;save();paint()}}
+  else if(d.el){const mo=ens(mon);mo.el=mo.el||{};mo.el[d.el]=t.value;save();elPaint()}
   else if(d.ob!==undefined){ens(mon).ob=t.value;save();paint()}});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-elset]");if(!b||!MGR)return;const c=elCalc(mon);if(!(c.cu>0)||!(c.rate>0)){toast("আগে এখনকার রিডিং ও ইউনিট রেট দিন");return}if(c.cu<c.pr){toast("এখনকার রিডিং আগের চেয়ে কম হতে পারে না");return}const mo=ens(mon);mo.s=mo.s||{};const o=mo.s.bidyut;mo.s.bidyut=String(c.amt);{const L=S.log=S.log||[];L.push({t:Date.now(),k:mon,w:CO?"সহ-ম্যানেজার":"ম্যানেজার",a:"বিদ্যুৎ বিল (মিটার থেকে)",o:o||"",n:String(c.amt)});if(L.length>300)L.splice(0,L.length-300)}save();render();toast("বিদ্যুৎ বিল ৳"+f(c.amt)+" বসানো হয়েছে ✔")});
 document.addEventListener("click",e=>{const t=e.target;
   const st=t.closest("[data-st]");if(st&&MGR){const b=S.members.find(x=>x.id===st.dataset.st);if(!b||(b.till&&mon>b.till))return;const mo=ens(mon);mo.st=mo.st||{};mo.st[b.id]=isAct(b,mon)?"0":"1";save();render();return}
   const cpp=t.closest("[data-cpprev]");if(cpp&&MGR){const [y,m]=mon.split("-").map(Number),pk=m===1?(y-1)+"-12":y+"-"+String(m-1).padStart(2,"0"),pm=S.months[pk];if(!pm||!(Object.keys(pm.s||{}).length||(pm.sx||[]).length)){alert("আগের মাসে কপি করার মতো বিবিধ খরচ পাওয়া যায়নি");return}if(!confirm("আগের মাসের বিবিধ খরচের তালিকা এই মাসে কপি হবে। এই মাসের বিবিধ খরচ বদলে যাবে। চালিয়ে যাবেন?"))return;const mo=ens(mon);mo.s=Object.assign({},pm.s||{});delete mo.s.rentOv;mo.sx=(pm.sx||[]).map(e=>({id:"y"+Math.random().toString(36).slice(2,7),n:e.n,a:e.a}));save();render();return}
   const sxa=t.closest("[data-sxadd]");if(sxa&&MGR){const mo=ens(mon);mo.sx=(mo.sx||[]).concat([{id:"y"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-sxn]")].pop();if(l)l.focus()},60);return}
-  const sxd=t.closest("[data-sxdel]");if(sxd&&MGR){const mo=ens(mon);mo.sx=(mo.sx||[]).filter(x=>x.id!==sxd.dataset.sxdel);save();render();return}
+  const sxd=t.closest("[data-sxdel]");if(sxd&&MGR){const mo=ens(mon);const snap=JSON.stringify(S);mo.sx=(mo.sx||[]).filter(x=>x.id!==sxd.dataset.sxdel);save();render();toastUndo("খরচ মুছে গেছে",undoTo(snap));return}
   const xa=t.closest("[data-xadd]");if(xa&&MGR){const mo=ens(mon);mo.xp=(mo.xp||[]).concat([{id:"x"+Math.random().toString(36).slice(2,7),n:xa.dataset.xadd,a:""}]);save();render();
     setTimeout(()=>{const l=[...document.querySelectorAll("[data-xa]")].pop();if(l)l.focus()},60);return}
   const fa=t.closest("[data-fadd]");if(fa&&MGR){const mo=ens(mon);mo.fu=(mo.fu||[]).concat([{id:"u"+Math.random().toString(36).slice(2,7),n:"",a:""}]);save();render();setTimeout(()=>{const l=[...document.querySelectorAll("[data-fn]")].pop();if(l)l.focus()},60);return}
@@ -1607,7 +1633,7 @@ document.addEventListener("click",async e=>{
   const o=t.closest("[data-open]");if(o){e.preventDefault();mon=o.dataset.open;tab="month";render();return}
   const tb=t.closest("[data-t]");if(tb){closeOv();tab=tb.dataset.t;render();return}
   const xmr=t.closest("[data-xmrm]");if(xmr&&MGR){S.xm=(S.xm||[]).filter(x=>x!==xmr.dataset.xmrm);save();refreshMonths();if(!MONTHS.includes(mon))mon=MONTHS[MONTHS.length-1];render();monSheet();return}
-  const dl=t.closest("[data-del]");if(dl&&MGR){if(!confirm("এই সদস্য ও তার হিসাব মুছবেন?"))return;const id=dl.dataset.del;if(MCODES[id]){alert("আগে 🚫 বন্ধ বা 🚪 ছেড়ে গেছে দিন (সেটিং → লগইন কোড), তারপর মুছুন।");return}S.members=S.members.filter(x=>x.id!==id);Object.values(S.months).forEach(m=>delete m.r[id]);save();render();return}
+  const dl=t.closest("[data-del]");if(dl&&MGR){if(!confirm("এই সদস্য ও তার হিসাব মুছবেন?"))return;const id=dl.dataset.del;if(MCODES[id]){alert("আগে 🚫 বন্ধ বা 🚪 ছেড়ে গেছে দিন (সেটিং → লগইন কোড), তারপর মুছুন।");return}const snap=JSON.stringify(S);S.members=S.members.filter(x=>x.id!==id);Object.values(S.months).forEach(m=>delete m.r[id]);save();render();toastUndo("সদস্য মুছে গেছে",undoTo(snap));return}
   const lgb=t.closest("[data-lg]");if(lgb&&MGR){const q=lgb.dataset.lg.split(":");lgAct(q[0],q[1]);return}
   const rr_=t.closest("[data-rrm]");if(rr_&&MGR){if(!confirm("এই মাসিক নিয়ম বন্ধ হবে; ভবিষ্যতের বাকি তারিখগুলোও মুছে যাবে।"))return;const z=SCw(),id=rr_.dataset.rrm,T=todayK();z.rep=(z.rep||[]).filter(r=>r.id!==id);z.w=z.w.filter(x=>x.rp!==id||x.done||x.d<T);save();render();return}
   const sv_=t.closest("[data-scv]");if(sv_){scv=sv_.dataset.scv;render();return}
