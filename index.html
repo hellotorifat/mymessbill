@@ -245,7 +245,7 @@ const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
 const LK=()=>!!(S.months[mon]||{}).lock;
 const RO=()=>MGR&&!LK()?"":" readonly";
-(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay],[data-payfull],[data-el],[data-elset]';
+(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxm],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay],[data-payfull],[data-el],[data-elset]';
 const blk=e=>{if(tab==="month"&&LK()&&e.target.closest&&e.target.closest(G)){e.stopPropagation();e.preventDefault();if(e.type==="click")toast("🔒 মাস লক করা আছে");return true}};
 ["input","change","click"].forEach(n=>document.addEventListener(n,blk,true));
 /* পরিবর্তনের ইতিহাস (audit log) */
@@ -323,16 +323,16 @@ function calc(k){
   const arT=arl.reduce((a,e)=>a+e.a,0),gone=Object.keys(arM).filter(i=>!rows.some(r=>r.id===i)).map(i=>({id:i,name:S.members.find(z=>z.id===i).name,AR:arM[i],P:arM[i]}));
   // প্রতিটি বিবিধ খরচের আলাদা "কার ওপর যাবে" (xi): কেউ বাদ থাকলে বাকিরা ভাগ নেয়; কেউ বাদ না থাকলে আগের মতো সবার সমান (বা "কত জনে ভাগ" ঘরের সংখ্যা)
   const xi=mo.xi||{},xt=mo.xt||{},its=SH.map(x=>({k:x[0],l:x[1],a:p(sv(k,x[0]))})).concat(sx.map(e=>({k:e.id,l:e.n||"অন্যান্য",a:p(e.a)}))).filter(i=>i.a>0);
-  its.forEach(i=>{i.t=xt[i.k]||(XI_ADV.includes(i.k)?"pre":"post")});
+  its.forEach(i=>{const se=sx.find(e=>e.id===i.k);i.t=se&&se.m==="__res"?"res":(xt[i.k]||(XI_ADV.includes(i.k)?"pre":"post"))});
   const lv=mo.lv||{};
   its.forEach(i=>{const xs=Object.assign({},xi[i.k]||{});if(i.t==="pre")for(const id in lv)if(lv[id])xs[id]=1;const ok=inc.filter(r=>!xs[r.id]);i.xs=xs;i.exn=inc.filter(r=>xs[r.id]).map(r=>r.name);i.cnt=ok.length<inc.length?ok.length:div;i.per=i.cnt?i.a/i.cnt:0});
   // নিজের টাকায় কেনা (rb): কিনে দেওয়া টাকা ওই সদস্যের মোট প্রদান থেকে বাদ; মেসের হাত থেকে যায়নি, তাই আয় ও খরচ দুদিকেই সমান কমে (ফান্ড অপরিবর্তিত)
-  const rbM={};(mo.rb||[]).forEach(e=>{if(e.m&&p(e.a)>0)rbM[e.m]=(rbM[e.m]||0)+p(e.a)});
+  const rbM={};(mo.rb||[]).concat(sx).forEach(e=>{if(e.m&&p(e.a)>0)rbM[e.m]=(rbM[e.m]||0)+p(e.a)});
   rows.forEach(r=>{r.mc=r.meal*rate;r.G=r.bazar-r.mc;r.RB=rbM[r.id]||0;r.AR=arM[r.id]||0;r.J=ex[r.id]?0:its.reduce((a,i)=>a+(i.xs[r.id]?0:i.per),0);r.J+=r.AR;r.N=r.rent+r.khala+r.J-r.G-r.deduct;r.P=r.N+r.extra-r.RB});
   const ov=sv(k,"rentOv"),rentT=ov!==""?p(ov):sum(rows,"rent"),income=sum(rows,"P")+sum(gone,"P");
-  const rbT=sum(rows,"RB"),cost=shared+rentT+sum(rows,"khala")+arT-rbT;
+  const rbT=sum(rows,"RB"),resT=its.filter(i=>i.t==="res").reduce((a,i)=>a+i.a,0),cost=shared+rentT+sum(rows,"khala")+arT-rbT-resT;
   const xl=mo.xp||[],exp=sum(xl.map(e=>({v:p(e.a)})),"v"),khalaT=sum(rows,"khala");
-  return{xl,sx,exp,khalaT,rows,div,exn:rows.filter(r=>ex[r.id]).map(r=>r.name),exi:rows.filter(r=>ex[r.id]).map(r=>r.id),its,arl,arT:arT-rbT,rbT,gone,tb,tm,rate,shared,share,rentT,cost,income,fund:income-cost,net:income-cost-exp,active:tb>0||tm>0}}
+  return{xl,sx,exp,khalaT,rows,div,exn:rows.filter(r=>ex[r.id]).map(r=>r.name),exi:rows.filter(r=>ex[r.id]).map(r=>r.id),its,arl,arT:arT-rbT-resT,rbT,resT,gone,tb,tm,rate,shared,share,rentT,cost,income,fund:income-cost,net:income-cost-exp,active:tb>0||tm>0}}
 const act=()=>MONTHS.map(k=>({k,c:calc(k)})).filter(x=>x.c.active);
 
 const IC=(()=>{const g=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`,P=x=>`<path d="${x}"/>`;return{
@@ -512,7 +512,7 @@ function vMonth(){
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>`,
   PB=()=>`<p class="mute" style="margin:2px 0 8px">মেসের সব সাধারণ খরচ (ওয়াইফাই, ময়লা, বিদ্যুৎ, বিবিধ) ও আগের মাসের বিল এখানে।</p>
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
-  ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
+  ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><select data-sxm="${e.id}" aria-label="কে কিনেছেন" style="grid-column:1/-1;order:5"><option value="">কে কিনেছেন? (বা অন্য)</option><option value="__res"${e.m==="__res"?" selected":""}>🏦 ভবিষ্যতের জন্য জমা (কেউ কেনেনি)</option>${S.members.map(b=>`<option value="${b.id}"${b.id===e.m?" selected":""}>${esc(b.name)}</option>`).join("")}</select><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}${e.m==="__res"?` <small class="mute">(🏦 ভবিষ্যতের জন্য জমা)</small>`:e.m?` <small class="mute">(${esc((S.members.find(b=>b.id===e.m)||{}).name||"")} কিনেছেন)</small>`:""}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <div style="margin-top:10px"><label class="mute" style="display:block">🧹 খালার মোট বিল (ফাঁকা = সদস্যভেদে আলাদা; দিলে সবার মধ্যে সমান ভাগ)</label><input${RO()} data-s="kt" inputmode="decimal" value="${esc(sv(mon,"kt"))}" placeholder="যেমন: ৪০০০" style="max-width:160px"></div>
   ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch" data-cpprev="1">📋 আগের মাসের বিবিধ খরচ কপি করুন</button></div>':""}
   <details class="tools"><summary>⚙ উন্নত: কত জনে ভাগ / সবার টিক</summary><div style="margin-top:10px"><label class="mute" style="display:block">কত জনের মধ্যে ভাগ হবে? (ফাঁকা রাখলে নিচে টিক দেওয়া সদস্য সংখ্যাই ধরা হবে)</label><input${RO()} data-cnt="1" inputmode="numeric" value="${esc(m.c||"")}" placeholder="${bd(c.rows.length-c.exn.length)}" style="max-width:140px"></div>
@@ -631,6 +631,7 @@ function flowHTML(k,c,fi,offn){
    +SH.filter(x=>p(sv(k,x[0]))>0).map(x=>row("🧾 "+x[1]+" <small>(বিবিধ)</small>",-1,p(sv(k,x[0])))).join("")
    +c.sx.filter(e=>p(e.a)>0).map(e=>row("🧾 "+esc(e.n||"অন্যান্য")+" <small>(বিবিধ)</small>",-1,p(e.a))).join("")
    +c.arl.map(e=>row("📮 "+esc(e.n||"আগের মাসের বিল")+" <small>("+(e.f?lab(e.f)+" মাসের বিল":"আগের মাসের বিল")+")</small>",-1,e.a)).join("")
+   +(c.resT>0?row("🏦 ভবিষ্যতের জন্য জমা রাখা <small>(তোলা হয়েছে, এখনো খরচ হয়নি — ফান্ডে থাকছে)</small>",1,c.resT):"")
    +(c.rbT>0?row("↩ সদস্যরা নিজের টাকায় কিনেছেন <small>(তাদের মোট প্রদান থেকে আগেই বাদ দেওয়া)</small>",1,c.rbT):"")
    +c.xl.filter(e=>p(e.a)>0).map(e=>row("✍ "+esc(e.n||"অন্যান্য"),-1,p(e.a))).join("");
   const h2=hd("ধাপ ২ — এই মাসের খরচ (বাদ যাবে)")+(ex||'<tr><td colspan="3" style="text-align:left">কোনো খরচ লেখা হয়নি</td></tr>');
@@ -654,7 +655,7 @@ function reportHTML(k){
   ${xiHTML(c)}
   ${arHTML(c)}
   ${flowHTML(k,c,fi,offn)}
-  ${rbOf(k).length&&Object.keys(rbSum(k)).length?`<div class="box"><h2>↩ বিবিধ খরচে আগে যারা টাকা দিয়েছেন — ফেরত পাবেন</h2>${rbTable(k)}</div>`:""}
+  ${Object.keys(rbSum(k)).length?`<div class="box"><h2>↩ বিবিধ খরচে আগে যারা টাকা দিয়েছেন — ফেরত পাবেন</h2>${rbTable(k)}</div>`:""}
   ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
   <p class="mute" style="text-align:center;margin:6px 0 0">mymessbill • Developed by Rifat • তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p></div>`}
 function vRep(){return `<div class="row">${msel()}${DL?'<button class="p fix" data-act="pdf">📄 PDF ডাউনলোড</button>':""}</div>
@@ -1213,7 +1214,7 @@ function vXp(c){
 /* ---------- বিবিধ খরচ আগে কে দিয়েছে → ফেরত ---------- */
 const rbOf=k=>(S.months[k]||{}).rb||[];
 const rbFind=id=>rbOf(mon).find(x=>x.id===id);
-function rbSum(k){const m={};rbOf(k).forEach(e=>{if(!e.m||!(p(e.a)>0))return;const o=m[e.m]=m[e.m]||{a:0,n:[]};o.a+=p(e.a);if(e.n)o.n.push(e.n)});return m}
+function rbSum(k){const m={};rbOf(k).concat((S.months[k]||{}).sx||[]).forEach(e=>{if(!e.m||e.m==="__res"||!(p(e.a)>0))return;const o=m[e.m]=m[e.m]||{a:0,n:[]};o.a+=p(e.a);if(e.n)o.n.push(e.n)});return m}
 function rbTable(k){
   const m=rbSum(k),ids=Object.keys(m),tot=ids.reduce((a,i)=>a+m[i].a,0),cc=calc(k),sh=cc.shared,inR=id=>cc.rows.some(r=>r.id===id);
   const nm=id=>{const b=S.members.find(x=>x.id===id);return b?b.name:"(মুছে ফেলা সদস্য)"};
@@ -1225,10 +1226,9 @@ function vRb(c){
   const rows=rbOf(mon).map(e=>MGR?`<div class="xrow rb"><select data-rbm="${e.id}" aria-label="কে দিয়েছেন"><option value="">— কে দিয়েছেন —</option>${S.members.map(b=>`<option value="${b.id}"${b.id===e.m?" selected":""}>${esc(b.name)}</option>`).join("")}</select><input data-rbn="${e.id}" list="rbn" value="${esc(e.n||"")}" placeholder="কীসের খরচ" aria-label="কীসের খরচ"><input data-rba="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-rbdel="${e.id}" aria-label="মুছুন">✕</button></div>`
     :"").join("");
   const dl=MGR?`<datalist id="rbn">${SH.map(x=>`<option value="${x[1]}">`).join("")}</datalist>`:"";
-  if(!MGR&&!rbOf(mon).length)return"";
-  return `<div class="box"><h2>🛍 নিজের টাকায় কেনা — মোট প্রদান থেকে বাদ</h2>
-  <p class="mute">কেউ টিস্যু, হ্যান্ড ওয়াশ বা অন্য বিবিধ জিনিস নিজের পকেট থেকে কিনলে এখানে লিখুন (যেমন: রাফি, টিস্যু, ৭৫)। ওই টাকা তার <b>মোট প্রদান</b> থেকে নিজে বাদ হয়ে যাবে। খরচটা অবশ্যই ওপরের <b>বিবিধ</b> ঘরে (বা বিবিধ খরচের তালিকায়) আলাদাভাবে লিখুন, নইলে অন্যদের ভাগ ধরা পড়বে না।</p>${rows}${dl}
-  ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-rbadd="1">➕ কে কী কিনেছেন যোগ করুন</button></div>':""}
+  if(!rbOf(mon).length)return"";
+  return `<div class="box"><h2>🛍 আগে লেখা — নিজের টাকায় কেনা</h2>
+  <p class="mute">আগের পদ্ধতিতে লেখা তালিকা (এগুলোও মোট প্রদান থেকে বাদ হয়)। এখন থেকে নতুন কেনা "মেস কস্ট"-এর নতুন খরচ যোগে নাম, টাকা ও <b>কে কিনেছেন</b> বেছে লিখুন — আলাদা কিছু করতে হবে না।</p>${rows}${dl}
   <div id="rbsum">${rbTable(mon)}</div>
   <p class="mute">মেস ফান্ডে কোনো বদল হয় না। PDF-এ ওই সদস্যের কার্ডেও দেখাবে।</p></div>`}
 const sxFind=id=>((S.months[mon]||{}).sx||[]).find(x=>x.id===id);
@@ -1371,20 +1371,21 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
   save();render()});
 
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-msub]");if(!t)return;msub=t.dataset.msub;render();window.scrollTo({top:0})});
+document.addEventListener("change",e=>{const t=e.target;if(!MGR||!t.dataset||t.dataset.sxm===undefined||LK())return;const x=sxFind(t.dataset.sxm);if(!x)return;x.m=t.value;save();render()});
 /* ---------- 🎯 কোন বিবিধ খরচ কার ওপর যাবে (প্রতিটি খরচের আলাদা) ---------- */
 // উদ্দেশ্য: যিনি পরের মাসে ছেড়ে যাচ্ছেন তিনি আগাম বিল (ওয়াইফাই, ময়লা, বিদ্যুৎ) দেবেন না, কিন্তু ব্যবহার করা জিনিস (টিস্যু, হ্যান্ড ওয়াশ…) এর ভাগ দেবেন।
-const XI_ADV=["wifi","garbage","bidyut"];
+const XI_ADV=["wifi","garbage","bidyut"],XTL={pre:"⏩ আগাম",post:"✅ ব্যবহার শেষে",res:"🏦 ভবিষ্যতের জন্য জমা"};
 function xiBox(c){const mo=S.months[mon]||{},lv=mo.lv||{},any=c.its.some(i=>i.exn.length);if(!MGR&&!any)return"";const ed=MGR&&!LK();
-  const item=i=>`<div style="margin:8px 0"><b>${esc(i.l)}</b> ${ed?`<button class="mch" data-xt="${i.k}" style="padding:2px 8px;font-size:12px">${i.t==="pre"?"⏩ আগাম":"✅ ব্যবহার শেষে"}</button>`:`<small class="mute">${i.t==="pre"?"⏩ আগাম":"✅ ব্যবহার শেষে"}</small>`} <span class="mute">৳${f(i.a)}${i.exn.length?` • ${bd(i.cnt)} জনে — জনপ্রতি ৳${f(i.per)}`:""}</span><div class="chips" style="margin-top:4px">${c.rows.map(r=>{const bad=(i.xs||{})[r.id],gl=c.exi.includes(r.id),on=!bad&&!gl;return `<button class="mch${on?" on":""}" data-xi="${i.k}|${r.id}"${ed&&!gl?"":" disabled"} aria-pressed="${on}">${on?"✔":"⏸"} ${esc(r.name)}</button>`}).join("")}</div></div>`;
+  const item=i=>`<div style="margin:8px 0"><b>${esc(i.l)}</b> ${ed?`<button class="mch" data-xt="${i.k}" style="padding:2px 8px;font-size:12px">${XTL[i.t]}</button>`:`<small class="mute">${XTL[i.t]}</small>`} <span class="mute">৳${f(i.a)}${i.exn.length?` • ${bd(i.cnt)} জনে — জনপ্রতি ৳${f(i.per)}`:""}</span><div class="chips" style="margin-top:4px">${c.rows.map(r=>{const bad=(i.xs||{})[r.id],gl=c.exi.includes(r.id),on=!bad&&!gl;return `<button class="mch${on?" on":""}" data-xi="${i.k}|${r.id}"${ed&&!gl?"":" disabled"} aria-pressed="${on}">${on?"✔":"⏸"} ${esc(r.name)}</button>`}).join("")}</div></div>`;
   return `<div class="box"><h2>🚪 কেউ কি মেস ছেড়ে যাচ্ছেন?</h2>
   <div class="chips">${c.rows.map(r=>{const on=!!lv[r.id];return `<button class="mch${on?" on":""}" data-lv="${r.id}"${ed?"":" disabled"} aria-pressed="${on}">${on?"🚪 ":""}${esc(r.name)}</button>`}).join("")}</div>
   <p class="mute" style="margin:8px 0 0">নাম ট্যাপ করলে 🚪 হবে — তিনি ওয়াইফাই, ময়লা, বিদ্যুৎ-এর মতো <b>আগাম বিল</b> দেবেন না, কিন্তু টিস্যু, হ্যান্ড ওয়াশসহ <b>ব্যবহার করা</b> খরচের ভাগ দেবেন। বাকিদের ভাগ নিজে নিজে ঠিক হয়ে যায়।</p>
   ${c.its.length?`<details class="tools" style="margin:8px 0 0"><summary>⚙ প্রতিটি খরচ আলাদা করে ঠিক করুন (ঐচ্ছিক)</summary>${c.its.map(item).join("")}</details>`:""}</div>`}
 function xiHTML(c){const L=c.its.filter(i=>i.exn.length);if(!L.length)return"";
-  return `<div class="box"><h2>🎯 যে খরচ কিছু সদস্যের ওপর যায়নি</h2><table><tr><th>খরচ</th><th>মোট</th><th>বাদ ছিলেন</th><th>জনপ্রতি</th></tr>${L.map(i=>`<tr><td>${esc(i.l)} <small>(${i.t==="pre"?"আগাম":"ব্যবহার শেষে"})</small></td><td>${f(i.a)}</td><td style="text-align:left">${esc(i.exn.join(", "))}</td><td>${f(i.per)}</td></tr>`).join("")}</table></div>`}
+  return `<div class="box"><h2>🎯 যে খরচ কিছু সদস্যের ওপর যায়নি</h2><table><tr><th>খরচ</th><th>মোট</th><th>বাদ ছিলেন</th><th>জনপ্রতি</th></tr>${L.map(i=>`<tr><td>${esc(i.l)} <small>(${({pre:"আগাম",post:"ব্যবহার শেষে",res:"ভবিষ্যতের জন্য জমা"})[i.t]})</small></td><td>${f(i.a)}</td><td style="text-align:left">${esc(i.exn.join(", "))}</td><td>${f(i.per)}</td></tr>`).join("")}</table></div>`}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-xi],[data-lv],[data-xt]");if(!t||!MGR||LK())return;const mo=ens(mon);mo.xi=mo.xi||{};
   if(t.dataset.xi!==undefined){const q=t.dataset.xi.split("|"),m=(mo.xi[q[0]]=mo.xi[q[0]]||{});if(m[q[1]])delete m[q[1]];else m[q[1]]=1}
-  else if(t.dataset.xt!==undefined){const k=t.dataset.xt,c0=calc(mon).its.find(i=>i.k===k);mo.xt=mo.xt||{};mo.xt[k]=c0&&c0.t==='pre'?'post':'pre'}
+  else if(t.dataset.xt!==undefined){const k=t.dataset.xt,c0=calc(mon).its.find(i=>i.k===k);mo.xt=mo.xt||{};mo.xt[k]=c0&&c0.t==='pre'?'post':c0&&c0.t==='post'?'res':'pre'}
   else{const id=t.dataset.lv;mo.lv=mo.lv||{};if(mo.lv[id])delete mo.lv[id];else mo.lv[id]=1}
   save();render()});
 
@@ -1394,7 +1395,7 @@ function memHTML(k,c){
   const L=(t,v,b)=>`<div style="display:flex;justify-content:space-between;gap:8px${b?";font-weight:700;border-top:1px solid var(--line);margin-top:3px;padding-top:3px":""}"><span>${t}</span><span style="white-space:nowrap">${v}</span></div>`;
   const card=(name,tag,body)=>`<div style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);font-size:12px;line-height:1.55;break-inside:avoid"><div style="font-weight:700;font-size:14px;margin-bottom:4px">${esc(name)}${tag?` <span style="color:var(--bad);font-size:12px">${tag}</span>`:""}</div>${body}</div>`;
   const cards=c.rows.map(r=>{const left=!!lv[r.id],pd=p(payOf(k,r.id).a),bal=r.P-pd;
-    const sh=c.its.map(i=>{const bears=!(i.xs||{})[r.id]&&!c.exi.includes(r.id);return L(esc(i.l)+(i.t==="pre"?" <small>(আগাম)</small>":""),bears?"৳"+f(i.per):'<span style="color:var(--mute)">বাদ</span>')}).join("");
+    const sh=c.its.map(i=>{const bears=!(i.xs||{})[r.id]&&!c.exi.includes(r.id);return L(esc(i.l)+(i.t==="pre"?" <small>(আগাম)</small>":i.t==="res"?" <small>(ভবিষ্যতের জন্য জমা)</small>":""),bears?"৳"+f(i.per):'<span style="color:var(--mute)">বাদ</span>')}).join("");
     return card(r.name,left?"🚪 চলে যাচ্ছেন":"",
       L("🍽 মিল "+f(r.meal)+" × ৳"+f(c.rate),"৳"+f(r.mc))
      +(r.bazar>0?L("🛒 নিজে বাজার করেছেন","৳"+f(r.bazar))+L(r.G>=0?"↳ মেস থেকে পাবেন":"↳ মিল খরচের চেয়ে কম বাজার, দিতে হবে","৳"+f(Math.abs(r.G))):L("↳ মিল খরচ দিতে হবে","৳"+f(r.mc)))
