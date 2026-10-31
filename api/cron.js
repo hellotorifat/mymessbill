@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
-import { cmd, getJSON, setJSON, sha, J, guard, StoreError, notifyMess } from "./_lib.js";
+import { cmd, getJSON, setJSON, sha, J, guard, StoreError, notifyMess, entOf, entIdx } from "./_lib.js";
 
 // Vercel Cron প্রতিদিন একবার (vercel.json) এই endpoint ডাকে। Vercel নিজে "Authorization: Bearer <CRON_SECRET>" পাঠায়।
 // তাই Vercel → Settings → Environment Variables-এ CRON_SECRET (কমপক্ষে ১৬ অক্ষর, এলোমেলো) দিতে হবে।
@@ -33,5 +33,21 @@ export const GET = guard(async (req) => {
     }
     if (changed) { if (keep.length) await setJSON("rm_" + id, keep); else { await cmd("DEL", "rm_" + id); await cmd("ZREM", "rmidx", id); } }
   }
-  return J({ ok: 1, date: ymd, mess: ids.length, due, sent });
+  // প্ল্যানের মেয়াদ শেষের ৩ দিনের মধ্যে থাকলে একবার সতর্কবার্তা (সবাই পাবে; নবায়ন ম্যানেজারের কাজ)
+  if (!(await cmd("GET", "entidx_ok"))) {
+    let cur = "0";
+    do { const [nx, ks] = await cmd("SCAN", cur, "MATCH", "ent_*", "COUNT", 500); cur = String(nx); for (const k of ks) { const e = await getJSON(k); if (e && e.until) await entIdx(k.slice(4), e.until); } } while (cur !== "0");
+    await cmd("SET", "entidx_ok", "1");
+  }
+  let expSent = 0;
+  const eids = (await cmd("ZRANGE", "entidx", 0, -1)) || [];
+  for (const id of eids) {
+    const e = await entOf(id), left = e && e.until ? e.until - Date.now() : 0;
+    if (!e || !e.until || left <= 0) { await entIdx(id, 0); continue; }
+    if (left > 3 * 86400000) continue;
+    if (!(await cmd("SET", "expn_" + id + "_" + e.until, "1", "NX", "PX", 7 * 86400000))) continue;
+    const meta = await getJSON("vm_" + id);
+    expSent += await notifyMess(id, meta && meta.name, { k: "exp" }, "", { noThrottle: true });
+  }
+  return J({ ok: 1, date: ymd, mess: ids.length, due, sent, expSent });
 });

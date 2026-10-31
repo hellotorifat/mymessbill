@@ -76,6 +76,8 @@ export async function getCfg() {
 }
 export async function entOf(id) { return (await getJSON("ent_" + id)) || null; }
 export function limFrom(e, cfg) { return e && (!e.until || e.until > Date.now()) ? Math.max(e.limit || 0, cfg.free) : cfg.free; }
+// মেয়াদি প্ল্যানের মেসগুলোর সূচি (cron মেয়াদ শেষের আগে সতর্কবার্তা পাঠাতে ব্যবহার করে)
+export const entIdx = (id, until) => (until ? cmd("ZADD", "entidx", until, id) : cmd("ZREM", "entidx", id));
 export const newPid = () => String(Date.now()).padStart(13, "0") + "-" + Math.random().toString(36).slice(2, 8).padEnd(6, "0");
 
 /* ---------- অ্যাডমিনের জন্য মেসের সূচি (SCAN-এর বদলে) ---------- */

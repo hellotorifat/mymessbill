@@ -10,7 +10,7 @@ self.addEventListener("fetch",e=>{
 });
 
 /* ---------- পুশ নোটিফিকেশন ---------- */
-const GEN={rem:"⏰ রিমাইন্ডার",chat:"💬 চ্যাটে নতুন মেসেজ",meal:"🍽 মিলে আপডেট",bazar:"🛒 বাজারে আপডেট",duty:"📅 রুটিনে আপডেট",pub:"📋 ম্যানেজার আপডেট করেছেন"};
+const GEN={rem:"⏰ রিমাইন্ডার",chat:"💬 চ্যাটে নতুন মেসেজ",meal:"🍽 মিলে আপডেট",bazar:"🛒 বাজারে আপডেট",duty:"📅 রুটিনে আপডেট",pub:"📋 ম্যানেজার আপডেট করেছেন",exp:"⏳ প্ল্যানের মেয়াদ শেষ হতে চলেছে — ম্যানেজার নবায়ন করুন"};
 const idbGet=id=>new Promise(res=>{try{const q=indexedDB.open("bpnf",1);q.onupgradeneeded=()=>q.result.createObjectStore("k");q.onsuccess=()=>{try{const g=q.result.transaction("k").objectStore("k").get(id);g.onsuccess=()=>res(g.result||null);g.onerror=()=>res(null)}catch(e){res(null)}};q.onerror=()=>res(null)}catch(e){res(null)}});
 const u8=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
 self.addEventListener("push",e=>{e.waitUntil((async()=>{

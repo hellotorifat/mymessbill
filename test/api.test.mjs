@@ -270,3 +270,28 @@ test("অ্যাডমিন: মেস মুছলে রিমাইন্�
   assert.equal(await lib.getJSON("ps_" + m.id), null);
   assert.ok(!(await lib.cmd("ZRANGE", "rmidx", 0, -1)).includes(m.id));
 });
+
+test("অ্যাডমিন নোট সেভ হয়; মেয়াদ শেষের ৩ দিনের মধ্যে cron একবারই সতর্কবার্তা দেয়", async () => {
+  const cron = await import("../api/cron.js");
+  process.env.CRON_SECRET = "cron-secret-1234567890";
+  const m = newMess({ mc: 2 });
+  assert.equal((await jr(await vault.PUT(req("PUT", "/api/vault", m.body)))).status, 200);
+  const AK = { "x-admin-key": process.env.ADMIN_KEY, ip: "8.8.8.8" };
+  assert.equal((await jr(admin.POST(req("POST", "/api/admin", { a: "note", id: m.id, note: "ফোন করতে হবে" }, AK)))).status, 200);
+  const ls = await jr(admin.GET(req("GET", "/api/admin?q=" + m.id, undefined, AK)));
+  assert.equal(ls.list[0].note, "ফোন করতে হবে");
+  // ২ দিনের মেয়াদ → সূচিতে আসে, cron সতর্কবার্তা চিহ্নিত করে (পুশ সাবস্ক্রাইবার নেই, তাই sent=0 কিন্তু expn_ কী বসে)
+  assert.equal((await jr(admin.POST(req("POST", "/api/admin", { a: "ent", id: m.id, limit: 30, days: 2 }, AK)))).status, 200);
+  assert.ok((await lib.cmd("ZRANGE", "entidx", 0, -1)).includes(m.id));
+  const run = () => jr(cron.GET(req("GET", "/api/cron", undefined, { authorization: "Bearer " + process.env.CRON_SECRET })));
+  assert.equal((await run()).status, 200);
+  const e = await lib.getJSON("ent_" + m.id);
+  assert.equal(await lib.cmd("GET", "expn_" + m.id + "_" + e.until), "1");
+  // ৩০ দিনের মেয়াদ → সতর্কবার্তা নয়
+  const m2 = newMess({ mc: 2 });
+  await vault.PUT(req("PUT", "/api/vault", m2.body));
+  await admin.POST(req("POST", "/api/admin", { a: "ent", id: m2.id, limit: 30, days: 30 }, AK));
+  await run();
+  const e2 = await lib.getJSON("ent_" + m2.id);
+  assert.equal(await lib.cmd("GET", "expn_" + m2.id + "_" + e2.until), null);
+});

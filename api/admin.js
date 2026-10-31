@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
-import { cmd, cmds, getJSON, setJSON, sha, J, guard, StoreError, okId, getCfg, entOf, limFrom, DEF_PLANS, metaOf, idxEnsure, idxDel, payStats, payBump, ipOf } from "./_lib.js";
+import { cmd, cmds, getJSON, setJSON, sha, J, guard, StoreError, okId, getCfg, entOf, limFrom, DEF_PLANS, metaOf, idxEnsure, idxDel, payStats, payBump, ipOf, entIdx } from "./_lib.js";
 
 // সুপার অ্যাডমিন (শুধু মালিকের জন্য): ADMIN_KEY env-এর সাথে মিললে তবেই উত্তর দেয়।
 // দেখা যায়: মেসের নাম, তৈরি/সর্বশেষ আপডেটের সময়, সংস্করণ, লগইন কোডের সংখ্যা, মেসেজ সংখ্যা। সদস্য/হিসাব/চ্যাট এনক্রিপ্টেড, তাই পড়া যায় না।
@@ -60,10 +60,10 @@ export const GET = guard(async (req) => {
   } else {
     total = ids.length; page = await metasOf(ids.slice(off, off + lim));
   }
-  const res = page.length ? await cmds(page.flatMap((m) => [["ZCARD", zk("c", m.id)], ["ZCARD", zk("e", m.id)], ["GET", "ent_" + m.id]])) : [];
+  const res = page.length ? await cmds(page.flatMap((m) => [["ZCARD", zk("c", m.id)], ["ZCARD", zk("e", m.id)], ["GET", "ent_" + m.id], ["GET", "an_" + m.id]])) : [];
   const rows = page.map((m, j) => {
-    let en = null; try { en = JSON.parse(res[j * 3 + 2]); } catch {}
-    return { id: m.id, name: m.name, ver: m.ver, cat: m.cat, uat: m.uat, codes: m.codes, chat: res[j * 3] || 0, ev: res[j * 3 + 1] || 0, mc: m.mc, lim: limFrom(en, cfg0), until: (en && en.until) || 0, size: m.size };
+    let en = null; try { en = JSON.parse(res[j * 4 + 2]); } catch {}
+    return { id: m.id, name: m.name, ver: m.ver, cat: m.cat, uat: m.uat, codes: m.codes, chat: res[j * 4] || 0, ev: res[j * 4 + 1] || 0, note: res[j * 4 + 3] || "", mc: m.mc, lim: limFrom(en, cfg0), until: (en && en.until) || 0, size: m.size };
   });
   // sum=1: ওভারভিউয়ের মোট হিসাব (সব মেস মিলিয়ে) — শুধু প্রথম লোড/রিফ্রেশে চাওয়া হয়
   let sum;
@@ -97,9 +97,9 @@ export const DELETE = guard(async (req) => {
   if (!v) return J({ error: "none" }, 404);
   const dels = ["v_" + id, zk("c", id), zk("e", id), "ent_" + id];
   for (const lk of v.lks || []) { if ((await cmd("GET", "lk_" + lk)) === id) dels.push("lk_" + lk); }
-  dels.push("ps_" + id, "rm_" + id, "pm_" + id); // পুশ সাবস্ক্রিপশন, রিমাইন্ডার, পেমেন্ট ইনডেক্স — আগে এগুলো পড়ে থাকত
+  dels.push("ps_" + id, "rm_" + id, "pm_" + id, "an_" + id); // পুশ সাবস্ক্রিপশন, রিমাইন্ডার, পেমেন্ট ইনডেক্স — আগে এগুলো পড়ে থাকত
   await cmds(dels.map((k) => ["DEL", k]));
-  await cmd("ZREM", "rmidx", id);
+  await cmds([["ZREM", "rmidx", id], ["ZREM", "entidx", id]]);
   await idxDel(id);
   return J({ ok: 1, deleted: v.name || id });
 });
@@ -170,6 +170,7 @@ export const POST = guard(async (req) => {
         const days = p.plan.days || 0, now = Date.now();
         const until = days ? Math.max(now, e.until || 0) + days * 86400000 : 0;
         await setJSON("ent_" + p.mid, { limit: Math.max(e.limit || 0, p.plan.limit), until: days ? until : 0, by: p.id, at: now });
+        await entIdx(p.mid, days ? until : 0);
         p.st = "approved";
       } else {
         p.st = "rejected";
@@ -185,8 +186,16 @@ export const POST = guard(async (req) => {
   if (b.a === "ent") {
     if (!okId(b.id)) return J({ error: "bad" }, 400);
     const limit = parseInt(b.limit) || 0, days = Math.max(0, parseInt(b.days) || 0);
+    const until = days ? Date.now() + days * 86400000 : 0;
     if (limit <= 0) await cmd("DEL", "ent_" + b.id);
-    else await setJSON("ent_" + b.id, { limit: Math.min(limit, 1000), until: days ? Date.now() + days * 86400000 : 0, by: "manual", at: Date.now() });
+    else await setJSON("ent_" + b.id, { limit: Math.min(limit, 1000), until, by: "manual", at: Date.now() });
+    await entIdx(b.id, limit <= 0 ? 0 : until);
+    return J({ ok: 1 });
+  }
+  if (b.a === "note") {
+    if (!okId(b.id)) return J({ error: "bad" }, 400);
+    const n = cleanStr(b.note, 300);
+    if (n) await cmd("SET", "an_" + b.id, n); else await cmd("DEL", "an_" + b.id);
     return J({ ok: 1 });
   }
   return J({ error: "bad" }, 400);
