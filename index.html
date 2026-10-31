@@ -503,12 +503,12 @@ function vHome(){
 const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
-  msub=msub||"a";
+  msub=msub||"a";const hasD=c.rows.some(r=>r.deduct);
   const SUB=[["a","🛒 বাজার"],["b","🧾 বিবিধ"],["c","💰 জমা"],["d","📊 ফলাফল"]],
   PA=()=>`${vAct()}
-  <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
-  ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
-  <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
+  <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th>${hasD?"<th>ছাড়</th>":""}<th>মোট বিল</th><th>অতিরিক্ত</th><th>নিজে কিনেছেন (−)</th><th>মোট প্রদান</th></tr>
+  ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${hasD?i("d",r.id):""}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="RB:${r.id}"></td><td data-o="P:${r.id}"></td></tr>`).join("")}
+  <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td>${hasD?"<td></td>":""}<td data-o="tN"></td><td></td><td data-o="tRB"></td><td data-o="income"></td></tr></table>
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>`,
   PB=()=>`<p class="mute" style="margin:2px 0 8px">মেসের সব সাধারণ খরচ (ওয়াইফাই, ময়লা, বিদ্যুৎ, বিবিধ) ও আগের মাসের বিল এখানে।</p>
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
@@ -542,8 +542,8 @@ function elPaint(){const o=document.getElementById("elo");if(!o)return;const c=e
 function paint(){
   if(tab!=="month")return;elPaint();payPaint();
   const c=calc(mon),o={},put=(k,t,n)=>o[k]=[t,n];
-  c.rows.forEach(r=>{put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
-  put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
+  c.rows.forEach(r=>{put("RB:"+r.id,r.RB>0?"−"+f(r.RB):"—");put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
+  put("tRB",c.rbT>0?"−"+f(c.rbT):"—");put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
   put("tN",f(sum(c.rows,"N")));put("income",f(c.income));put("cost","৳"+f(c.cost-c.shared-c.arT+c.exp));put("incx",f(c.income-c.shared-c.arT));{const fi=fundInfo(mon);put("fund","৳"+f(fi.close),fi.close);put("fclose","৳"+f(fi.close),fi.close);put("finc",f(c.income-c.shared-c.arT));put("xall","৳"+f(c.cost-c.shared-c.arT+c.exp));put("xall2","−"+f(c.cost-c.shared-c.arT+c.exp));put("fuT","−"+f(fi.used));put("fuT2","৳"+f(fi.used));put("fleft","৳"+f(fi.left));put("fleft2","৳"+f(fi.left));put("ax:rent",f(c.rentT));SH.forEach(x=>{put("sh:"+x[0],f(p(sv(mon,x[0]))));const tr=document.querySelector('[data-sr="'+x[0]+'"]');if(tr)tr.hidden=!MGR&&!(p(sv(mon,x[0]))>0)});c.sx.forEach(e=>{put("sxv:"+e.id,f(p(e.a)))});{const w=$("shw");if(w){const d=c.shared-sum(c.rows,"J")+sum(c.rows,"AR");w.hidden=Math.abs(d)<.5;w.innerHTML=Math.abs(d)<.5?"":"⚠ সদস্যদের ভাগের যোগফল মোট বিবিধের চেয়ে ৳"+f(Math.abs(d))+(d>0?" কম":" বেশি")+" — \"কত জনের মধ্যে ভাগ\" ঘরের সংখ্যা টিক দেওয়া সদস্যের সংখ্যার সাথে মেলান।"+(MGR&&!LK()?' <button class="mch on" data-fixcn="1">অটো ঠিক করুন</button>':"")}}put("shT","৳"+f(c.shared));put("shT2","৳"+f(c.shared));put("shP","৳"+f(c.share));put("xgrand","৳"+f(c.cost+c.exp));put("ax:khala",f(c.khalaT))}
   document.querySelectorAll("[data-o]").forEach(el=>{const v=o[el.dataset.o];if(!v)return;el.textContent=v[0];
     if(v[1]!==undefined&&/^(fund|fgen|fclose|G)/.test(el.dataset.o))el.className=v[1]>=0?"pos":"neg"})}
@@ -644,13 +644,13 @@ function flowHTML(k,c,fi,offn){
   <table class="c" style="width:100%"><tr><th style="text-align:left">বিবরণ</th><th style="text-align:right">টাকা</th><th style="text-align:right">হাতে থাকে</th></tr>${h1}${h2}${t2}${h3}${h4}${t3}</table>
   <p class="mute" style="margin:6px 0 0">বাজার ও মিলের টাকা মিল রেট অনুযায়ী সদস্যদের মধ্যেই মিটে যায়, তাই আলাদা ধরা হয়নি।${c.exn.length?" বিবিধ খরচ যাদের ওপর যায়নি: "+esc(c.exn.join(", "))+"।":""}${offn.length?" এই মাসের হিসাবে বাদ (নিষ্ক্রিয়): "+esc(offn.join(", "))+"।":""}</p></div>`}
 function reportHTML(k){
-  const c=calc(k),m=S.months[k]||{n:""},fi=fundInfo(k),offn=S.members.filter(b=>isMem(b,k)&&!isAct(b,k)).map(b=>b.name);
-  const rows=c.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.bazar)}</td><td>${f(r.meal)}</td><td>${f(r.mc)}</td><td class="${r.G>=0?"pos":"neg"}">${sg(r.G)}</td><td>${f(r.rent)}</td><td>${f(r.khala)}</td><td>${f(r.J)}</td><td>${f(r.deduct)}</td><td>${f(r.N)}</td><td>${f(r.extra)}</td><td><b>${f(r.P)}</b></td></tr>`).join("");
+  const c=calc(k),hasD=calc(k).rows.some(r=>r.deduct),m=S.months[k]||{n:""},fi=fundInfo(k),offn=S.members.filter(b=>isMem(b,k)&&!isAct(b,k)).map(b=>b.name);
+  const rows=c.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f(r.bazar)}</td><td>${f(r.meal)}</td><td>${f(r.mc)}</td><td class="${r.G>=0?"pos":"neg"}">${sg(r.G)}</td><td>${f(r.rent)}</td><td>${f(r.khala)}</td><td>${f(r.J)}</td>${hasD?`<td>${f(r.deduct)}</td>`:""}<td>${f(r.N)}</td><td>${f(r.extra)}</td><td>${r.RB>0?"−"+f(r.RB):"—"}</td><td><b>${f(r.P)}</b></td></tr>`).join("");
   const ln=(t,v,b)=>`<tr${b?' class="tot"':""}><td>${t}</td><td>${v}</td></tr>`,K=(t,v,cl)=>`<div><small>${t}</small><b class="${cl||""}">${v}</b></div>`;
   return `<div class="rp"><div class="rh"><div><div class="rt">🏠 ${esc(S.name||"mymessbill")}</div><div class="rs">mymessbill • Developed by Rifat</div></div><div style="text-align:right"><div class="rs">মাসিক হিসাব রিপোর্ট</div><div class="rt" style="font-size:22px">${lab(k)}</div></div></div>
   <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট বাজার","৳"+f(c.tb))}${K("মোট মিল",f(c.tm))}${K("মিল রেট","৳"+f(c.rate),"pos")}${K("মোট খরচ","৳"+f(fi.spX))}${K("মেস আয় (বিবিধ বাদে)","৳"+f(fi.incX))}${K("এ মাসে জমা",sg(c.net),c.net>=0?"pos":"neg")}${K("🏦 ফান্ড বাকি","৳"+f(fi.close),fi.close>=0?"pos":"neg")}</div>
-  <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>${rows}
-  <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td><td>${f(sum(c.rows,"deduct"))}</td><td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${f(c.income)}</td></tr></table></div>
+  <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th>${hasD?"<th>ছাড়</th>":""}<th>মোট বিল</th><th>অতিরিক্ত</th><th>নিজে কিনেছেন (−)</th><th>মোট প্রদান</th></tr>${rows}
+  <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td>${hasD?`<td>${f(sum(c.rows,"deduct"))}</td>`:""}<td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${c.rbT>0?"−"+f(c.rbT):"—"}</td><td>${f(c.income)}</td></tr></table></div>
   ${memHTML(k,c)}
   ${xiHTML(c)}
   ${arHTML(c)}
