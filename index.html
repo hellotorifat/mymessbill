@@ -646,7 +646,7 @@ function reportHTML(k){
   <div class="kpi" style="grid-template-columns:repeat(7,1fr)">${K("মোট বাজার","৳"+f(c.tb))}${K("মোট মিল",f(c.tm))}${K("মিল রেট","৳"+f(c.rate),"pos")}${K("মোট খরচ","৳"+f(fi.spX))}${K("মেস আয় (বিবিধ বাদে)","৳"+f(fi.incX))}${K("এ মাসে জমা",sg(c.net),c.net>=0?"pos":"neg")}${K("🏦 ফান্ড বাকি","৳"+f(fi.close),fi.close>=0?"pos":"neg")}</div>
   <div class="box"><h2>সদস্যভিত্তিক হিসাব</h2><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th>${hasD?"<th>ছাড়</th>":""}<th>মোট বিল</th><th>অতিরিক্ত</th><th>নিজে কিনেছেন (−)</th><th>মোট প্রদান</th></tr>${rows}
   <tr class="tot"><td>TOTAL</td><td>${f(c.tb)}</td><td>${f(c.tm)}</td><td>${f(sum(c.rows,"mc"))}</td><td></td><td>${f(sum(c.rows,"rent"))}</td><td>${f(sum(c.rows,"khala"))}</td><td>${f(sum(c.rows,"J"))}</td>${hasD?`<td>${f(sum(c.rows,"deduct"))}</td>`:""}<td>${f(sum(c.rows,"N"))}</td><td>${f(sum(c.rows,"extra"))}</td><td>${c.rbT>0?"−"+f(c.rbT):"—"}</td><td>${f(c.income)}</td></tr></table></div>
-  ${xiHTML(c)}
+  ${bbHTML(c)}
   ${arHTML(c)}
   ${flowHTML(k,c,fi,offn)}
   ${m.n?`<div class="box"><h2>নোট</h2>${esc(m.n)}</div>`:""}
@@ -1374,6 +1374,12 @@ function xiBox(c){const mo=S.months[mon]||{},lv=mo.lv||{},any=c.its.some(i=>i.ex
   <div class="chips">${c.rows.map(r=>{const on=!!lv[r.id];return `<button class="mch${on?" on":""}" data-lv="${r.id}"${ed?"":" disabled"} aria-pressed="${on}">${on?"🚪 ":""}${esc(r.name)}</button>`}).join("")}</div>
   <p class="mute" style="margin:8px 0 0">নাম ট্যাপ করলে 🚪 হবে — তিনি ওয়াইফাই, ময়লা, বিদ্যুৎ-এর মতো <b>আগাম বিল</b> দেবেন না, কিন্তু টিস্যু, হ্যান্ড ওয়াশসহ <b>ব্যবহার করা</b> খরচের ভাগ দেবেন। বাকিদের ভাগ নিজে নিজে ঠিক হয়ে যায়।</p>
   ${c.its.length?`<details class="tools" style="margin:8px 0 0"><summary>⚙ প্রতিটি খরচ আলাদা করে ঠিক করুন (ঐচ্ছিক)</summary>${c.its.map(item).join("")}</details>`:""}</div>`}
+function bbHTML(c){if(!c.its.length)return"";
+  const nm=id=>(S.members.find(m=>m.id===id)||{}).name||"";
+  const note=i=>{const se=c.sx.find(e=>e.id===i.k),a=[];
+    if(i.t==="res")a.push("🏦 ভবিষ্যতের জন্য জমা");else if(se&&se.m&&se.m!=="__res")a.push("🛍 "+esc(nm(se.m))+" কিনেছেন");
+    if(i.exn.length)a.push("বাদ: "+esc(i.exn.join(", ")));return a.join(" • ")||"—"};
+  return `<div class="box"><h2>🧾 বিবিধ খরচের বিবরণ</h2><table><tr><th>কী খরচ</th><th>মোট টাকা</th><th>কত জনে ভাগ</th><th>জনপ্রতি</th><th style="text-align:left">নোট</th></tr>${c.its.map(i=>`<tr><td style="text-align:left">${esc(i.l)}</td><td>${f(i.a)}</td><td>${bd(i.cnt)}</td><td>${f(i.per)}</td><td style="text-align:left">${note(i)}</td></tr>`).join("")}<tr class="tot"><td style="text-align:left">মোট বিবিধ</td><td>${f(c.shared)}</td><td></td><td></td><td></td></tr></table></div>`}
 function xiHTML(c){const L=c.its.filter(i=>i.exn.length);if(!L.length)return"";
   return `<div class="box"><h2>🎯 যে খরচ কিছু সদস্যের ওপর যায়নি</h2><table><tr><th>খরচ</th><th>মোট</th><th>বাদ ছিলেন</th><th>জনপ্রতি</th></tr>${L.map(i=>`<tr><td>${esc(i.l)} <small>(${({pre:"আগাম",post:"ব্যবহার শেষে",res:"ভবিষ্যতের জন্য জমা"})[i.t]})</small></td><td>${f(i.a)}</td><td style="text-align:left">${esc(i.exn.join(", "))}</td><td>${f(i.per)}</td></tr>`).join("")}</table></div>`}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-xi],[data-lv],[data-xt]");if(!t||!MGR||LK())return;const mo=ens(mon);mo.xi=mo.xi||{};
