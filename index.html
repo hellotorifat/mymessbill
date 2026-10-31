@@ -320,7 +320,8 @@ function calc(k){
   arl.forEach(e=>e.w.forEach(i=>{arM[i]=(arM[i]||0)+e.a/e.w.length}));
   const arT=arl.reduce((a,e)=>a+e.a,0),gone=Object.keys(arM).filter(i=>!rows.some(r=>r.id===i)).map(i=>({id:i,name:S.members.find(z=>z.id===i).name,AR:arM[i],P:arM[i]}));
   // প্রতিটি বিবিধ খরচের আলাদা "কার ওপর যাবে" (xi): কেউ বাদ থাকলে বাকিরা ভাগ নেয়; কেউ বাদ না থাকলে আগের মতো সবার সমান (বা "কত জনে ভাগ" ঘরের সংখ্যা)
-  const xi=mo.xi||{},its=SH.map(x=>({k:x[0],l:x[1],a:p(sv(k,x[0]))})).concat(sx.map(e=>({k:e.id,l:e.n||"অন্যান্য",a:p(e.a)}))).filter(i=>i.a>0);
+  const xi=mo.xi||{},xt=mo.xt||{},its=SH.map(x=>({k:x[0],l:x[1],a:p(sv(k,x[0]))})).concat(sx.map(e=>({k:e.id,l:e.n||"অন্যান্য",a:p(e.a)}))).filter(i=>i.a>0);
+  its.forEach(i=>{i.t=xt[i.k]||(XI_ADV.includes(i.k)?"pre":"post")});
   its.forEach(i=>{const xs=xi[i.k]||{},ok=inc.filter(r=>!xs[r.id]);i.xs=xs;i.exn=inc.filter(r=>xs[r.id]).map(r=>r.name);i.cnt=ok.length<inc.length?ok.length:div;i.per=i.cnt?i.a/i.cnt:0});
   rows.forEach(r=>{r.mc=r.meal*rate;r.G=r.bazar-r.mc;r.AR=arM[r.id]||0;r.J=ex[r.id]?0:its.reduce((a,i)=>a+(i.xs[r.id]?0:i.per),0);r.J+=r.AR;r.N=r.rent+r.khala+r.J-r.G-r.deduct;r.P=r.N+r.extra});
   const ov=sv(k,"rentOv"),rentT=ov!==""?p(ov):sum(rows,"rent"),income=sum(rows,"P")+sum(gone,"P");
@@ -1360,14 +1361,15 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
 const XI_ADV=["wifi","garbage","bidyut"];
 function xiBox(c){const xi=(S.months[mon]||{}).xi||{},any=c.its.some(i=>i.exn.length);if(!MGR&&!any)return"";const ed=MGR&&!LK();
   if(!c.its.length)return"";
-  const pre=ed?`<div class="chips" style="margin:6px 0">${c.rows.map(r=>{const adv=c.its.filter(i=>XI_ADV.includes(i.k)),on=adv.length&&adv.every(i=>(xi[i.k]||{})[r.id]);return `<button class="mch${on?" on":""}" data-xipre="${r.id}" aria-pressed="${!!on}">🚪 ${esc(r.name)}: আগাম বিল বাদ</button>`}).join("")}</div>`:"";
-  return `<div class="box"><h2>🎯 কোন খরচ কার ওপর যাবে</h2><p class="mute">কেউ পরের মাসে চলে গেলে ওয়াইফাই/ময়লা/বিদ্যুৎ-এর আগাম বিল তার ওপর যাবে না, কিন্তু টিস্যু, হ্যান্ড ওয়াশ, অন্যান্য বিবিধ খরচ তিনি দেবেন — আলাদা করে ঠিক করুন। ✔ = ভাগ নেবেন, ⏸ = এই খরচ থেকে বাদ। কিছু না করলে সবাই সব খরচে সমান ভাগ দেবে।</p>${pre}
-  ${c.its.map(i=>`<div style="margin:8px 0"><b>${esc(i.l)}</b> <span class="mute">৳${f(i.a)}${i.exn.length?` • ${bd(i.cnt)} জনে — জনপ্রতি ৳${f(i.per)}`:""}</span><div class="chips" style="margin-top:4px">${c.rows.map(r=>{const bad=(i.xs||{})[r.id],gl=c.exi.includes(r.id),on=!bad&&!gl;return `<button class="mch${on?" on":""}" data-xi="${i.k}|${r.id}"${ed&&!gl?"":" disabled"} aria-pressed="${on}">${on?"✔":"⏸"} ${esc(r.name)}</button>`}).join("")}</div></div>`).join("")}</div>`}
+  const pre=ed?`<div class="chips" style="margin:6px 0">${c.rows.map(r=>{const adv=c.its.filter(i=>i.t==="pre"),on=adv.length&&adv.every(i=>(xi[i.k]||{})[r.id]);return `<button class="mch${on?" on":""}" data-xipre="${r.id}" aria-pressed="${!!on}">🚪 ${esc(r.name)} চলে যাচ্ছেন</button>`}).join("")}</div>`:"";
+  return `<div class="box"><h2>🎯 কোন খরচ কার ওপর যাবে</h2><p class="mute">প্রতিটি খরচ <b>⏩ আগাম (প্রিপেইড)</b> — যেমন ওয়াইফাই, ময়লা, বিদ্যুৎ, যা এই মাসেই আগাম দেওয়া হয় — নাকি <b>✅ ব্যবহার শেষে (পোস্টপেইড)</b> — যেমন টিস্যু, হ্যান্ড ওয়াশ, যা ব্যবহার করে ফেলেছেন — তা ঠিক করুন। কেউ পরের মাসে চলে গেলে নিচের "🚪 চলে যাচ্ছেন" চাপুন: তিনি আগাম খরচগুলো থেকে বাদ যাবেন, কিন্তু ব্যবহার শেষের খরচগুলোর ভাগ দেবেন। ✔ = ভাগ নেবেন, ⏸ = বাদ। কিছু না করলে সবাই সব খরচে সমান।</p>${pre}
+  ${c.its.map(i=>`<div style="margin:8px 0"><b>${esc(i.l)}</b> ${ed?`<button class="mch" data-xt="${i.k}" style="padding:2px 8px;font-size:12px">${i.t==="pre"?"⏩ আগাম":"✅ ব্যবহার শেষে"}</button>`:`<small class="mute">${i.t==="pre"?"⏩ আগাম":"✅ ব্যবহার শেষে"}</small>`} <span class="mute">৳${f(i.a)}${i.exn.length?` • ${bd(i.cnt)} জনে — জনপ্রতি ৳${f(i.per)}`:""}</span><div class="chips" style="margin-top:4px">${c.rows.map(r=>{const bad=(i.xs||{})[r.id],gl=c.exi.includes(r.id),on=!bad&&!gl;return `<button class="mch${on?" on":""}" data-xi="${i.k}|${r.id}"${ed&&!gl?"":" disabled"} aria-pressed="${on}">${on?"✔":"⏸"} ${esc(r.name)}</button>`}).join("")}</div></div>`).join("")}</div>`}
 function xiHTML(c){const L=c.its.filter(i=>i.exn.length);if(!L.length)return"";
-  return `<div class="box"><h2>🎯 যে খরচ কিছু সদস্যের ওপর যায়নি</h2><table><tr><th>খরচ</th><th>মোট</th><th>বাদ ছিলেন</th><th>জনপ্রতি</th></tr>${L.map(i=>`<tr><td>${esc(i.l)}</td><td>${f(i.a)}</td><td style="text-align:left">${esc(i.exn.join(", "))}</td><td>${f(i.per)}</td></tr>`).join("")}</table></div>`}
-document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-xi],[data-xipre]");if(!t||!MGR||LK())return;const mo=ens(mon);mo.xi=mo.xi||{};
+  return `<div class="box"><h2>🎯 যে খরচ কিছু সদস্যের ওপর যায়নি</h2><table><tr><th>খরচ</th><th>মোট</th><th>বাদ ছিলেন</th><th>জনপ্রতি</th></tr>${L.map(i=>`<tr><td>${esc(i.l)} <small>(${i.t==="pre"?"আগাম":"ব্যবহার শেষে"})</small></td><td>${f(i.a)}</td><td style="text-align:left">${esc(i.exn.join(", "))}</td><td>${f(i.per)}</td></tr>`).join("")}</table></div>`}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-xi],[data-xipre],[data-xt]");if(!t||!MGR||LK())return;const mo=ens(mon);mo.xi=mo.xi||{};
   if(t.dataset.xi!==undefined){const q=t.dataset.xi.split("|"),m=(mo.xi[q[0]]=mo.xi[q[0]]||{});if(m[q[1]])delete m[q[1]];else m[q[1]]=1}
-  else{const id=t.dataset.xipre,c=calc(mon),adv=c.its.filter(i=>XI_ADV.includes(i.k)),all=adv.length&&adv.every(i=>(mo.xi[i.k]||{})[id]);
+  else if(t.dataset.xt!==undefined){const k=t.dataset.xt,c0=calc(mon).its.find(i=>i.k===k);mo.xt=mo.xt||{};mo.xt[k]=c0&&c0.t==='pre'?'post':'pre'}
+  else{const id=t.dataset.xipre,c=calc(mon),adv=c.its.filter(i=>i.t==="pre"),all=adv.length&&adv.every(i=>(mo.xi[i.k]||{})[id]);
     adv.forEach(i=>{const m=(mo.xi[i.k]=mo.xi[i.k]||{});if(all)delete m[id];else m[id]=1})}
   save();render()});
 
