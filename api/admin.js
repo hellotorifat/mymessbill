@@ -97,7 +97,9 @@ export const DELETE = guard(async (req) => {
   if (!v) return J({ error: "none" }, 404);
   const dels = ["v_" + id, zk("c", id), zk("e", id), "ent_" + id];
   for (const lk of v.lks || []) { if ((await cmd("GET", "lk_" + lk)) === id) dels.push("lk_" + lk); }
+  dels.push("ps_" + id, "rm_" + id, "pm_" + id); // পুশ সাবস্ক্রিপশন, রিমাইন্ডার, পেমেন্ট ইনডেক্স — আগে এগুলো পড়ে থাকত
   await cmds(dels.map((k) => ["DEL", k]));
+  await cmd("ZREM", "rmidx", id);
   await idxDel(id);
   return J({ ok: 1, deleted: v.name || id });
 });

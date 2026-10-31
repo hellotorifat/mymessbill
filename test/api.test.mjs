@@ -255,3 +255,18 @@ test("অ্যাডমিন: ফিল্টার (পেইড/সক্র
   const bad = await list("?f=hack");
   assert.equal(bad.status, 200);
 });
+
+test("অ্যাডমিন: মেস মুছলে রিমাইন্ডার ও পুশ ডেটাও মোছে (পড়ে থাকে না)", async () => {
+  const remind = await import("../api/remind.js");
+  const m = newMess();
+  assert.equal((await jr(await vault.PUT(req("PUT", "/api/vault", m.body)))).status, 200);
+  const set = await jr(await remind.POST(req("POST", "/api/remind", { a: "set", id: m.id, token: m.token, list: [{ id: "r1", k: "o", d: "2099-01-01", iv: "aaaa", ct: "bbbb" }] })));
+  assert.equal(set.status, 200);
+  await lib.setJSON("ps_" + m.id, [{ e: "https://fcm.googleapis.com/x", p: "p", a: "a", l: m.lk, t: 1 }]);
+  assert.ok(await lib.getJSON("rm_" + m.id)); assert.ok((await lib.cmd("ZRANGE", "rmidx", 0, -1)).includes(m.id));
+  const del = await jr(admin.DELETE(req("DELETE", "/api/admin?id=" + m.id, undefined, { "x-admin-key": process.env.ADMIN_KEY, ip: "9.9.9.9" })));
+  assert.equal(del.status, 200);
+  assert.equal(await lib.getJSON("rm_" + m.id), null);
+  assert.equal(await lib.getJSON("ps_" + m.id), null);
+  assert.ok(!(await lib.cmd("ZRANGE", "rmidx", 0, -1)).includes(m.id));
+});

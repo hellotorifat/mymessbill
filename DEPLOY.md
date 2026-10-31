@@ -1,7 +1,7 @@
 # Vercel-এ চালু করার ধাপ (mymessbill)
 
 ## ১. ফাইল আপলোড
-সব ফাইল ও ফোল্ডার GitHub repo-তে দিন — বিশেষ করে `api` ফোল্ডার (ভেতরে _lib.js, vault.js, chat.js, auth.js, admin.js, pay.js, push.js, remind.js, cron.js — `_mem.js` শুধু টেস্টের জন্য), `index.html`, `admin.html`, `logo.png`, `vercel.json`, `package.json`।
+সব ফাইল ও ফোল্ডার GitHub repo-তে দিন — বিশেষ করে `api` ফোল্ডার (ভেতরে _lib.js, vault.js, chat.js, auth.js, admin.js, pay.js, push.js, remind.js, cron.js — `_mem.js` শুধু টেস্টের জন্য), `index.html`, `admin.html`, `logo.webp`, `vendor/`, `robots.txt`, `sitemap.xml`, `vercel.json`, `package.json`।
 `api` ফোল্ডার না গেলে সাইট চলবে না (404)।
 
 ## ২. ডেটাবেস
@@ -86,11 +86,11 @@ Vercel → Project → Storage → Create → **Upstash Redis** (Free) → Conne
 - সেটিংসে **ডেটার আকারের মিটার** (সীমা ছুঁলে আগেই সতর্কতা)।
 - অ্যাডমিনে সতর্কতা ব্যানার (দুর্বল ADMIN_KEY, SERVER_SECRET নেই)।
 
-**PDF লাইব্রেরি নিজের সাইট থেকে দিতে (ঐচ্ছিক কিন্তু ভালো)**
-`npm run vendor` চালালে `vendor/` ফোল্ডারে html2canvas ও jsPDF নামে এবং sha384 ছাপে। ফাইলগুলো কমিট করুন — অ্যাপ আগে `/vendor/...` চেষ্টা করে, না পেলে cdnjs।
+**PDF লাইব্রেরি নিজের সাইট থেকে (এখন `vendor/` ফোল্ডারে commit করা আছে)**
+আবার নামাতে চাইলে `npm run vendor` চালালে `vendor/` ফোল্ডারে html2canvas ও jsPDF নামে এবং sha384 ছাপে। ফাইলগুলো কমিট করুন — অ্যাপ আগে `/vendor/...` চেষ্টা করে, না পেলে cdnjs।
 
 **টেস্ট ও লোকাল চালানো**
-- `npm test` — ১৬টি অটো টেস্ট (মেমরি ব্যাকএন্ডে, Redis লাগে না)।
+- `npm test` — ১৮টি অটো টেস্ট (মেমরি ব্যাকএন্ডে, Redis লাগে না)।
 - `npm run dev` — `http://localhost:3000`-এ লোকাল সার্ভার (অ্যাডমিন কী: `dev-admin-key-1234`)।
 
 ## v26 — আরও ফিচার
@@ -100,3 +100,9 @@ Vercel → Project → Storage → Create → **Upstash Redis** (Free) → Conne
 - **অ্যাডমিন**: ওভারভিউতে গত ১২ মাসের নতুন মেসের চার্ট ও সক্রিয় মেসের সংখ্যা; মেস তালিকায় ফিল্টার (পেইড / ৭ দিনে সক্রিয় / ৩০ দিন নিষ্ক্রিয় / ডেটা বড়)।
 - **এরর লগ**: সার্ভারের ত্রুটি Vercel → Logs-এ এক লাইনের JSON (`"lvl":"error"`) হিসেবে আসে, `"app":"mymessbill"` দিয়ে খুঁজুন।
 - নতুন কোনো env বা ফাইল লাগে না।
+
+
+## v27 — রিভিউ ও ফিক্স
+- `vendor/` (html2canvas, jsPDF) রিপোতে যোগ — PDF আর CDN-এর ওপর নির্ভর করে না, অফলাইনেও চলে (সার্ভিস ওয়ার্কার ক্যাশ `bp-v21`)।
+- অ্যাডমিন থেকে মেস মুছলে এখন পুশ সাবস্ক্রিপশন, রিমাইন্ডার ও পেমেন্ট ইনডেক্সও মোছে (আগে ডেটাবেসে পড়ে থাকত)। টেস্ট যোগ হয়েছে।
+- হোম পেজে meta description, Open Graph, favicon, canonical; `robots.txt` ও `sitemap.xml` যোগ।
