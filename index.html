@@ -87,7 +87,9 @@ button.p,.btn.p{background:linear-gradient(180deg,color-mix(in srgb,var(--pri) 8
 .mg6 button svg{width:26px;height:26px;stroke:var(--pri);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .mg6 button.on{background:var(--soft);border-color:var(--pri)}
 
-.chips{display:flex;flex-wrap:wrap;gap:6px}.mch{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:0;font-size:14px}.mch.on{background:var(--pri);color:#fff;border-color:var(--pri)}.mch:disabled{opacity:.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.mch{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:0;font-size:14px}
+.msub{display:flex;gap:6px;overflow-x:auto;position:sticky;top:0;z-index:30;padding:8px 2px;margin:6px 0;background:var(--bg);-webkit-overflow-scrolling:touch}.msub .mch{white-space:nowrap;flex:1 1 auto;padding:8px 10px;font-weight:600;text-align:center}.msub .mch.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.tools{margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 12px}.tools summary{cursor:pointer;padding:8px 0;font-weight:600;color:var(--pri-d)}.mch.on{background:var(--pri);color:#fff;border-color:var(--pri)}.mch:disabled{opacity:.5}
 .xrow{display:grid;grid-template-columns:1fr 110px 36px;gap:6px;margin-bottom:6px}.xrow.rb select{grid-column:1/-1}.xrow.rb{padding-bottom:8px;border-bottom:1px dashed var(--line)}
 table.fndt{width:100%}table.fndt td:first-child{position:static;white-space:normal}
 tr.tot td{font-weight:700;border-top:2px solid var(--pri)}tr.off td{color:var(--mute)}
@@ -234,7 +236,7 @@ const def=()=>({members:[["নাজমুল",2175],["মিনহাজ",2175]
 const blank=()=>Object.assign(def(),{name:"",members:[],mcode:""});
 let S=blank(),MCODE="",VER=0,CID="",VAULT=null,Kraw=null,VM=null,VA=null,BASE="",PUB="",stage="login",NEW={},NEWMEM=[];
 const nowK=(d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))(new Date());
-let ROLE=null,MGR=false,CO=false,busy=false,DL=null,tab="home",mon=MONTHS.includes(nowK)?nowK:MONTHS[0];
+let msub="a",ROLE=null,MGR=false,CO=false,busy=false,DL=null,tab="home",mon=MONTHS.includes(nowK)?nowK:MONTHS[0];
 const SKEY="bpSessV3",PKEY="bpPendV3";
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const p=s=>String(s==null?"":s).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[,৳\s−–]/g,m=>/[−–]/.test(m)?"-":"").split("+").reduce((a,x)=>a+(String(x).match(/-?\d*\.?\d+/g)||[]).reduce((b,y)=>b+(parseFloat(y)||0),0),0);
@@ -498,16 +500,14 @@ function vHome(){
 const msel=()=>`<select data-mon="1" aria-label="মাস">${MONTHS.map(k=>`<option value="${k}"${k===mon?" selected":""}>${lab(k)}</option>`).join("")}</select>`;
 function vMonth(){
   const c=calc(mon),i=(fl,id)=>`<td><input${RO()} data-f="${fl}" data-id="${id}" inputmode="decimal" value="${esc(rv(mon,id,fl))}" aria-label="${fl}"></td>`,m=S.months[mon]||{n:""};
-  return `<div class="row">${msel()}${MGR?'<button class="fix" data-act="monsheet">➕ মাস</button>':""}</div>${vAct()}
-  <div class="chips" style="margin:8px 0">${MGR?`<button class="mch${LK()?" on":""}" data-lk="1">${LK()?"🔓 মাস আনলক করুন":"🔒 মাস লক করুন"}</button><button class="mch" data-due="1">📩 বাকির রিমাইন্ডার (WhatsApp)</button><button class="mch" data-log="1">🕑 পরিবর্তনের ইতিহাস</button><button class="mch" data-bk="1">💾 ব্যাকআপ</button><button class="mch" data-rs="1">♻ রিস্টোর</button>`:(LK()?'<span class="mute">🔒 এই মাসের হিসাব চূড়ান্ত</span>':"")}<button class="mch" data-csv="1">⬇ Excel/CSV</button></div>
-  <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
+  msub=msub||"a";
+  const SUB=[["a","🛒 বাজার"],["b","🧾 বিবিধ"],["c","💰 জমা"],["d","📊 ফলাফল"]],
+  PA=()=>`${vAct()}
   <div class="box scroll"><table><tr><th>নাম</th><th>বাজার</th><th>মিল</th><th>মিল খরচ</th><th>দিবে(−)/নিবে(+)</th><th>ভাড়া</th><th>খালা বিল</th><th>বিবিধ</th><th>ছাড়</th><th>মোট বিল</th><th>অতিরিক্ত</th><th>মোট প্রদান</th></tr>
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
   <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
-  ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
-  ${arBox(c)}
-  ${vPay(c)}
-  ${elBox()}
+  ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>`,
+  PB=()=>`<p class="mute" style="margin:2px 0 8px">মেসের সব সাধারণ খরচ (ওয়াইফাই, ময়লা, বিদ্যুৎ, বিবিধ) ও আগের মাসের বিল এখানে।</p>
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
   ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
   <div style="margin-top:10px"><label class="mute" style="display:block">🧹 খালার মোট বিল (ফাঁকা = সদস্যভেদে আলাদা; দিলে সবার মধ্যে সমান ভাগ)</label><input${RO()} data-s="kt" inputmode="decimal" value="${esc(sv(mon,"kt"))}" placeholder="যেমন: ৪০০০" style="max-width:160px"></div>
@@ -517,10 +517,19 @@ function vMonth(){
   <div class="g2">${c.rows.map(r=>`<label style="display:flex;gap:7px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" data-ck="${r.id}"${c.exi.indexOf(r.id)<0?" checked":""}${MGR?"":" disabled"}> ${esc(r.name)}</label>`).join("")}</div>
   <p class="mute">মোট বিবিধ: <b data-o="shared"></b> • জনপ্রতি (<span data-o="cn"></span> জন): <b data-o="share"></b></p><p class="warnb" id="shw" hidden></p></div>
   ${xiBox(c)}
-  <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
+  ${arBox(c)}
+  ${elBox()}`,
+  PC=()=>`  ${vPay(c)}`,
+  PD=()=>`  <div class="box"><h2>মেসের মোট হিসাব</h2><div class="kpi"><div><small>মোট মেস খরচ</small><b data-o="cost"></b></div><div><small>মোট মেস আয় (বিবিধ বাদে)</small><b data-o="incx"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fclose"></b></div></div></div>
   ${vRb(c)}
   ${vXp(c)}
-  ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`}
+  ${MGR||m.n?`<div class="box"><h2>নোট</h2><textarea${RO()} data-n="1" rows="3" placeholder="ভুল বা অতিরিক্ত খরচ থাকলে লিখুন">${esc(m.n||"")}</textarea></div>`:""}`;
+  return `<div class="row">${msel()}${MGR?'<button class="fix" data-act="monsheet">➕ মাস</button>':""}</div>
+  <details class="tools"><summary>🛠 টুলস, লক ও রিপোর্ট</summary>
+  <div class="chips" style="margin:8px 0">${MGR?`<button class="mch${LK()?" on":""}" data-lk="1">${LK()?"🔓 মাস আনলক করুন":"🔒 মাস লক করুন"}</button><button class="mch" data-due="1">📩 বাকির রিমাইন্ডার (WhatsApp)</button><button class="mch" data-log="1">🕑 পরিবর্তনের ইতিহাস</button><button class="mch" data-bk="1">💾 ব্যাকআপ</button><button class="mch" data-rs="1">♻ রিস্টোর</button>`:(LK()?'<span class="mute">🔒 এই মাসের হিসাব চূড়ান্ত</span>':"")}<button class="mch" data-csv="1">⬇ Excel/CSV</button></div></details>
+  <div class="kpi"><div><small>মোট বাজার</small><b data-o="tb"></b></div><div><small>মোট মিল</small><b data-o="tm"></b></div><div><small>মিল রেট</small><b data-o="rate"></b></div><div><small>🏦 ফান্ড বাকি</small><b data-o="fund"></b></div></div>
+  <div class="msub" role="tablist">${SUB.map(x=>`<button class="mch${msub===x[0]?" on":""}" role="tab" aria-selected="${msub===x[0]}" data-msub="${x[0]}">${x[1]}</button>`).join("")}</div>
+  ${({a:PA,b:PB,c:PC,d:PD}[msub]||PA)()}`}
 const elPrev=k=>{const i=MONTHS.indexOf(k);for(let j=i-1;j>=0;j--){const e=(S.months[MONTHS[j]]||{}).el;if(e&&p(e.c)>0)return e.c}return""};
 const elCalc=k=>{const e=(S.months[k]||{}).el||{},pr=e.p!==undefined&&e.p!==""?p(e.p):p(elPrev(k)),cu=p(e.c),u=Math.max(0,cu-pr);return{pr,cu,rate:p(e.r),u,amt:cu>0?Math.round(u*p(e.r)*100)/100:0}};
 function elBox(){if(!MGR&&!((S.months[mon]||{}).el))return"";const e=(S.months[mon]||{}).el||{},pv=e.p!==undefined&&e.p!==""?e.p:elPrev(mon);
@@ -1356,6 +1365,7 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
   else if(d.arw!==undefined){const q=d.arw.split("|"),x=mo.ar.find(z=>z.id===q[0]);if(!x)return;x.w=(x.w||[]).includes(q[1])?x.w.filter(i=>i!==q[1]):(x.w||[]).concat([q[1]])}
   save();render()});
 
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-msub]");if(!t)return;msub=t.dataset.msub;render();window.scrollTo({top:0})});
 /* ---------- 🎯 কোন বিবিধ খরচ কার ওপর যাবে (প্রতিটি খরচের আলাদা) ---------- */
 // উদ্দেশ্য: যিনি পরের মাসে ছেড়ে যাচ্ছেন তিনি আগাম বিল (ওয়াইফাই, ময়লা, বিদ্যুৎ) দেবেন না, কিন্তু ব্যবহার করা জিনিস (টিস্যু, হ্যান্ড ওয়াশ…) এর ভাগ দেবেন।
 const XI_ADV=["wifi","garbage","bidyut"];
