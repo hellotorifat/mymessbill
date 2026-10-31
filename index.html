@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><script>try{var t=localStorage.getItem("bpTheme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#08463d"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>mymessbill — মেস ম্যানেজমেন্ট</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Baloo+Da+2:wght@600;700&display=swap"><style id="css">
+<meta charset="utf-8"><script>try{var t=localStorage.getItem("bpTheme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#08463d"><link rel="icon" type="image/png" href="/icon-192.png"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="description" content="মেসের বাজার, মিল, ভাড়া ও বিলের স্বয়ংক্রিয় হিসাব — বাংলায়। ১৫ জন পর্যন্ত বিনামূল্যে, এনক্রিপ্টেড, PDF রিপোর্টসহ।"><link rel="canonical" href="https://mymessbill.vercel.app/"><meta property="og:type" content="website"><meta property="og:title" content="mymessbill — মেস ম্যানেজমেন্ট"><meta property="og:description" content="মেসের হিসাব এক জায়গায় — বাজার, মিল, ভাড়া, বিল ও PDF রিপোর্ট।"><meta property="og:image" content="https://mymessbill.vercel.app/icon-512.png"><meta property="og:url" content="https://mymessbill.vercel.app/"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>mymessbill — মেস ম্যানেজমেন্ট</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Baloo+Da+2:wght@600;700&display=swap"><style id="css">
 :root{--bg:#eef3f1;--card:#ffffff;--field:#f4f8f6;--ink:#10201d;--mute:#5b6b66;--line:#dce6e1;--pri:#0b6b5c;--pri-d:#08463d;--onpri:#ffffff;--soft:#e0f1ec;--acc:#f4a300;--acc-soft:#fff2d2;--acc-ink:#6b4600;--bad:#d23f2c;--good:#0b6b5c;--info:#2a6fdb;--info-soft:#e3edff;--rose:#e0685a;--rose-soft:#fde9e5;--sh:0 1px 2px rgba(16,32,29,.06),0 12px 28px -18px rgba(16,32,29,.35)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1513;--card:#13211e;--field:#0e1a18;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--onpri:#06241d;--soft:#173833;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#4fd1b5;--info:#7aa8ff;--info-soft:#18284a;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}}
 :root[data-theme="dark"]{--bg:#0b1513;--card:#13211e;--field:#0e1a18;--ink:#e6f0ed;--mute:#9bb0a9;--line:#233431;--pri:#4fd1b5;--pri-d:#0b3a33;--onpri:#06241d;--soft:#173833;--acc:#ffbf3c;--acc-soft:#3a2f12;--acc-ink:#ffd98a;--bad:#ff8a77;--good:#4fd1b5;--info:#7aa8ff;--info-soft:#18284a;--rose:#ff8a77;--rose-soft:#3a1f1b;--sh:0 1px 2px rgba(0,0,0,.4),0 12px 28px -18px rgba(0,0,0,.7)}
@@ -243,7 +243,7 @@ const sg=n=>(n>=0?"+":"−")+f(Math.abs(n));
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
 const LK=()=>!!(S.months[mon]||{}).lock;
 const RO=()=>MGR&&!LK()?"":" readonly";
-(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay],[data-el],[data-elset]';
+(()=>{const G='[data-f],[data-s],[data-sxn],[data-sxa],[data-sxadd],[data-sxdel],[data-xn],[data-xa],[data-xadd],[data-xdel],[data-ck],[data-cpprev],[data-pay],[data-payfull],[data-el],[data-elset]';
 const blk=e=>{if(tab==="month"&&LK()&&e.target.closest&&e.target.closest(G)){e.stopPropagation();e.preventDefault();if(e.type==="click")toast("🔒 মাস লক করা আছে");return true}};
 ["input","change","click"].forEach(n=>document.addEventListener(n,blk,true));
 /* পরিবর্তনের ইতিহাস (audit log) */
@@ -387,9 +387,9 @@ function vSetup(){return `<div class="box"><h2>🏠 মেস তৈরি ক�
 
 /* ---------- charts ---------- */
 function chart(title,key,fm){
-  const vals=MONTHS.map(k=>{const c=calc(k);return c.active?c[key]:null}),ok=vals.filter(v=>v!=null);
+  const vals=MONTHS.map(k=>{const c=calc(k);return c.active?(typeof key==="function"?key(c):c[key]):null}),ok=vals.filter(v=>v!=null);
   if(!ok.length)return `<div class="box"><h2>${title}</h2><p class="mute">হিসাব যোগ হলে গ্রাফ দেখা যাবে।</p></div>`;
-  const W=640,H=210,l=40,r=14,t=26,b=30,n=vals.length,mx=Math.max(...ok)*1.15||1,x=i=>l+i*(W-l-r)/(n-1),y=v=>t+(H-t-b)*(1-v/mx);
+  const W=640,H=210,l=40,r=14,t=26,b=30,n=vals.length,mx=Math.max(...ok)*1.15||1,x=i=>l+i*(W-l-r)/Math.max(1,n-1),y=v=>t+(H-t-b)*(1-v/mx);
   const P=vals.map((v,i)=>v==null?null:[x(i),y(v),v]).filter(Boolean);
   const grid=[0,.5,1].map(q=>`<line x1="${l}" x2="${W-r}" y1="${y(mx*q)}" y2="${y(mx*q)}" stroke="var(--line)"/><text x="${l-5}" y="${y(mx*q)+3}" font-size="10" text-anchor="end" fill="var(--mute)">${fm(mx*q)}</text>`).join("");
   const xl=MONTHS.map((k,i)=>`<text x="${x(i)}" y="${H-10}" font-size="9" text-anchor="middle" fill="var(--mute)">${SM[+k.slice(5)-1]}</text>`).join("");
@@ -497,6 +497,7 @@ function vMonth(){
   ${c.rows.map(r=>`<tr><td>${esc(r.name)}</td>${i("b",r.id)}${i("m",r.id)}<td data-o="mc:${r.id}"></td><td data-o="G:${r.id}"></td>${i("r",r.id)}${i("k",r.id)}<td data-o="J:${r.id}"></td>${i("d",r.id)}<td data-o="N:${r.id}"></td>${i("e",r.id)}<td data-o="P:${r.id}"></td></tr>`).join("")}
   <tr class="tot"><td>TOTAL</td><td data-o="tb"></td><td data-o="tm"></td><td data-o="tmc"></td><td></td><td></td><td></td><td data-o="tJ"></td><td></td><td data-o="tN"></td><td></td><td data-o="income"></td></tr></table>
   ${MGR?'<p class="mute">বাজার/মিল ঘরে <b>120+250+80</b> লিখলে নিজে যোগ হবে। মিল রেট = মোট বাজার ÷ মোট মিল।</p>':""}</div>
+  ${vPay(c)}
   ${elBox()}
   <div class="box"><h2>মেস কস্ট (সবার মধ্যে সমান ভাগ)</h2><div class="g2">${SH.map(x=>`<div><label>${x[1]}</label><input${RO()} data-s="${x[0]}" inputmode="decimal" value="${esc(sv(mon,x[0]))}"></div>`).join("")}<div><label>মালিককে বাড়িভাড়া</label><input${RO()} data-s="rentOv" inputmode="decimal" value="${esc(sv(mon,"rentOv"))}" placeholder="${f(sum(c.rows,"rent"))}"></div></div>
   ${(()=>{const L=(S.months[mon]||{}).sx||[];return L.map(e=>MGR?`<div class="xrow"><input data-sxn="${e.id}" value="${esc(e.n||"")}" placeholder="খরচের নাম (যেমন: গ্যাস)" aria-label="খরচের নাম"><input data-sxa="${e.id}" inputmode="decimal" value="${esc(e.a||"")}" placeholder="টাকা" aria-label="টাকা"><button class="x" data-sxdel="${e.id}" aria-label="মুছুন">✕</button></div>`:`<div class="srow"><span style="flex:1">${esc(e.n||"—")}</span><b>${f(p(e.a))}</b></div>`).join("")})()}${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-sxadd="1">➕ নতুন খরচ যোগ করুন (সবার মধ্যে ভাগ হবে)</button></div>':""}
@@ -517,7 +518,7 @@ function elBox(){if(!MGR&&!((S.months[mon]||{}).el))return"";const e=(S.months[m
   ${MGR?'<div class="chips" style="margin:8px 0"><button class="mch on" data-elset="1">✔ এই বিল "বিদ্যুৎ"-এ বসান</button></div>':""}<p class="mute">আগের মাসের এখনকার রিডিং নিজে থেকে আগের রিডিং হিসেবে আসে।</p></div>`}
 function elPaint(){const o=document.getElementById("elo");if(!o)return;const c=elCalc(mon);o.textContent=c.cu>0?bd(f(c.u))+" ইউনিট • ৳"+f(c.amt):"—"}
 function paint(){
-  if(tab!=="month")return;elPaint();
+  if(tab!=="month")return;elPaint();payPaint();
   const c=calc(mon),o={},put=(k,t,n)=>o[k]=[t,n];
   c.rows.forEach(r=>{put("mc:"+r.id,f(r.mc));put("G:"+r.id,sg(r.G),r.G);put("J:"+r.id,f(r.J));put("N:"+r.id,f(r.N));put("P:"+r.id,f(r.P))});
   put("tb",f(c.tb));put("tm",f(c.tm));put("rate","৳"+f(c.rate));put("tmc",f(sum(c.rows,"mc")));put("shared",f(c.shared));put("tJ",f(sum(c.rows,"J")));put("share",f(c.share));put("cn",bd(c.div));
@@ -545,7 +546,7 @@ function vMem(){
   <tr class="tot"><td>TOTAL</td><td>${f(sum(rows,"tb"))}</td><td>${f(sum(rows,"tm"))}</td><td></td><td>${f(sum(rows,"mc"))}</td><td>${f(sum(rows,"N"))}</td><td>${f(sum(rows,"P"))}</td><td>${sg(sum(rows,"net"))}</td><td></td></tr></table></div>`}
 function vYear(){
   const yr=y=>{const A=MONTHS.filter(k=>k.startsWith(y)).map(k=>calc(k)).filter(c=>c.active),t=g=>sum(A,g);return`<tr class="tot"><td>${bd(y)} সর্বমোট</td><td>${f(t("tb"))}</td><td>${f(t("tm"))}</td><td>${f(t("tm")?t("tb")/t("tm"):0)}</td><td>${f(t("cost")+t("exp"))}</td><td>${f(t("income"))}</td><td>${sg(t("net"))}</td><td>${f(t("exp"))}</td><td></td></tr>`};
-  return `<div class="box scroll"><h2>বার্ষিক সারাংশ</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
+  return chart("📈 মিল রেটের তুলনা (মাস অনুযায়ী)","rate",v=>"৳"+f(v))+chart("🛒 মোট বাজারের তুলনা","tb",v=>f(Math.round(v)))+chart("🏦 মোট খরচের তুলনা (লেখা খরচসহ)",c=>c.cost+c.exp,v=>f(Math.round(v)))+`<div class="box scroll"><h2>বার্ষিক সারাংশ</h2><table><tr><th>মাস</th><th>বাজার</th><th>মিল</th><th>রেট</th><th>মোট খরচ</th><th>মেস আয়</th><th>ফান্ড জমা</th><th>এর মধ্যে লেখা খরচ</th><th>ফান্ড বাকি</th></tr>
   ${MONTHS.map(k=>{const c=calc(k),a=c.active,d=v=>a?v:"—";return`<tr class="${a?"":"off"}"><td><a href="#" data-open="${k}">${lab(k)}</a></td><td>${d(f(c.tb))}</td><td>${d(f(c.tm))}</td><td>${d(f(c.rate))}</td><td>${d(f(c.cost+c.exp))}</td><td>${d(f(c.income))}</td><td class="${c.net>=0?"pos":"neg"}">${d(sg(c.net))}</td><td>${a||c.exp?f(c.exp):"—"}</td><td>${a||c.exp?f(fundInfo(k).close):"—"}</td></tr>`}).join("")}${[...new Set(MONTHS.map(k=>k.slice(0,4)))].map(yr).join("")}</table></div>`}
 /* ---------- টাকা পাঠানোর নম্বর (বিকাশ/নগদ…) ---------- */
 const PM=()=>S.pm||[];
@@ -594,7 +595,7 @@ function vSet(){
   <div class="row"><input id="nn" placeholder="নতুন সদস্যের নাম"><input id="nr" inputmode="decimal" placeholder="ভাড়া" style="max-width:100px"><button class="p fix" data-act="add">যোগ</button></div></div>
   <div class="box"><h2>ডিফল্ট মান</h2><div class="g2"><div><label>খালা বিল (জনপ্রতি)</label><input data-df="khala" inputmode="decimal" value="${S.def.khala}"></div><div><label>অতিরিক্ত যোগ (জনপ্রতি)</label><input data-df="extra" inputmode="decimal" value="${S.def.extra}"></div><div><label>ওয়াইফাই (মাসিক)</label><input data-df="wifi" inputmode="decimal" value="${S.def.wifi}"></div></div>
   <label style="display:block;margin-top:10px">🌙 মেম্বারের মিল অনুরোধ বন্ধ হবে (বাংলাদেশ সময়)</label><select data-df="mcut" style="max-width:260px">${[[20,"রাত ৮টা"],[21,"রাত ৯টা"],[22,"রাত ১০টা"],[23,"রাত ১১টা"],[24,"কখনো বন্ধ হবে না"]].map(x=>`<option value="${x[0]}"${MCUT()===x[0]?" selected":""}>${x[1]}</option>`).join("")}</select><p class="mute">এই সময়ের পর থেকে ভোর ৫টা পর্যন্ত মেম্বার আগামী দিনের (ভোর ১২টার পর চলতি দিনের) মিল বদলাতে পারবেন না। ম্যানেজার সব সময় বদলাতে পারবেন।</p></div>
-  ${MGR?pmBox()+rmBox():""}
+  ${MGR?pmBox()+brandBox()+rmBox():""}
   ${true?`<div class="box"><h2>🔐 ম্যানেজার কোড</h2>  <div class="warnb">⚠ ম্যানেজার কোড এখানে দেখানো যায় না — তৈরির সময় সংরক্ষণ করা কোডটি রাখুন। কোড হারালে ডেটা ফেরত পাওয়া যাবে না।</div></div>`:""}${vPlan()}${vLogins()}${vBackup()}`}
 
 /* ---------- PDF report ---------- */
@@ -869,8 +870,26 @@ function bzReportHTML(){
 function loadScript(srcs){return new Promise((res,rej)=>{let i=0;const next=()=>{if(i>=srcs.length)return rej(new Error("lib"));const s=document.createElement("script");s.src=srcs[i++];s.async=true;s.referrerPolicy="no-referrer";s.onload=()=>res();s.onerror=()=>{s.remove();next()};document.head.appendChild(s)};next()})}
 async function loadPdfLibs(){if(window.html2canvas&&window.jspdf)return;const C="https://cdnjs.cloudflare.com/ajax/libs/";
   await Promise.all([window.html2canvas?0:loadScript(["/vendor/html2canvas.min.js",C+"html2canvas/1.4.1/html2canvas.min.js"]),window.jspdf?0:loadScript(["/vendor/jspdf.umd.min.js",C+"jspdf/2.5.1/jspdf.umd.min.js"])])}
+const BRC=/^#[0-9a-f]{6}$/i,BRL=/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/;
+function brandize(h){const b=S.brand;if(!b)return h;
+  if(b.c&&BRC.test(b.c))h=h.replace('<div class="rp">',()=>'<div class="rp" style="--pri:'+b.c+';--pri-d:'+b.c+'">');
+  if(b.l&&BRL.test(b.l))h=h.replace('<div class="rt">🏠 ',()=>'<div class="rt"><img src="'+b.l+'" alt="" style="height:34px;max-width:150px;object-fit:contain;vertical-align:middle;margin-right:8px;background:#fff;border-radius:6px;padding:2px">');
+  return h}
+function brandBox(){const b=S.brand||{};
+  return `<div class="box"><h2>🎨 রিপোর্টের লোগো ও রঙ</h2><p class="mute">PDF রিপোর্ট ও ব্যক্তিগত হিসাবের PDF-এ আপনার মেসের লোগো ও রঙ বসবে। (Excel/CSV-এ রঙ বা ছবি যায় না।)</p>
+  <div class="row"><label class="mute" style="min-width:70px">হেডারের রঙ</label><input type="color" data-bc="1" value="${BRC.test(b.c||"")?b.c:"#08463d"}" aria-label="রঙ" style="max-width:70px;padding:2px"><button class="fix" data-act="bcrst">রিসেট</button></div>
+  <div class="row" style="margin-top:8px">${b.l&&BRL.test(b.l)?`<img src="${b.l}" alt="লোগো" style="height:40px;max-width:150px;object-fit:contain;background:#fff;border-radius:8px;padding:3px;border:1px solid var(--line)"><button class="x fix" data-act="blrm">লোগো মুছুন</button>`:`<span class="mute">লোগো নেই</span>`}</div>
+  <input type="file" accept="image/png,image/jpeg,image/webp" data-blogo="1" style="border:1.5px dashed var(--line);padding:8px;margin-top:8px"><p class="mute">গাঢ় রঙ দিন, নইলে হেডারের সাদা লেখা পড়া কঠিন হবে। লোগো স্বয়ংক্রিয়ভাবে ছোট করা হয়।</p></div>`}
+document.addEventListener("input",e=>{const t=e.target;if(!MGR||!t.dataset||t.dataset.bc===undefined||!BRC.test(t.value))return;S.brand=Object.assign({},S.brand,{c:t.value});save()});
+document.addEventListener("change",e=>{const t=e.target;if(!MGR||!t.dataset||t.dataset.blogo===undefined||!t.files||!t.files[0])return;const fl=t.files[0];
+  const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/im.width,80/im.height),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+    let u="";try{u=c.toDataURL("image/png");if(u.length>60000)u=c.toDataURL("image/jpeg",.85)}catch(x){}
+    if(!BRL.test(u)||u.length>80000){alert("লোগোটি অনেক বড় বা জটিল — ছোট/সাধারণ ছবি দিন");return}
+    S.brand=Object.assign({},S.brand,{l:u});save();render();toast("লোগো যোগ হয়েছে ✔")};im.onerror=()=>alert("ছবিটি পড়া যায়নি");im.src=r.result};r.readAsDataURL(fl)});
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-act=blrm],[data-act=bcrst]");if(!t||!MGR)return;
+  const b=Object.assign({},S.brand);if(t.dataset.act==="blrm")delete b.l;else delete b.c;S.brand=b;save();render()});
 async function makePDF(html,fn,btn,W){
-  W=W||1123;
+  W=W||1123;html=brandize(html);
   const old=btn?btn.textContent:"";if(btn){btn.disabled=true;btn.textContent="PDF তৈরি হচ্ছে…"}
   try{
     await loadPdfLibs();if(!window.html2canvas||!window.jspdf)throw new Error("lib");
@@ -1277,17 +1296,24 @@ document.addEventListener("click",e=>{const t=e.target;
 
 /* ---------- টাকা জমার ট্র্যাকার (মাসিক ট্যাবে) ---------- */
 const payOf=(k,id)=>((S.pay&&S.pay[k])||{})[id]||{};
+const payChip=(due,pd)=>due-pd<=0.5?"✔ পরিশোধিত":pd>0?"◑ আংশিক":"⚠ বাকি";
+function payProg(c){let tp=0,full=0;c.rows.forEach(r=>{const pd=p(payOf(mon,r.id).a);tp+=pd;if(r.P-pd<=0.5)full++});
+  const pct=c.income>0?Math.max(0,Math.min(100,Math.round(tp/c.income*100))):0;
+  return `<p class="mute" style="margin:4px 0">আদায় <b>৳${f(tp)}</b> / ৳${f(c.income)} (${bd(pct)}%) • পুরো পরিশোধ করেছেন <b>${bd(full)}/${bd(c.rows.length)}</b> জন</p><div style="height:8px;background:var(--line);border-radius:6px;overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:var(--pri)"></i></div>`}
 function vPay(c){
   const k=mon;
-  return `<div class="box scroll"><h2>💰 টাকা জমার ট্র্যাকার</h2><table><tr><th>সদস্য</th><th>দেয়</th><th>জমা দিয়েছে</th><th>বাকি</th><th></th></tr>${c.rows.map(r=>{const pd=p(payOf(k,r.id).a),bal=r.P-pd;
-    return `<tr><td>${esc(r.name)}</td><td>${f(r.P)}</td><td>${MGR?`<input data-pay="${r.id}" inputmode="decimal" value="${esc(payOf(k,r.id).a||"")}" aria-label="জমা">`:f(pd)}</td><td data-pb="${r.id}" class="${bal>0.5?"neg":"pos"}">${f(bal)}</td><td data-ps="${r.id}">${bal>0.5?"⚠ বাকি":"✔"}</td></tr>`}).join("")}
-  <tr class="tot"><td>TOTAL</td><td>${f(c.income)}</td><td data-pt="p">${f(sum(c.rows.map(r=>({v:p(payOf(k,r.id).a)})),"v"))}</td><td data-pt="b"></td><td></td></tr></table><p class="mute">"দেয়" = ওপরের "মোট প্রদান"। ম্যানেজার জমার অঙ্ক লিখলে বাকি নিজে হিসাব হয়।</p></div>`}
+  return `<div class="box scroll"><h2>💰 বিল পরিশোধের ট্র্যাকার</h2><div id="payprog">${payProg(c)}</div><table><tr><th>সদস্য</th><th>দেয়</th><th>জমা দিয়েছে</th><th>বাকি</th><th>অবস্থা</th>${MGR?"<th></th>":""}</tr>${c.rows.map(r=>{const pd=p(payOf(k,r.id).a),bal=r.P-pd;
+    return `<tr><td>${esc(r.name)}</td><td data-pdue="${r.id}">${f(r.P)}</td><td>${MGR?`<input data-pay="${r.id}" inputmode="decimal" value="${esc(payOf(k,r.id).a||"")}" aria-label="জমা">`:f(pd)}</td><td data-pb="${r.id}" class="${bal>0.5?"neg":"pos"}">${f(Math.max(0,bal))}</td><td data-ps="${r.id}">${payChip(r.P,pd)}</td>${MGR?`<td><button class="fix" data-payfull="${r.id}" aria-label="পুরো জমা">✔ পুরো</button></td>`:""}</tr>`}).join("")}
+  <tr class="tot"><td>TOTAL</td><td data-pt="d">${f(c.income)}</td><td data-pt="p">${f(sum(c.rows.map(r=>({v:p(payOf(k,r.id).a)})),"v"))}</td><td data-pt="b">${f(sum(c.rows.map(r=>({v:Math.max(0,r.P-p(payOf(k,r.id).a))})),"v"))}</td><td></td>${MGR?"<td></td>":""}</tr></table><p class="mute">"দেয়" = ওপরের "মোট প্রদান"। ম্যানেজার জমার অঙ্ক লিখলে বাকি ও অবস্থা নিজে হিসাব হয়; "✔ পুরো" চাপলে পুরো টাকা জমা ধরা হয়।</p></div>`}
 function payPaint(){
-  const c=calc(mon);let tp=0,tb=0;
+  if(tab!=="month")return;const c=calc(mon);let tp=0,tb=0;
   c.rows.forEach(r=>{const pd=p(payOf(mon,r.id).a),bal=r.P-pd;tp+=pd;tb+=Math.max(0,bal);
-    const b=document.querySelector(`[data-pb="${r.id}"]`),s=document.querySelector(`[data-ps="${r.id}"]`);
-    if(b){b.textContent=f(bal);b.className=bal>0.5?"neg":"pos"}if(s)s.textContent=bal>0.5?"⚠ বাকি":"✔"});
-  const a=document.querySelector('[data-pt="p"]'),b=document.querySelector('[data-pt="b"]');if(a)a.textContent=f(tp);if(b)b.textContent=f(tb)}
+    const q=x=>document.querySelector(`[${x}="${r.id}"]`),b=q("data-pb"),s=q("data-ps"),d=q("data-pdue");
+    if(d)d.textContent=f(r.P);if(b){b.textContent=f(Math.max(0,bal));b.className=bal>0.5?"neg":"pos"}if(s)s.textContent=payChip(r.P,pd)});
+  const T=x=>document.querySelector(`[data-pt="${x}"]`),a=T("p"),b=T("b"),d=T("d"),g=$("payprog");if(a)a.textContent=f(tp);if(b)b.textContent=f(tb);if(d)d.textContent=f(c.income);if(g)g.innerHTML=payProg(c)}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-payfull]");if(!t||!MGR||LK())return;
+  const id=t.dataset.payfull,r=calc(mon).rows.find(z=>z.id===id);if(!r)return;
+  const m=(S.pay=S.pay||{})[mon]=(S.pay[mon]||{});(m[id]=m[id]||{}).a=String(Math.max(0,Math.round(r.P*100)/100));save();render()});
 
 /* ---------- ঘোষণা ---------- */
 function vNotice(){

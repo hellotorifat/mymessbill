@@ -1,5 +1,5 @@
 // অ্যাপ শেল ক্যাশ: নেটওয়ার্ক আগে, না পেলে ক্যাশ। /api/* কখনো ক্যাশ হয় না।
-const C="bp-v20",SHELL=["/","/index.html","/manifest.webmanifest","/icon-192.png","/rifat.webp","/logo.webp"],LATER=["/vendor/html2canvas.min.js","/vendor/jspdf.umd.min.js"];
+const C="bp-v21",SHELL=["/","/index.html","/manifest.webmanifest","/icon-192.png","/rifat.webp","/logo.webp"],LATER=["/vendor/html2canvas.min.js","/vendor/jspdf.umd.min.js"];
 // অ্যাপ শেল ইনস্টলের সময়; PDF লাইব্রেরি (থাকলে) পিছনে ক্যাশ হয় — না থাকলে ইনস্টল আটকায় না। তাই অফলাইনেও PDF চলে।
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(SHELL).then(()=>Promise.allSettled(LATER.map(u=>c.add(u))))).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
@@ -10,7 +10,7 @@ self.addEventListener("fetch",e=>{
 });
 
 /* ---------- পুশ নোটিফিকেশন ---------- */
-const GEN={rem:"⏰ রিমাইন্ডার",chat:"💬 চ্যাটে নতুন মেসেজ",meal:"🍽 মিলে আপডেট",bazar:"🛒 বাজারে আপডেট",duty:"📅 রুটিনে আপডেট",pub:"📋 ম্যানেজার আপডেট করেছেন"};
+const GEN={rem:"⏰ রিমাইন্ডার",chat:"💬 চ্যাটে নতুন মেসেজ",meal:"🍽 মিলে আপডেট",bazar:"🛒 বাজারে আপডেট",duty:"📅 রুটিনে আপডেট",pub:"📋 ম্যানেজার আপডেট করেছেন",exp:"⏳ প্ল্যানের মেয়াদ শেষ হতে চলেছে — ম্যানেজার নবায়ন করুন"};
 const idbGet=id=>new Promise(res=>{try{const q=indexedDB.open("bpnf",1);q.onupgradeneeded=()=>q.result.createObjectStore("k");q.onsuccess=()=>{try{const g=q.result.transaction("k").objectStore("k").get(id);g.onsuccess=()=>res(g.result||null);g.onerror=()=>res(null)}catch(e){res(null)}};q.onerror=()=>res(null)}catch(e){res(null)}});
 const u8=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
 self.addEventListener("push",e=>{e.waitUntil((async()=>{
